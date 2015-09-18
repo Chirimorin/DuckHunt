@@ -28,21 +28,7 @@ namespace DuckHunt.Model
         }
         #endregion
 
-        // This lock should be used for any changes within the actionContainer to ensure thread safety. 
-        private object _lock = new object();
-
         public double WindowWidth { get; set; }
         public double WindowHeight { get; set; }
-
-        private List<Chicken> _movedObjects = new List<Chicken>();
-        public List<Chicken> MovedObjects
-        {
-            get
-            {
-                return _movedObjects;
-            }
-        }
-
-
     }
 }

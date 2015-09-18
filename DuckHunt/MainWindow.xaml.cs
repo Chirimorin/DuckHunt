@@ -1,4 +1,6 @@
-﻿using DuckHunt.Controllers;
+﻿using DuckHunt.Behaviors;
+using DuckHunt.Factories;
+using DuckHunt.Controllers;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
@@ -30,55 +32,23 @@ namespace DuckHunt
             Loaded += RecalculateScreenSize;
             SizeChanged += RecalculateScreenSize;
 
+            UnitFactory.Instance.Canvas = MainCanvas;
+
             GameController.Instance.StartGameLoop();
-            GameController.Instance.UpdateScreenEvent += UpdateScreen;
         }
 
         private void RecalculateScreenSize(object sender, EventArgs e)
         {
-            lock (ActionContainer.Instance)
+            lock (Locks.ActionContainer)
             {
                 ActionContainer.Instance.WindowWidth = MainCanvas.ActualWidth;
                 ActionContainer.Instance.WindowHeight = MainCanvas.ActualHeight;
             }
         }
 
-        private void UpdateScreen(object sender, EventArgs e)
-        {
-            // Invoke makes sure this runs on the UI thread as it should. 
-            try
-            {
-                Dispatcher.Invoke(delegate
-                {
-                    lock (ActionContainer.Instance)
-                    {
-                        Chicken chicken = ActionContainer.Instance.MovedObjects.FirstOrDefault();
-
-                        if (chicken.Gfx == null)
-                        {
-                            chicken.Gfx = new Ellipse();
-                            chicken.Gfx.StrokeThickness = 2;
-                            chicken.Gfx.Stroke = Brushes.Blue;
-                            chicken.Gfx.Width = 20;
-                            chicken.Gfx.Height = 20;
-
-                            MainCanvas.Children.Add(chicken.Gfx);
-                        }
-
-                        Canvas.SetLeft(chicken.Gfx, chicken.PosX);
-                        Canvas.SetTop(chicken.Gfx, chicken.PosY);
-                    }
-                });
-            }
-            catch
-            {
-
-            }
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            GameController.Instance.AbortGameLoop();
+            GameController.Instance.StopGameLoop();
         }
     }
 }

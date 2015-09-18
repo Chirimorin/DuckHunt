@@ -1,10 +1,13 @@
-﻿using DuckHunt.Model;
+﻿using DuckHunt.Behaviors;
+using DuckHunt.Factories;
+using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace DuckHunt.Controllers
 {
@@ -29,7 +32,6 @@ namespace DuckHunt.Controllers
 
         #region Game loop management
         private Thread _gameLoopThread;
-        private object _gameStateLock = new object();
         private bool _isRunning = false;
 
         #endregion
@@ -40,7 +42,7 @@ namespace DuckHunt.Controllers
         /// <returns>true if a new gameloop was started.</returns>
         public bool StartGameLoop()
         {
-            lock(_gameStateLock)
+            lock(Locks.GameState)
             {
                 if (_isRunning)
                 {
@@ -55,25 +57,25 @@ namespace DuckHunt.Controllers
             return true;
         }
 
-        public void AbortGameLoop()
+        public void StopGameLoop()
         {
-            _isRunning = false;
-            _gameLoopThread.Abort();
+            lock (Locks.GameState)
+            {
+                _isRunning = false;
+            }
         }
-
-        private Chicken _currentChicken;
 
         /// <summary>
         /// The main game loop. This should be started with StartGameLoop().
         /// </summary>
         private void GameLoop()
         {
-            lock(_gameStateLock)
+            lock(Locks.GameState)
             {
                 _isRunning = true;
             }
 
-            _currentChicken = new Chicken();
+            UnitFactory.Instance.createUnit("chicken");
 
             while (_isRunning)
             {
@@ -94,24 +96,27 @@ namespace DuckHunt.Controllers
 
         private void UpdateGame()
         {
-            // TODO: update all game objects. 
-            _currentChicken.Move();
+            lock (Locks.UnitContainer)
+            {
+                UnitContainer.MoveUnits();
+            }
         }
 
-        public event EventHandler UpdateScreenEvent;
         private void UpdateScreen()
         {
-            if (UpdateScreenEvent != null)
+            lock (Locks.UnitContainer)
             {
-                UpdateScreenEvent(this, EventArgs.Empty);
+                UnitContainer.DrawUnits();
             }
         }
 
         private void ClearGame()
         {
-            _currentChicken = null;
+            lock (Locks.UnitContainer)
+            {
+                UnitContainer.RemoveAllUnits();
+            }
         }
-
-
+        
     }
 }
