@@ -29,8 +29,6 @@ namespace DuckHunt.Factories
 
         private static Dictionary<string, Type> _types;
 
-        public Canvas Canvas { private get; set; }
-
         private UnitFactory()
         {
             _types = new Dictionary<string, Type>();
@@ -38,31 +36,27 @@ namespace DuckHunt.Factories
             Chicken.RegisterSelf();
         }
 
-        public Unit createUnit(string type)
+        public Unit createUnit(string unit)
         {
-            // Invoke makes sure this runs on the UI thread as it should. 
-            try
+            Unit newUnit;
+            if (_types.ContainsKey(unit))
             {
-                return Application.Current.Dispatcher.Invoke(delegate
+                newUnit = (Unit)Activator.CreateInstance(_types[unit]);
+
+                newUnit.MoveBehavior = MoveBehaviorFactory.Instance.createMoveBehavior(newUnit.PreferredMoveBehavior);
+                newUnit.DrawBehavior = DrawBehaviorFactory.Instance.createDrawBehavior(newUnit.PreferredDrawBehavior);
+
+                newUnit.init(25, 25);
+
+                lock (Locks.UnitContainer)
                 {
-                    Unit newUnit = (Unit)Activator.CreateInstance(_types[type]);
+                    UnitContainer.AddUnit(newUnit);
+                }
 
-                    newUnit.MoveBehavior = new SimpleMoveBehavior();
-                    newUnit.DrawBehavior = new SimpleDrawBehavior(Canvas);
-
-                    lock(Locks.UnitContainer)
-                    {
-                        UnitContainer.AddUnit(newUnit);
-                    }
-
-                    return newUnit;
-                });
-                
+                return newUnit;
             }
-            catch
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public static void register(string name, Type t)

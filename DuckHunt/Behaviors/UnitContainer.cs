@@ -23,6 +23,21 @@ namespace DuckHunt.Behaviors
             }
         }
 
+        private static List<Unit> _unitsToDelete;
+        private static List<Unit> UnitsToDelete
+        {
+            get
+            {
+                if (_unitsToDelete == null)
+                {
+                    _unitsToDelete = new List<Unit>();
+                }
+                return _unitsToDelete;
+            }
+        }
+
+        public static int NumUnits { get { return Units.Count; } }
+
         public static void AddUnit(Unit unit)
         {
             Units.Add(unit);
@@ -30,7 +45,17 @@ namespace DuckHunt.Behaviors
 
         public static void RemoveUnit(Unit unit)
         {
-            Units.Remove(unit);
+            UnitsToDelete.Add(unit);
+        }
+
+        public static void RemoveDeadUnits()
+        {
+            foreach (Unit unit in UnitsToDelete)
+            {
+                unit.DrawBehavior.clearGraphics();
+                Units.Remove(unit);
+            }
+            UnitsToDelete.Clear();
         }
 
         public static void RemoveAllUnits()
@@ -59,15 +84,25 @@ namespace DuckHunt.Behaviors
             {
                 foreach (Unit unit in Units)
                 {
-                    if (unit.DrawBehavior != null &&
-                        unit.MoveBehavior != null)
+                    if (unit.DrawBehavior != null)
                     {
-                        unit.DrawBehavior.Draw(unit.MoveBehavior);
+                        unit.DrawBehavior.Draw();
                     }
                     else
                     {
                         Console.WriteLine("Warning! Unit does not have a draw behavior!");
                     }
+                }
+            });
+        }
+
+        public static void clicked(Point point)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                foreach (Unit unit in Units)
+                {
+                    unit.clicked(point);
                 }
             });
         }

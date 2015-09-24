@@ -16,7 +16,10 @@ namespace DuckHunt.Model
         private static readonly Lazy<ActionContainer> _instance
             = new Lazy<ActionContainer>(() => new ActionContainer());
 
-        private ActionContainer() { }
+        private ActionContainer()
+        {
+            Time = DateTime.Now;
+        }
 
         public static ActionContainer Instance
         {
@@ -28,7 +31,32 @@ namespace DuckHunt.Model
         }
         #endregion
 
+        private DateTime Time { get; set; }
+        private double _deltaTime;
+        public double DeltaTime
+        {
+            get
+            {
+                return _deltaTime;
+            }
+        }
+
+        public double FPS
+        {
+            get
+            {
+                return Math.Round(1d / DeltaTime, 1);
+            }
+        }
+
         public double WindowWidth { get; set; }
         public double WindowHeight { get; set; }
+
+        public void updateTime()
+        {
+            DateTime now = DateTime.Now;
+            _deltaTime = ((now - Time).Milliseconds)/1000d;
+            Time = now;
+        }
     }
 }

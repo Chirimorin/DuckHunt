@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,11 +64,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behaviors\Draw\IDrawBehavior.cs" />
+    <Compile Include="Behaviors\Draw\BaseDrawBehavior.cs" />
+    <Compile Include="Behaviors\Draw\ImageDrawBehavior.cs" />
     <Compile Include="Behaviors\Draw\SimpleDrawBehavior.cs" />
-    <Compile Include="Behaviors\Move\SecondMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\RandomMoveBehavior.cs" />
+    <Compile Include="Factories\DrawBehaviorFactory.cs" />
+    <Compile Include="Factories\MoveBehaviorFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
-    <Compile Include="Behaviors\Move\IMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Behaviors\UnitContainer.cs" />
     <Compile Include="Controllers\GameController.cs" />
@@ -80,6 +84,8 @@
   <ItemGroup>
     <Compile Include="Model\ActionContainer.cs" />
     <Compile Include="Model\Chicken.cs" />
+    <Compile Include="Model\DrawHelperContainer.cs" />
+    <Compile Include="Model\InputContainer.cs" />
     <Compile Include="Model\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -107,7 +113,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Chicken spritesheet.png" />
+    <Resource Include="Images\Chicken.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

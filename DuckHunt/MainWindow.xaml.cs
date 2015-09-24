@@ -32,7 +32,11 @@ namespace DuckHunt
             Loaded += RecalculateScreenSize;
             SizeChanged += RecalculateScreenSize;
 
-            UnitFactory.Instance.Canvas = MainCanvas;
+            lock(Locks.DrawHelperContainer)
+            {
+                DrawHelperContainer.Instance.Canvas = MainCanvas;
+                DrawHelperContainer.Instance.FPS = FPS;
+            }
 
             GameController.Instance.StartGameLoop();
         }
@@ -49,6 +53,15 @@ namespace DuckHunt
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             GameController.Instance.StopGameLoop();
+        }
+
+        private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Console.WriteLine("click...");
+            lock (Locks.InputContainer)
+            {
+                InputContainer.Instance.ClickedPoints.Add(e.GetPosition(MainCanvas));
+            }
         }
     }
 }

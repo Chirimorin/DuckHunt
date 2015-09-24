@@ -1,18 +1,25 @@
 ﻿using DuckHunt.Behaviors.Move;
+using DuckHunt.Factories;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace DuckHunt.Behaviors.Draw
 {
-    class SimpleDrawBehavior : IDrawBehavior
+    class SimpleDrawBehavior : BaseDrawBehavior
     {
+        public static void RegisterSelf()
+        {
+            DrawBehaviorFactory.register("simple", typeof(SimpleDrawBehavior));
+        }
+
         private Ellipse _gfx;
         private Ellipse Gfx
         {
@@ -23,29 +30,6 @@ namespace DuckHunt.Behaviors.Draw
                     _gfx = new Ellipse();
                 }
                 return _gfx;
-            }
-        }
-
-        private double Width
-        {
-            get
-            {
-                return Gfx.Width;
-            }
-            set
-            {
-                Gfx.Width = value;
-            }
-        }
-        private double Height
-        {
-            get
-            {
-                return Gfx.Height;
-            }
-            set
-            {
-                Gfx.Height = value;
             }
         }
 
@@ -84,18 +68,18 @@ namespace DuckHunt.Behaviors.Draw
             }
         }
 
-        public SimpleDrawBehavior(Canvas canvas)
+        public SimpleDrawBehavior()
         {
-            Width = 20;
-            Height = 20;
-
             Color = Brushes.Blue;
             Stroke = Brushes.Black;
             StrokeThickness = 2;
 
             try
             {
-                canvas.Children.Add(Gfx);
+                lock(Locks.DrawHelperContainer)
+                {
+                    DrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
+                }
             }
             catch (Exception ex)
             {
@@ -103,10 +87,27 @@ namespace DuckHunt.Behaviors.Draw
             }
         }
 
-        public void Draw(IMoveBehavior behavior)
+        public override void Draw()
         {
-            Canvas.SetLeft(Gfx, behavior.PosX);
-            Canvas.SetTop(Gfx, behavior.PosY);
+            Canvas.SetLeft(Gfx, PosX);
+            Canvas.SetTop(Gfx, PosY);
+        }
+
+        public override void UpdateSize()
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                Gfx.Width = Width;
+                Gfx.Height = Height;
+            });
+        }
+
+        public override void clearGraphics()
+        {
+            lock (Locks.DrawHelperContainer)
+            {
+                DrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace DuckHunt.Controllers
@@ -36,13 +37,24 @@ namespace DuckHunt.Controllers
 
         #endregion
 
+        private Random _random;
+        public Random Random
+        {
+            get
+            {
+                if (_random == null)
+                    _random = new Random();
+                return _random;
+            }
+        }
+
         /// <summary>
         /// Function to start the game loop.
         /// </summary>
         /// <returns>true if a new gameloop was started.</returns>
         public bool StartGameLoop()
         {
-            lock(Locks.GameState)
+            lock (Locks.GameState)
             {
                 if (_isRunning)
                 {
@@ -70,12 +82,10 @@ namespace DuckHunt.Controllers
         /// </summary>
         private void GameLoop()
         {
-            lock(Locks.GameState)
+            lock (Locks.GameState)
             {
                 _isRunning = true;
             }
-
-            UnitFactory.Instance.createUnit("chicken");
 
             while (_isRunning)
             {
@@ -83,7 +93,8 @@ namespace DuckHunt.Controllers
                 UpdateGame();
                 UpdateScreen();
 
-                Thread.Sleep(16);
+                Thread.Sleep(1);
+                Thread.Yield();
             }
 
             ClearGame();
@@ -91,23 +102,57 @@ namespace DuckHunt.Controllers
 
         private void HandleInputs()
         {
-            // TODO: collect and handle inputs;
+            lock (Locks.InputContainer)
+            lock (Locks.UnitContainer)
+            {
+                foreach (Point point in InputContainer.Instance.ClickedPoints)
+                {
+                    UnitContainer.clicked(point);
+                }
+
+                InputContainer.Instance.ClickedPoints.Clear();
+            }
         }
 
         private void UpdateGame()
         {
+            lock (Locks.ActionContainer)
+            {
+                ActionContainer.Instance.updateTime();
+            }
+
             lock (Locks.UnitContainer)
             {
+                UnitContainer.RemoveDeadUnits();
+
+                while (UnitContainer.NumUnits < 3)
+                {
+                    UnitFactory.Instance.createUnit("chicken");
+                }
+                
                 UnitContainer.MoveUnits();
             }
         }
 
         private void UpdateScreen()
         {
-            lock (Locks.UnitContainer)
+            try
             {
-                UnitContainer.DrawUnits();
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    lock (Locks.UnitContainer)
+                    {
+                        UnitContainer.DrawUnits();
+                    }
+
+                    lock (Locks.ActionContainer)
+                        lock (Locks.DrawHelperContainer)
+                            DrawHelperContainer.Instance.FPS.Content = ActionContainer.Instance.FPS + " FPS";
+                });
+
             }
+            catch { }
+            
         }
 
         private void ClearGame()
@@ -117,6 +162,6 @@ namespace DuckHunt.Controllers
                 UnitContainer.RemoveAllUnits();
             }
         }
-        
+
     }
 }
