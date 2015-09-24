@@ -57,7 +57,6 @@ namespace DuckHunt
 
         private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine("click...");
             lock (Locks.InputContainer)
             {
                 InputContainer.Instance.ClickedPoints.Add(e.GetPosition(MainCanvas));

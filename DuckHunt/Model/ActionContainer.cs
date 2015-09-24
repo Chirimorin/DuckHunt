@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,10 @@ namespace DuckHunt.Model
 
         private ActionContainer()
         {
-            Time = DateTime.Now;
+            Console.WriteLine("Frequency: " + Stopwatch.Frequency);
+            // Frequency is door hardware bepaald. 
+            TickTime = 1.0 / Stopwatch.Frequency;
+            Time = Stopwatch.GetTimestamp();
         }
 
         public static ActionContainer Instance
@@ -31,15 +35,10 @@ namespace DuckHunt.Model
         }
         #endregion
 
-        private DateTime Time { get; set; }
-        private double _deltaTime;
-        public double DeltaTime
-        {
-            get
-            {
-                return _deltaTime;
-            }
-        }
+        public long Time { get; private set; }
+        public readonly double TickTime;
+        //public double TickTime { get; private set; }
+        public double DeltaTime { get; private set; }
 
         public double FPS
         {
@@ -54,8 +53,8 @@ namespace DuckHunt.Model
 
         public void updateTime()
         {
-            DateTime now = DateTime.Now;
-            _deltaTime = ((now - Time).Milliseconds)/1000d;
+            long now = Stopwatch.GetTimestamp();
+            DeltaTime = (now - Time) * (TickTime);
             Time = now;
         }
     }

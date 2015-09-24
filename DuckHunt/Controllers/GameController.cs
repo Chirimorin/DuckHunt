@@ -3,6 +3,7 @@ using DuckHunt.Factories;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -19,7 +20,12 @@ namespace DuckHunt.Controllers
         private static readonly Lazy<GameController> _instance
             = new Lazy<GameController>(() => new GameController());
 
-        private GameController() { }
+        private GameController()
+        {
+            // Calculate the minimum frame time. 
+            if (FPSlimit)
+                minTicksPerFrame = Stopwatch.Frequency / maxFPS;
+        }
 
         public static GameController Instance
         {
@@ -35,6 +41,9 @@ namespace DuckHunt.Controllers
         private Thread _gameLoopThread;
         private bool _isRunning = false;
 
+        private readonly bool FPSlimit = false;
+        private readonly int maxFPS = 240;
+        private readonly long minTicksPerFrame = 1;
         #endregion
 
         private Random _random;
@@ -89,38 +98,59 @@ namespace DuckHunt.Controllers
 
             while (_isRunning)
             {
+                UpdateTime();
                 HandleInputs();
                 UpdateGame();
                 UpdateScreen();
 
-                Thread.Sleep(1);
-                Thread.Yield();
+                // Thread.Sleep en Thread.Yield zorgen voor haperen
+                // Wait until we can start this frame. 
+                while (!TimePassed()) ;
             }
 
             ClearGame();
+        }
+
+        /// <summary>
+        /// Checks if the minimum frame time has passed since the last frame. 
+        /// This is either 1 tick (smallest measurable time) or calculated based on the FPS limit. 
+        /// </summary>
+        /// <returns>True if the next frame can start.</returns>
+        private bool TimePassed()
+        {
+            lock (Locks.ActionContainer)
+            {
+                return ((Stopwatch.GetTimestamp() - ActionContainer.Instance.Time) > minTicksPerFrame);
+            }
+        }
+
+        /// <summary>
+        /// Updates the time to represent the time since the last call
+        /// </summary>
+        private void UpdateTime()
+        {
+            lock (Locks.ActionContainer)
+            {
+                ActionContainer.Instance.updateTime();
+            }
         }
 
         private void HandleInputs()
         {
             lock (Locks.InputContainer)
             lock (Locks.UnitContainer)
-            {
-                foreach (Point point in InputContainer.Instance.ClickedPoints)
                 {
-                    UnitContainer.clicked(point);
-                }
+                    foreach (Point point in InputContainer.Instance.ClickedPoints)
+                    {
+                        UnitContainer.clicked(point);
+                    }
 
-                InputContainer.Instance.ClickedPoints.Clear();
-            }
+                    InputContainer.Instance.ClickedPoints.Clear();
+                }
         }
 
         private void UpdateGame()
         {
-            lock (Locks.ActionContainer)
-            {
-                ActionContainer.Instance.updateTime();
-            }
-
             lock (Locks.UnitContainer)
             {
                 UnitContainer.RemoveDeadUnits();
@@ -129,7 +159,7 @@ namespace DuckHunt.Controllers
                 {
                     UnitFactory.Instance.createUnit("chicken");
                 }
-                
+
                 UnitContainer.MoveUnits();
             }
         }
@@ -152,7 +182,7 @@ namespace DuckHunt.Controllers
 
             }
             catch { }
-            
+
         }
 
         private void ClearGame()

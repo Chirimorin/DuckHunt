@@ -50,10 +50,8 @@ namespace DuckHunt.Model
 
         public override void clicked(Point point)
         {
-            Console.WriteLine("Click?");
             if (isHit(point))
             {
-                Console.WriteLine("click!");
                 UnitContainer.RemoveUnit(this);
             }
         }
