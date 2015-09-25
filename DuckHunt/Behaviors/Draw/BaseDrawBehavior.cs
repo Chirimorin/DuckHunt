@@ -9,7 +9,19 @@ namespace DuckHunt.Behaviors.Draw
 {
     public abstract class BaseDrawBehavior
     {
-        public Unit Parent { get; set; }
+        private Unit _parent;
+        public Unit Parent
+        {
+            get
+            {
+                return _parent;
+            }
+            set
+            {
+                _parent = value;
+                UpdateSize();
+            }
+        }
 
         public double Width
         {

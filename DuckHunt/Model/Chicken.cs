@@ -51,7 +51,7 @@ namespace DuckHunt.Model
             UnitFactory.register("chicken", typeof(Chicken));
         }
 
-        public override void clicked(Point point)
+        public override void onClick(Point point)
         {
             if (isHit(point))
             {

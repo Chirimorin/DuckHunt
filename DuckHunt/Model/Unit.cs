@@ -11,6 +11,7 @@ namespace DuckHunt.Model
 {
     public abstract class Unit
     {
+        #region Behaviors
         private BaseMoveBehavior _moveBehavior;
         public BaseMoveBehavior MoveBehavior
         {
@@ -26,6 +27,19 @@ namespace DuckHunt.Model
                 }
                 _moveBehavior = value;
                 _moveBehavior.Parent = this;
+            }
+        }
+
+        /// <summary>
+        /// De move behavior bepaald door de Unit zelf
+        /// Key (string) = type
+        /// Value (object[]) = constructor params voor die behavior
+        /// </summary>
+        public virtual KeyValuePair<string, object[]> PreferredMoveBehavior
+        {
+            get
+            {
+                return new KeyValuePair<string, object[]>("simple", null);
             }
         }
 
@@ -46,41 +60,83 @@ namespace DuckHunt.Model
                 _drawBehavior.Parent = this;
             }
         }
-        
-        private double _posX;
-        public double PosX
+
+        /// <summary>
+        /// De draw behavior bepaald door de Unit zelf
+        /// Key (string) = type
+        /// Value (object[]) = constructor params voor die behavior
+        /// </summary>
+        public virtual KeyValuePair<string, object[]> PreferredDrawBehavior
         {
             get
             {
-                return _posX;
+                return new KeyValuePair<string, object[]>("simple", null);
             }
-            set
-            {
-                _posX = value;
-            }
+        }
+        #endregion
+
+        #region Posities
+        private double _posX;
+        /// <summary>
+        /// X-positie van de linker rand van de Unit (in pixels)
+        /// </summary>
+        public double PosX
+        {
+            get { return _posX; }
+            set { _posX = value; }
+        }
+        /// <summary>
+        /// X-positie van het midden van de Unit (in pixels)
+        /// </summary>
+        public double PosXMiddle
+        {
+            get { return PosX + (0.5 * Width); }
+            set { PosX = value - (0.5 * Width); }
+        }
+        /// <summary>
+        /// X-positie van de rechter rand van de Unit (in pixels)
+        /// </summary>
+        public double PosXRight
+        {
+            get { return PosX + Width; }
+            set { PosX = value - Width; }
         }
 
         private double _posY;
+        /// <summary>
+        /// Y-positie van de bovenste rand van de Unit (in pixels)
+        /// </summary>
         public double PosY
         {
-            get
-            {
-                return _posY;
-            }
-
-            set
-            {
-                _posY = value;
-            }
+            get { return _posY; }
+            set { _posY = value; }
         }
+        /// <summary>
+        /// Y-positie van het midden van de Unit (in pixels)
+        /// </summary>
+        public double PosYMiddle
+        {
+            get { return PosY + (0.5 * Height); }
+            set { PosY = value - (0.5 * Height); }
+        }
+        /// <summary>
+        /// Y-positie van de onderste rand van de Unit (in pixels)
+        /// </summary>
+        public double PosYBottom
+        {
+            get { return PosY + Height; }
+            set { PosY = value - Height; }
+        }
+        #endregion
 
+        #region Afmetingen
         private double _width;
+        /// <summary>
+        /// Breedte van de Unit (in pixels)
+        /// </summary>
         public double Width
         {
-            get
-            {
-                return _width;
-            }
+            get { return _width; }
             set
             {
                 _width = value;
@@ -90,12 +146,12 @@ namespace DuckHunt.Model
         }
 
         private double _height;
+        /// <summary>
+        /// Hoogte van de Unit (in pixels)
+        /// </summary>
         public double Height
         {
-            get
-            {
-                return _height;
-            }
+            get { return _height; }
             set
             {
                 _height = value;
@@ -103,46 +159,35 @@ namespace DuckHunt.Model
                     DrawBehavior.UpdateSize();
             }
         }
+        #endregion
 
-        public virtual KeyValuePair<string, object[]> PreferredMoveBehavior
-        {
-            get
-            {
-                return new KeyValuePair<string, object[]>("simple", null);
-            }
-        }
-
-        public virtual KeyValuePair<string, object[]> PreferredDrawBehavior
-        {
-            get
-            {
-                return new KeyValuePair<string, object[]>("simple", null);
-            }
-        }
-
-
+        #region logica functies
+        /// <summary>
+        /// Controleert of een specifiek punt de Unit raakt
+        /// </summary>
+        /// <param name="point">Het punt om te controleren</param>
+        /// <returns>true als deze Unit het punt raakt</returns>
         public virtual bool isHit(Point point)
         {
             if (DrawBehavior != null)
             {
-                double minX = PosX;
-                double maxX = PosX + Width;
-                double minY = PosY;
-                double maxY = PosY + Height;
-
-                if (minX < point.X &&
-                    maxX > point.X &&
-                    minY < point.Y &&
-                    maxY > point.Y)
-                {
-                    return true;
-                }
+                return (point.X > PosX &&
+                   point.X < PosX + Width &&
+                   point.Y > PosY &&
+                   point.Y < PosY + Height);
             }
 
             return false;
         }
+        #endregion
 
-        public abstract void clicked(Point point);
+        #region event functies
+        /// <summary>
+        /// Wordt aangeroepen bij elke muisklik
+        /// </summary>
+        /// <param name="point">Het punt waar geklikt is</param>
+        public virtual void onClick(Point point) { }
+        #endregion
 
         public virtual void init(double width, double height, double posX = 0, double posY = 0)
         {

@@ -102,7 +102,7 @@ namespace DuckHunt.Behaviors
             {
                 foreach (Unit unit in Units)
                 {
-                    unit.clicked(point);
+                    unit.onClick(point);
                 }
             });
         }
