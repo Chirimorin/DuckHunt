@@ -38,5 +38,20 @@ namespace DuckHunt.Model
                 return _clickedPoints;
             }
         }
+
+        private Point _mousePosition;
+        public Point MousePosition
+        {
+            get
+            {
+                if (_mousePosition == null)
+                    _mousePosition = new Point();
+                return _mousePosition;
+            }
+            set
+            {
+                _mousePosition = value;
+            }
+        }
     }
 }

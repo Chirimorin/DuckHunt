@@ -31,6 +31,9 @@ namespace DuckHunt.Factories
 
             SimpleMoveBehavior.RegisterSelf();
             RandomMoveBehavior.RegisterSelf();
+            AfraidOfMouseMoveBehavior.RegisterSelf();
+            HugMouseMoveBehavior.RegisterSelf();
+            GravityMoveBehavior.RegisterSelf();
         }
 
         public BaseMoveBehavior createMoveBehavior(KeyValuePair<string, object[]> type)

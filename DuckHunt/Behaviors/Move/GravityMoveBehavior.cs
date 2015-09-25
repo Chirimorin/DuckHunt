@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DuckHunt.Behaviors.Move
 {
-    class RandomMoveBehavior : BaseMoveBehavior
+    public class GravityMoveBehavior : BaseMoveBehavior
     {
         private double VXMax { get; set; }
         private double VYMax { get; set; }
@@ -20,23 +20,25 @@ namespace DuckHunt.Behaviors.Move
         private double MaxDVX { get; set; }
         private double MaxDVY { get; set; }
 
-        public RandomMoveBehavior()
+        public GravityMoveBehavior()
         {
             VX = 125;
             VY = 250;
 
             VXMax = 500;
-            VYMax = 500;
+            VYMax = 2000;
 
             MaxDVX = 500;
-            MaxDVY = 500;
+            MaxDVY = 1500;
+
+            VYGoal = 2500;
 
             updateGoals(true);
         }
 
         public static void RegisterSelf()
         {
-            MoveBehaviorFactory.register("random", typeof(RandomMoveBehavior));
+            MoveBehaviorFactory.register("gravity", typeof(GravityMoveBehavior));
         }
 
         public override void Move()
@@ -87,12 +89,20 @@ namespace DuckHunt.Behaviors.Move
             if ((PosY > maxY && VY > 0) ||
                 (PosY < 0 && VY < 0))
             {
-                VY = -VY;
-                VYGoal = -VYGoal;
+                VY = -VY * 0.5;
+                if (VY > -75)
+                    VY = 0;
             }
 
             if (PosY > maxY)
+            {
                 PosY = maxY;
+
+                if (GameController.Instance.Random.Next(0, 10) == 0)
+                {
+                    VY = -1000;
+                }
+            }
             if (PosY < 0)
                 PosY = 0;
 
@@ -113,14 +123,6 @@ namespace DuckHunt.Behaviors.Move
                 VXGoal = newGoal;
             }
 
-            if (force || VY == VYGoal)
-            {
-                double newGoal = random.Next((int)(VYMax / 2), (int)(VYMax));
-                if (random.Next(0, 2) == 0)
-                    newGoal = -newGoal;
-                VYGoal = newGoal;
-            }
-
             if (Parent != null)
             {
                 double windowWidth;
@@ -133,9 +135,8 @@ namespace DuckHunt.Behaviors.Move
                 }
 
                 double minX = windowWidth / 4;
-                double minY = windowHeight / 4;
                 double maxX = windowWidth - minX;
-                double maxY = windowHeight - minY;
+                double maxY = windowHeight - Height;
 
                 if ((PosX + (0.5 * Width)) < minX &&
                     VXGoal < 0)
@@ -143,13 +144,6 @@ namespace DuckHunt.Behaviors.Move
                 else if ((PosX + (0.5 * Width)) > maxX &&
                     VXGoal > 0)
                     VXGoal = -VXGoal;
-
-                if ((PosY + (0.5 * Height)) < minY &&
-                    VYGoal < 0)
-                    VYGoal = -VYGoal;
-                else if ((PosY + (0.5 * Height)) > maxY &&
-                    VYGoal > 0)
-                    VYGoal = -VYGoal;
             }
         }
     }

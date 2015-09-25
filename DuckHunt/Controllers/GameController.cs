@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace DuckHunt.Controllers
@@ -41,8 +42,8 @@ namespace DuckHunt.Controllers
         private Thread _gameLoopThread;
         private bool _isRunning = false;
 
-        private readonly bool FPSlimit = false;
-        private readonly int maxFPS = 240;
+        private readonly bool FPSlimit = true;
+        private readonly int maxFPS = 60;
         private readonly long minTicksPerFrame = 1;
         #endregion
 
@@ -140,6 +141,9 @@ namespace DuckHunt.Controllers
             lock (Locks.InputContainer)
             lock (Locks.UnitContainer)
                 {
+                    System.Drawing.Point mousePosition = System.Windows.Forms.Control.MousePosition;
+                    InputContainer.Instance.MousePosition = new Point(mousePosition.X, mousePosition.Y);
+
                     foreach (Point point in InputContainer.Instance.ClickedPoints)
                     {
                         UnitContainer.clicked(point);

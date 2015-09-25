@@ -22,6 +22,7 @@ namespace DuckHunt.Model
             Console.WriteLine("Frequency: " + Stopwatch.Frequency);
             // Frequency is door hardware bepaald. 
             TickTime = 1.0 / Stopwatch.Frequency;
+            Console.WriteLine("TickTime: " + TickTime * 1000 + " ms");
             Time = Stopwatch.GetTimestamp();
         }
 

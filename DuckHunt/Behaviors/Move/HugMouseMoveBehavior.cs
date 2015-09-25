@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DuckHunt.Behaviors.Move
 {
-    class RandomMoveBehavior : BaseMoveBehavior
+    public class HugMouseMoveBehavior : BaseMoveBehavior
     {
         private double VXMax { get; set; }
         private double VYMax { get; set; }
@@ -20,7 +21,7 @@ namespace DuckHunt.Behaviors.Move
         private double MaxDVX { get; set; }
         private double MaxDVY { get; set; }
 
-        public RandomMoveBehavior()
+        public HugMouseMoveBehavior()
         {
             VX = 125;
             VY = 250;
@@ -36,7 +37,7 @@ namespace DuckHunt.Behaviors.Move
 
         public static void RegisterSelf()
         {
-            MoveBehaviorFactory.register("random", typeof(RandomMoveBehavior));
+            MoveBehaviorFactory.register("hug", typeof(HugMouseMoveBehavior));
         }
 
         public override void Move()
@@ -105,6 +106,14 @@ namespace DuckHunt.Behaviors.Move
         {
             Random random = GameController.Instance.Random;
 
+            Point mousePosition;
+
+            lock (Locks.InputContainer)
+            {
+                mousePosition = InputContainer.Instance.MousePosition;
+            }
+
+
             if (force || VX == VXGoal)
             {
                 double newGoal = random.Next((int)(VXMax / 2), (int)(VXMax));
@@ -123,32 +132,18 @@ namespace DuckHunt.Behaviors.Move
 
             if (Parent != null)
             {
-                double windowWidth;
-                double windowHeight;
-
-                lock (Locks.ActionContainer)
-                {
-                    windowWidth = ActionContainer.Instance.WindowWidth;
-                    windowHeight = ActionContainer.Instance.WindowHeight;
-                }
-
-                double minX = windowWidth / 4;
-                double minY = windowHeight / 4;
-                double maxX = windowWidth - minX;
-                double maxY = windowHeight - minY;
-
-                if ((PosX + (0.5 * Width)) < minX &&
+                if ((PosX + (0.5 * Width)) > mousePosition.X &&
+                VXGoal > 0)
+                    VXGoal = -VXGoal;
+                else if ((PosX + (0.5 * Width)) < mousePosition.X &&
                     VXGoal < 0)
                     VXGoal = -VXGoal;
-                else if ((PosX + (0.5 * Width)) > maxX &&
-                    VXGoal > 0)
-                    VXGoal = -VXGoal;
 
-                if ((PosY + (0.5 * Height)) < minY &&
-                    VYGoal < 0)
-                    VYGoal = -VYGoal;
-                else if ((PosY + (0.5 * Height)) > maxY &&
+                if ((PosY + (0.5 * Height)) > mousePosition.Y &&
                     VYGoal > 0)
+                    VYGoal = -VYGoal;
+                else if ((PosY + (0.5 * Height)) < mousePosition.Y &&
+                    VYGoal < 0)
                     VYGoal = -VYGoal;
             }
         }

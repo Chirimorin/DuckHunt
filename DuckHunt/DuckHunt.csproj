@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,7 +68,10 @@
     <Compile Include="Behaviors\Draw\BaseDrawBehavior.cs" />
     <Compile Include="Behaviors\Draw\ImageDrawBehavior.cs" />
     <Compile Include="Behaviors\Draw\SimpleDrawBehavior.cs" />
+    <Compile Include="Behaviors\Move\AfraidOfMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\GravityMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\HugMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\RandomMoveBehavior.cs" />
     <Compile Include="Factories\DrawBehaviorFactory.cs" />
     <Compile Include="Factories\MoveBehaviorFactory.cs" />
