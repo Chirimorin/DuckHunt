@@ -68,6 +68,7 @@
     <Compile Include="Behaviors\Draw\BaseDrawBehavior.cs" />
     <Compile Include="Behaviors\Draw\ImageDrawBehavior.cs" />
     <Compile Include="Behaviors\Draw\SimpleDrawBehavior.cs" />
+    <Compile Include="Behaviors\Draw\SpriteSheetDrawBehavior.cs" />
     <Compile Include="Behaviors\Move\AfraidOfMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\GravityMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\HugMouseMoveBehavior.cs" />
@@ -118,12 +119,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Chicken spritesheet.png">
+    <None Include="Images\Chicken spritesheet.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\Chicken.png">
+    </None>
+    <None Include="Images\Chicken.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ChickenFly.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

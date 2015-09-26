@@ -19,9 +19,9 @@ namespace DuckHunt.Model
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
                 //new KeyValuePair<string, object[]>("simple", null),
-                //new KeyValuePair<string, object[]>("hug", null),
-                //new KeyValuePair<string, object[]>("afraid", null),
-                //new KeyValuePair<string, object[]>("random", null),
+                new KeyValuePair<string, object[]>("hug", null),
+                new KeyValuePair<string, object[]>("afraid", null),
+                new KeyValuePair<string, object[]>("random", null),
                 new KeyValuePair<string, object[]>("gravity", null),
             };
 
@@ -35,7 +35,8 @@ namespace DuckHunt.Model
 
         private KeyValuePair<string, object[]>[] possibleDrawBehaviors =
             {
-                new KeyValuePair<string, object[]>("image", new object[] { "Chicken.png" })
+                //new KeyValuePair<string, object[]>("image", new object[] { "Chicken.png" }),
+                new KeyValuePair<string, object[]>("spritesheet", new object[] { "ChickenFly.png", 4, 2, 97, 72, 0.07 }),
             };
 
         public override KeyValuePair<string, object[]> PreferredDrawBehavior

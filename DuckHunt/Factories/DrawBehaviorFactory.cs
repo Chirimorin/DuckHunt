@@ -31,6 +31,7 @@ namespace DuckHunt.Factories
 
             SimpleDrawBehavior.RegisterSelf();
             ImageDrawBehavior.RegisterSelf();
+            SpriteSheetDrawBehavior.RegisterSelf();
         }
 
         public BaseDrawBehavior createDrawBehavior(KeyValuePair<string, object[]> type)
