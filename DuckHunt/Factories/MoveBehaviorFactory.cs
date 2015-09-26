@@ -30,6 +30,7 @@ namespace DuckHunt.Factories
             _types = new Dictionary<string, Type>();
 
             SimpleMoveBehavior.RegisterSelf();
+            HorizontalMoveBehavior.RegisterSelf();
             RandomMoveBehavior.RegisterSelf();
             AfraidOfMouseMoveBehavior.RegisterSelf();
             HugMouseMoveBehavior.RegisterSelf();

@@ -71,6 +71,7 @@
     <Compile Include="Behaviors\Draw\SpriteSheetDrawBehavior.cs" />
     <Compile Include="Behaviors\Move\AfraidOfMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\GravityMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\HorizontalMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\HugMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\RandomMoveBehavior.cs" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ActionContainer.cs" />
+    <Compile Include="Model\Bunny.cs" />
     <Compile Include="Model\Chicken.cs" />
     <Compile Include="Model\DrawHelperContainer.cs" />
     <Compile Include="Model\InputContainer.cs" />
@@ -128,6 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\ChickenFly.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\BunnyRun.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

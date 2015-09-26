@@ -34,6 +34,7 @@ namespace DuckHunt.Factories
             _types = new Dictionary<string, Type>();
 
             Chicken.RegisterSelf();
+            Bunny.RegisterSelf();
         }
 
         public Unit createUnit(string unit)
