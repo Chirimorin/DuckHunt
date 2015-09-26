@@ -78,6 +78,17 @@ namespace DuckHunt.Behaviors
             }
         }
 
+        public static void FixedTimePassed()
+        {
+            foreach (Unit unit in Units)
+            {
+                if (unit.MoveBehavior != null)
+                {
+                    unit.MoveBehavior.FixedTimePassed();
+                }
+            }
+        }
+
         public static void DrawUnits()
         {
             Application.Current.Dispatcher.Invoke(delegate

@@ -45,6 +45,9 @@ namespace DuckHunt.Controllers
         private readonly bool FPSlimit = true;
         private readonly int maxFPS = 60;
         private readonly long minTicksPerFrame = 1;
+        private readonly double fixedTimeCalls = 0.02; // Roep FixedTimePassed() 50 keer per seconde aan.
+
+        private double accumulator = 0; // Houd de tijd bij voor FixedTimePassed()
         #endregion
 
         private Random _random;
@@ -133,6 +136,7 @@ namespace DuckHunt.Controllers
             lock (Locks.ActionContainer)
             {
                 ActionContainer.Instance.updateTime();
+                accumulator += ActionContainer.Instance.DeltaTime;
             }
         }
 
@@ -165,6 +169,12 @@ namespace DuckHunt.Controllers
                 }
 
                 UnitContainer.MoveUnits();
+
+                while (accumulator > fixedTimeCalls)
+                {
+                    UnitContainer.FixedTimePassed();
+                    accumulator -= fixedTimeCalls;
+                }
             }
         }
 

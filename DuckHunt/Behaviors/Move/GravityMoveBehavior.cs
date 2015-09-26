@@ -75,6 +75,16 @@ namespace DuckHunt.Behaviors.Move
             EnsureInScreenX(true);
         }
 
+        public override void FixedTimePassed()
+        {
+            if (PosYBottom == WindowHeight && 
+                VY == 0 &&
+                Random.Next(0,50) == 0)
+            {
+                Jump();
+            }
+        }
+
         /// <summary>
         /// Laat de unit springen
         /// </summary>

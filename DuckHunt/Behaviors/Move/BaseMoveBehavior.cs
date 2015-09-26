@@ -245,6 +245,16 @@ namespace DuckHunt.Behaviors.Move
             set { _dT = value; }
         }
 
+        private double _fps;
+        /// <summary>
+        /// Aantal frames per seconde, berekend aan de hand van DT
+        /// </summary>
+        public double FPS
+        {
+            get { return _fps; }
+            set { _fps = value; }
+        }
+
         private Point _mousePosition;
         /// <summary>
         /// De positie van de muis in deze frame.
@@ -272,8 +282,9 @@ namespace DuckHunt.Behaviors.Move
                 WindowWidth = ActionContainer.Instance.WindowWidth;
                 WindowHeight = ActionContainer.Instance.WindowHeight;
                 DT = ActionContainer.Instance.DeltaTime;
+                FPS = ActionContainer.Instance.FPS;
             }
-            
+
             lock (Locks.InputContainer)
             {
                 MousePosition = InputContainer.Instance.MousePosition;
@@ -281,6 +292,12 @@ namespace DuckHunt.Behaviors.Move
 
             Move();
         }
+
+        /// <summary>
+        /// Wordt een vast aantal keren per seconde aangeroepen. 
+        /// Alle random zonder condities (zoals een random kans om te springen) horen hier in te staan. 
+        /// </summary>
+        public virtual void FixedTimePassed() { }
 
         /// <summary>
         /// De beweeg logica, deze moet uniek zijn voor elke moveBehavior
