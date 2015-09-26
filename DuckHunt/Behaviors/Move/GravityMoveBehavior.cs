@@ -11,140 +11,77 @@ namespace DuckHunt.Behaviors.Move
 {
     public class GravityMoveBehavior : BaseMoveBehavior
     {
-        private double VXMax { get; set; }
-        private double VYMax { get; set; }
-
-        private double VXGoal { get; set; }
-        private double VYGoal { get; set; }
-
-        private double MaxDVX { get; set; }
-        private double MaxDVY { get; set; }
-
-        public GravityMoveBehavior()
+        /// <summary>
+        /// De zwaartekracht constante (pixels/seconde)
+        /// </summary>
+        protected double Gravity { get; set; }
+        /// <summary>
+        /// DVY is bepaald door de zwaartekracht en staat vast.
+        /// </summary>
+        public override double DVY
         {
-            VX = 125;
-            VY = 250;
+            get { return Gravity; }
+            set { }
+        }
+        /// <summary>
+        /// Snelheid waarmee de unit springt.
+        /// </summary>
+        protected double JumpPower { get; set; }
 
-            VXMax = 500;
-            VYMax = 2000;
+        /// <summary>
+        /// Hoe erg de unit op de grond stuitert. 
+        /// 0 = niet stuiteren.
+        /// 1 = evenhard terug stuiteren.
+        /// </summary>
+        protected double Bouncyness { get; set; }
 
-            MaxDVX = 500;
-            MaxDVY = 1500;
+        /// <summary>
+        /// MoveBehavior met een zwaartekracht gebaseerde Y-beweging.
+        /// </summary>
+        public GravityMoveBehavior() : base()
+        {
+            MaxVY = 5000; // Maximale valsnelheid
+            Gravity = 2000; // Valversnelling
+            Bouncyness = 0.5; // Met de helft van de snelheid terug stuiteren
+            JumpPower = 1250; // Springkracht, pixels/seconde
 
-            VYGoal = 2500;
-
-            updateGoals(true);
+            VX = 500; 
+            DVX = 0;
         }
 
         public static void RegisterSelf()
         {
             MoveBehaviorFactory.register("gravity", typeof(GravityMoveBehavior));
         }
-
-        public override void Move()
+        
+        protected override void Move()
         {
-            updateGoals();
+            // Beweeg volgens standaard regels
+            baseMove();
 
-            double maxX = 0;
-            double maxY = 0;
-
-            double timePassed;
-
-            lock (Locks.ActionContainer)
+            if (EnsureInScreenY(false))
             {
-                maxX = ActionContainer.Instance.WindowWidth - Width;
-                maxY = ActionContainer.Instance.WindowHeight - Height;
-                timePassed = ActionContainer.Instance.DeltaTime;
-            }
-
-            double maxDVX = MaxDVX * timePassed;
-            double maxDVY = MaxDVY * timePassed;
-
-            if (Math.Abs(VXGoal - VX) < maxDVX)
-                VX = VXGoal;
-            else if (VX > VXGoal)
-                VX -= maxDVX;
-            else if (VX < VXGoal)
-                VX += maxDVX;
-
-            if (Math.Abs(VYGoal - VY) < maxDVY)
-                VY = VYGoal;
-            else if (VY > VYGoal)
-                VY -= maxDVY;
-            else if (VY < VYGoal)
-                VY += maxDVY;
-
-            if ((PosX > maxX && VX > 0) ||
-                (PosX < 0 && VX < 0))
-            {
-                VX = -VX;
-                VXGoal = -VXGoal;
-            }
-
-            if (PosX > maxX)
-                PosX = maxX;
-            if (PosX < 0)
-                PosX = 0;
-
-            if ((PosY > maxY && VY > 0) ||
-                (PosY < 0 && VY < 0))
-            {
-                VY = -VY * 0.5;
-                if (VY > -75)
+                if (VY > getTimeBased(DVY))
+                {   // Unit was aan het vallen
+                    VY = -VY * Bouncyness;
+                }
+                else
+                {   // Unit stond al op de grond of raakt het plafond
                     VY = 0;
-            }
-
-            if (PosY > maxY)
-            {
-                PosY = maxY;
-
-                if (GameController.Instance.Random.Next(0, 10) == 0)
-                {
-                    VY = -1000;
                 }
             }
-            if (PosY < 0)
-                PosY = 0;
 
-
-            PosX += VX * timePassed;
-            PosY += VY * timePassed;
+            // Zorg dat de unit het scherm niet uit loopt
+            EnsureInScreenX(true);
         }
 
-        private void updateGoals(bool force = false)
+        /// <summary>
+        /// Laat de unit springen
+        /// </summary>
+        protected void Jump()
         {
-            Random random = GameController.Instance.Random;
-
-            if (force || VX == VXGoal)
-            {
-                double newGoal = random.Next((int)(VXMax / 2), (int)(VXMax));
-                if (random.Next(0, 2) == 0)
-                    newGoal = -newGoal;
-                VXGoal = newGoal;
-            }
-
-            if (Parent != null)
-            {
-                double windowWidth;
-                double windowHeight;
-
-                lock (Locks.ActionContainer)
-                {
-                    windowWidth = ActionContainer.Instance.WindowWidth;
-                    windowHeight = ActionContainer.Instance.WindowHeight;
-                }
-
-                double minX = windowWidth / 4;
-                double maxX = windowWidth - minX;
-                double maxY = windowHeight - Height;
-
-                if ((PosX + (0.5 * Width)) < minX &&
-                    VXGoal < 0)
-                    VXGoal = -VXGoal;
-                else if ((PosX + (0.5 * Width)) > maxX &&
-                    VXGoal > 0)
-                    VXGoal = -VXGoal;
-            }
+            VY = -JumpPower;
         }
+
     }
 }

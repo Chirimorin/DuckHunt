@@ -69,7 +69,7 @@ namespace DuckHunt.Behaviors
             {
                 if (unit.MoveBehavior != null)
                 {
-                    unit.MoveBehavior.Move();
+                    unit.MoveBehavior.NewFrame();
                 }
                 else
                 {

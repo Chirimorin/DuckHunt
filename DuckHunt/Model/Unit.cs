@@ -23,10 +23,10 @@ namespace DuckHunt.Model
             {
                 if (_moveBehavior != null)
                 {
-                    _moveBehavior.Parent = null;
+                    _moveBehavior.ThisUnit = null;
                 }
                 _moveBehavior = value;
-                _moveBehavior.Parent = this;
+                _moveBehavior.ThisUnit = this;
             }
         }
 

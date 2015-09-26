@@ -53,6 +53,8 @@ namespace DuckHunt.Factories
                     UnitContainer.AddUnit(newUnit);
                 }
 
+                Console.WriteLine("Created unit " + unit);
+
                 return newUnit;
             }
 

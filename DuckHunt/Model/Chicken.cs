@@ -19,9 +19,9 @@ namespace DuckHunt.Model
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
                 //new KeyValuePair<string, object[]>("simple", null),
-                //new KeyValuePair<string, object[]>("hug", null),
-                //new KeyValuePair<string, object[]>("afraid", null),
-                //new KeyValuePair<string, object[]>("random", null),
+                new KeyValuePair<string, object[]>("hug", null),
+                new KeyValuePair<string, object[]>("afraid", null),
+                new KeyValuePair<string, object[]>("random", null),
                 new KeyValuePair<string, object[]>("gravity", null),
             };
 
@@ -61,8 +61,8 @@ namespace DuckHunt.Model
 
         public override void init(double width, double height, double posX = 0, double posY = 0)
         {
-            Width = 104;
-            Height = 90;
+            Width = 95;
+            Height = 70;
             PosX = posX;
             PosY = posY;
         }

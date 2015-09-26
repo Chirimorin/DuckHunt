@@ -9,27 +9,21 @@ using System.Threading.Tasks;
 
 namespace DuckHunt.Behaviors.Move
 {
-    class RandomMoveBehavior : BaseMoveBehavior
+    public class RandomMoveBehavior : BaseMoveBehavior
     {
-        private double VXMax { get; set; }
-        private double VYMax { get; set; }
+        protected double GoalVX { get; set; }
+        protected double GoalVY { get; set; }
 
-        private double VXGoal { get; set; }
-        private double VYGoal { get; set; }
-
-        private double MaxDVX { get; set; }
-        private double MaxDVY { get; set; }
-
-        public RandomMoveBehavior()
+        public RandomMoveBehavior() : base()
         {
             VX = 125;
             VY = 250;
 
-            VXMax = 500;
-            VYMax = 500;
+            MaxVX = 1000;
+            MaxVY = 1000;
 
-            MaxDVX = 500;
-            MaxDVY = 500;
+            DVX = 1000;
+            DVY = 1000;
 
             updateGoals(true);
         }
@@ -39,118 +33,96 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("random", typeof(RandomMoveBehavior));
         }
 
-        public override void Move()
+        protected override void Move()
         {
+            baseMove();
+
             updateGoals();
 
-            double maxX = 0;
-            double maxY = 0;
-
-            double timePassed;
-
-            lock (Locks.ActionContainer)
+            if (EnsureInScreenX(false))
             {
-                maxX = ActionContainer.Instance.WindowWidth - Width;
-                maxY = ActionContainer.Instance.WindowHeight - Height;
-                timePassed = ActionContainer.Instance.DeltaTime;
-            }
-
-            double maxDVX = MaxDVX * timePassed;
-            double maxDVY = MaxDVY * timePassed;
-
-            if (Math.Abs(VXGoal - VX) < maxDVX)
-                VX = VXGoal;
-            else if (VX > VXGoal)
-                VX -= maxDVX;
-            else if (VX < VXGoal)
-                VX += maxDVX;
-
-            if (Math.Abs(VYGoal - VY) < maxDVY)
-                VY = VYGoal;
-            else if (VY > VYGoal)
-                VY -= maxDVY;
-            else if (VY < VYGoal)
-                VY += maxDVY;
-
-            if ((PosX > maxX && VX > 0) ||
-                (PosX < 0 && VX < 0))
-            {
+                DVX = -DVX;
                 VX = -VX;
-                VXGoal = -VXGoal;
+                GoalVX = -GoalVX;
             }
 
-            if (PosX > maxX)
-                PosX = maxX;
-            if (PosX < 0)
-                PosX = 0;
-
-            if ((PosY > maxY && VY > 0) ||
-                (PosY < 0 && VY < 0))
+            if (EnsureInScreenY(false))
             {
+                DVY = -DVY;
                 VY = -VY;
-                VYGoal = -VYGoal;
+                GoalVY = -GoalVY;
             }
-
-            if (PosY > maxY)
-                PosY = maxY;
-            if (PosY < 0)
-                PosY = 0;
-
-
-            PosX += VX * timePassed;
-            PosY += VY * timePassed;
         }
 
-        private void updateGoals(bool force = false)
+        protected virtual void updateGoals(bool force = false)
         {
-            Random random = GameController.Instance.Random;
+            randomGoals(force);
 
-            if (force || VX == VXGoal)
+            // Ga richting het midden van het scherm als minder dan 25% van de rand af.
+            if (ThisUnit != null)
             {
-                double newGoal = random.Next((int)(VXMax / 2), (int)(VXMax));
-                if (random.Next(0, 2) == 0)
-                    newGoal = -newGoal;
-                VXGoal = newGoal;
-            }
+                double minX = WindowWidth / 4;
+                double maxX = WindowWidth - minX;
+                double minY = WindowHeight / 4;
+                double maxY = WindowHeight - minY;
 
-            if (force || VY == VYGoal)
-            {
-                double newGoal = random.Next((int)(VYMax / 2), (int)(VYMax));
-                if (random.Next(0, 2) == 0)
-                    newGoal = -newGoal;
-                VYGoal = newGoal;
-            }
-
-            if (Parent != null)
-            {
-                double windowWidth;
-                double windowHeight;
-
-                lock (Locks.ActionContainer)
+                if ((PosXMiddle < minX &&
+                    GoalVX < 0) ||
+                    (PosXMiddle > maxX &&
+                    GoalVX > 0))
                 {
-                    windowWidth = ActionContainer.Instance.WindowWidth;
-                    windowHeight = ActionContainer.Instance.WindowHeight;
+                    GoalVX = -GoalVX;
+                    DVX = -DVX;
                 }
 
-                double minX = windowWidth / 4;
-                double minY = windowHeight / 4;
-                double maxX = windowWidth - minX;
-                double maxY = windowHeight - minY;
-
-                if ((PosX + (0.5 * Width)) < minX &&
-                    VXGoal < 0)
-                    VXGoal = -VXGoal;
-                else if ((PosX + (0.5 * Width)) > maxX &&
-                    VXGoal > 0)
-                    VXGoal = -VXGoal;
-
-                if ((PosY + (0.5 * Height)) < minY &&
-                    VYGoal < 0)
-                    VYGoal = -VYGoal;
-                else if ((PosY + (0.5 * Height)) > maxY &&
-                    VYGoal > 0)
-                    VYGoal = -VYGoal;
+                if ((PosYMiddle < minY &&
+                    GoalVY < 0) ||
+                    (PosYMiddle > maxY &&
+                    GoalVY > 0))
+                {
+                    GoalVY = -GoalVY;
+                    DVY = -DVY;
+                }
             }
+        }
+
+        protected virtual void randomGoals(bool force = false)
+        {
+            // Update doelsnelheid voor X
+            if (force ||
+                GoalVX < 0 && VX < GoalVX ||
+                GoalVX > 0 && VX > GoalVX)
+            {
+                // Kies een nieuwe doelsnelheid
+                double newGoal = Random.Next((int)(MaxVX / 2), (int)(MaxVX));
+                // 50% kans op links of rechts
+                if (Random.Next(0, 2) == 0)
+                    newGoal = -newGoal;
+                GoalVX = newGoal;
+            }
+
+            // Update doelsnelheid voor Y
+            if (force ||
+                GoalVY < 0 && VY < GoalVY ||
+                GoalVY > 0 && VY > GoalVY)
+            {
+                // Kies een nieuwe doelsnelheid
+                double newGoal = Random.Next((int)(MaxVY / 2), (int)(MaxVY));
+                // 50% kans op links of rechts
+                if (Random.Next(0, 2) == 0)
+                    newGoal = -newGoal;
+                GoalVY = newGoal;
+            }
+
+            // X versnelling moet richting doelsnelheid gaan
+            if (DVX < 0 && GoalVX > 0 ||
+                DVX > 0 && GoalVX < 0)
+                DVX = -DVX;
+
+            // Y versnelling moet richting doelsnelheid gaan
+            if (DVY < 0 && GoalVY > 0 ||
+                DVY > 0 && GoalVY < 0)
+                DVY = -DVY;
         }
     }
 }

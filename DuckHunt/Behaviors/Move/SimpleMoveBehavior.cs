@@ -10,10 +10,10 @@ namespace DuckHunt.Behaviors.Move
 {
     class SimpleMoveBehavior : BaseMoveBehavior
     {
-        public SimpleMoveBehavior()
+        public SimpleMoveBehavior() : base()
         {
-            VX = 125;
-            VY = 250;
+            VX = 500;
+            VY = 300;
         }
 
         public static void RegisterSelf()
@@ -21,45 +21,12 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("simple", typeof(SimpleMoveBehavior));
         }
 
-        public override void Move()
+        protected override void Move()
         {
-            double maxX = 0;
-            double maxY = 0;
+            baseMove();
 
-            double timePassed;
-
-            lock (Locks.ActionContainer)
-            {
-                maxX = ActionContainer.Instance.WindowWidth - Width;
-                maxY = ActionContainer.Instance.WindowHeight - Height;
-                timePassed = ActionContainer.Instance.DeltaTime;
-            }
-
-            if ((PosX > maxX && VX > 0) ||
-                (PosX < 0 && VX < 0))
-            {
-                VX = -VX;
-            }
-
-            if (PosX > maxX)
-                PosX = maxX;
-            if (PosX < 0)
-                PosX = 0;
-
-            if ((PosY > maxY && VY > 0) ||
-                (PosY < 0 && VY < 0))
-            {
-                VY = -VY;
-            }
-
-            if (PosY > maxY)
-                PosY = maxY;
-            if (PosY < 0)
-                PosY = 0;
-
-
-            PosX += VX * timePassed;
-            PosY += VY * timePassed;
+            EnsureInScreenX(true);
+            EnsureInScreenY(true);
         }
     }
 }
