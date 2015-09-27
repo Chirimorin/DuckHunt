@@ -37,6 +37,16 @@ namespace DuckHunt.Factories
             Bunny.RegisterSelf();
         }
 
+        public Unit createRandomUnit()
+        {
+            if (_types == null ||
+                _types.Count == 0)
+                return null;
+
+            Random random = new Random();
+            return createUnit(_types.ElementAt(random.Next(0, _types.Count)).Key);
+        }
+
         public Unit createUnit(string unit)
         {
             Unit newUnit;
