@@ -56,7 +56,7 @@ namespace DuckHunt.Model
         {
             if (isHit(point))
             {
-                UnitContainer.RemoveUnit(this);
+                destroy();
             }
         }
 

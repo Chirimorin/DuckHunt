@@ -1,5 +1,7 @@
-﻿using DuckHunt.Behaviors.Draw;
+﻿using DuckHunt.Behaviors;
+using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -220,6 +222,29 @@ namespace DuckHunt.Model
             PosX = posX;
             PosY = posY;
             MaxTimeVisable = maxTimeVisable;
+        }
+
+        private bool _isDestroyed = false;
+        /// <summary>
+        /// Verwijderd de unit uit het spel. 
+        /// </summary>
+        public virtual void destroy()
+        {
+            if (!_isDestroyed)
+            {
+                _isDestroyed = true;
+                Console.WriteLine("Unit verwijderen...");
+                //lock (Locks.UnitContainer)
+                {
+                    Console.WriteLine("Lock gekregen");
+                    UnitContainer.RemoveUnit(this);
+                }
+                Console.WriteLine("Unit verwijderd...");
+            }
+            else
+            {
+                Console.WriteLine("Unit is al verwijderd!");
+            }
         }
     }
 }
