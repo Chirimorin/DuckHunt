@@ -12,7 +12,7 @@ namespace DuckHunt.Behaviors.Move
     {
         public HorizontalMoveBehavior() : base()
         {
-            VX = 200;
+            VX = 500;
             VY = 0;
         }
 
@@ -25,9 +25,14 @@ namespace DuckHunt.Behaviors.Move
         {
             PosY = ((WindowHeight / 4) * 3);
 
+
             baseMoveX();
 
-            EnsureInScreenX(true);
+            if (!ThisUnit.isMaxTimeVisableExpired())
+            {
+                Console.WriteLine("Tijd voorbij");
+                EnsureInScreenX(true);
+            }
         }
     }
 }

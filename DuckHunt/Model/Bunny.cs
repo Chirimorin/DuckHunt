@@ -51,12 +51,13 @@ namespace DuckHunt.Model
             }
         }
 
-        public override void init(double width, double height, double posX = 0, double posY = 0)
+        public override void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
         {
             Width = 100;
             Height = 100;
             PosX = posX;
             PosY = posY;
+            MaxTimeVisable = 5000;
         }
     }
 }

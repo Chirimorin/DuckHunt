@@ -1,16 +1,19 @@
 ﻿using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
 
 namespace DuckHunt.Model
 {
     public abstract class Unit
     {
+        private Stopwatch stopwatch = new Stopwatch();
+        public Unit()
+        {
+            stopwatch.Start();
+        }
+
         #region Behaviors
         private BaseMoveBehavior _moveBehavior;
         public BaseMoveBehavior MoveBehavior
@@ -161,6 +164,13 @@ namespace DuckHunt.Model
         }
         #endregion
 
+        #region Tijd zichtbaar
+        /// <summary>
+        /// Tijd dat het object in beeld blijft in milliseconden
+        /// </summary>
+        public int MaxTimeVisable { get; set; }
+        #endregion
+
         #region logica functies
         /// <summary>
         /// Controleert of een specifiek punt de Unit raakt
@@ -179,6 +189,20 @@ namespace DuckHunt.Model
 
             return false;
         }
+
+        /// <summary>
+        /// Checkt of de tijd waarin deze Unit maximaal in beeld mag zijn, is verstreken
+        /// </summary>
+        /// <returns>true als deze Unit moet verdwijnen</returns>
+        public virtual bool isMaxTimeVisableExpired()
+        {
+            if (stopwatch.ElapsedMilliseconds >= MaxTimeVisable)
+            {
+                return true;
+            }
+
+            return false;
+        }
         #endregion
 
         #region event functies
@@ -189,12 +213,13 @@ namespace DuckHunt.Model
         public virtual void onClick(Point point) { }
         #endregion
 
-        public virtual void init(double width, double height, double posX = 0, double posY = 0)
+        public virtual void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
         {
             Width = width;
             Height = height;
             PosX = posX;
             PosY = posY;
+            MaxTimeVisable = maxTimeVisable;
         }
     }
 }
