@@ -1,6 +1,7 @@
 ﻿using DuckHunt.Behaviors;
 using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -10,8 +11,34 @@ namespace DuckHunt.Model
     public abstract class Unit
     {
         private Stopwatch stopwatch = new Stopwatch();
-        public Unit()
+
+        private readonly double _birthTime;
+        /// <summary>
+        /// De leeftijd van de unit, in seconden. 
+        /// </summary>
+        public double LifeTime
         {
+            get
+            {
+                lock(Locks.ActionContainer)
+                {
+                    return ActionContainer.Instance.TimeSeconds - _birthTime;
+                }
+            }
+        }
+
+        public Unit(double width, double height, double posX, double posY, double maxLifeTime)
+        {
+            Width = width;
+            Height = height;
+            PosX = posX;
+            PosY = posY;
+            MaxLifetime = maxLifeTime;
+
+            lock (Locks.ActionContainer)
+            {
+                _birthTime = ActionContainer.Instance.TimeSeconds;
+            }
             stopwatch.Start();
         }
 
@@ -170,6 +197,7 @@ namespace DuckHunt.Model
         /// Tijd dat het object in beeld blijft in milliseconden
         /// </summary>
         public int MaxTimeVisable { get; set; }
+        public double MaxLifetime { get; set; }
         #endregion
 
         #region logica functies
@@ -195,14 +223,9 @@ namespace DuckHunt.Model
         /// Checkt of de tijd waarin deze Unit maximaal in beeld mag zijn, is verstreken
         /// </summary>
         /// <returns>true als deze Unit moet verdwijnen</returns>
-        public virtual bool isMaxTimeVisableExpired()
+        public virtual bool isMaxLifetimeExpired()
         {
-            if (stopwatch.ElapsedMilliseconds >= MaxTimeVisable)
-            {
-                return true;
-            }
-
-            return false;
+            return LifeTime > MaxLifetime;
         }
 
         /// <summary>
@@ -225,13 +248,31 @@ namespace DuckHunt.Model
         public virtual void onClick(Point point) { }
         #endregion
 
-        public virtual void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
+        public virtual void init(double width = double.NaN, double height = double.NaN, double posX = double.NaN, double posY = double.NaN, double maxLifeTime = double.PositiveInfinity)
         {
-            Width = width;
-            Height = height;
-            PosX = posX;
-            PosY = posY;
-            MaxTimeVisable = maxTimeVisable;
+            // Waarom niet constructor? Weet ik ook niet... ;)
+        }
+
+        private bool _isDestroyed = false;
+        /// <summary>
+        /// Verwijderd de unit uit het spel. 
+        /// </summary>
+        public virtual void destroy()
+        {
+            if (!_isDestroyed)
+            {
+                _isDestroyed = true;
+                //lock (Locks.UnitContainer)
+                {
+                    // UNSAFE! 
+                    // lock geeft een deadlock hier bij click events. Dus heeft een andere thread de lock nog. 
+                    UnitContainer.RemoveUnit(this);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Unit is al verwijderd!");
+            }
         }
     }
 }

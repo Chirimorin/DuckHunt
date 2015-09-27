@@ -16,13 +16,18 @@ namespace DuckHunt.Model
 {
     public class Chicken : Unit
     {
+        public Chicken() : base(95, 70, -95, -70, 10.0) { }
+
+        public Chicken(double width, double height, double posX, double posY, double maxLifeTime)
+            : base(width, height, posX, posY, maxLifeTime)
+        { }
+
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
-                new KeyValuePair<string, object[]>("simple", null),
-                /*new KeyValuePair<string, object[]>("hug", null),
-                new KeyValuePair<string, object[]>("afraid", null),
+                //new KeyValuePair<string, object[]>("simple", null),
+                //new KeyValuePair<string, object[]>("hug", null),
+                //new KeyValuePair<string, object[]>("afraid", null),
                 new KeyValuePair<string, object[]>("random", null),
-                new KeyValuePair<string, object[]>("gravity", null),*/
             };
 
         public override KeyValuePair<string, object[]> PreferredMoveBehavior
@@ -56,17 +61,13 @@ namespace DuckHunt.Model
         {
             if (isHit(point))
             {
-                UnitContainer.RemoveUnit(this);
+                destroy();
             }
         }
 
-        public override void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
+        public override void init(double width, double height, double posX, double posY, double maxLifeTime)
         {
-            Width = 95;
-            Height = 70;
-            PosX = posX;
-            PosY = posY;
-            MaxTimeVisable = 7000;
+
         }
     }
 }

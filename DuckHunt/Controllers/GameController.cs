@@ -163,10 +163,9 @@ namespace DuckHunt.Controllers
             {
                 UnitContainer.RemoveDeadUnits();
 
-                while (UnitContainer.NumUnits == 0)
+                while (UnitContainer.NumUnits < 3)
                 {
-                    UnitFactory.Instance.createUnit("chicken");
-                    UnitFactory.Instance.createUnit("bunny"); // DIT ZIJN SOMS 2 KONIJNEN OVER ELKAAE
+                    UnitFactory.Instance.createRandomUnit();
                 }
 
                 UnitContainer.MoveUnits();

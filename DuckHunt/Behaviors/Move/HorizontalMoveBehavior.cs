@@ -23,17 +23,14 @@ namespace DuckHunt.Behaviors.Move
 
         protected override void Move()
         {
-            PosY = ((WindowHeight / 4) * 3); // MOET NOG OP EEN ANDERE PLEK
-
+            PosYBottom = WindowHeight; // Ergens anders gaat dit mis, vooral als de window size veranderd.
 
             baseMoveX();
 
-            if (!ThisUnit.isMaxTimeVisableExpired())
+            if (!removeIfExpired())
             {
                 EnsureInScreenX(true);
             }
-
-            ThisUnit.removeWhenDisappeared();
         }
     }
 }

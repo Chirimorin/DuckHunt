@@ -12,9 +12,22 @@ namespace DuckHunt.Model
 {
     public class Bunny : Unit
     {
+        public Bunny() : base(90, 78, -78, 0, 5)
+        {
+            lock (Locks.ActionContainer)
+            {
+                PosYBottom = ActionContainer.Instance.WindowHeight;
+            }
+        }
+
+        public Bunny(double width, double height, double posX, double posY, double maxLifeTime)
+            : base(width, height, posX, posY, maxLifeTime)
+        { }
+
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
-                new KeyValuePair<string, object[]>("horizontal", null)
+                new KeyValuePair<string, object[]>("horizontal", null),
+                new KeyValuePair<string, object[]>("gravity", new object[] { 5000.0, 2000.0, 0.5, 1000.0, 500.0 }),
             };
 
         public override KeyValuePair<string, object[]> PreferredMoveBehavior
@@ -27,7 +40,7 @@ namespace DuckHunt.Model
 
         private KeyValuePair<string, object[]>[] possibleDrawBehaviors =
             {
-                new KeyValuePair<string, object[]>("spritesheet", new object[] { "BunnyRun.png", 3, 1, 64, 64, 0.09 }),
+                new KeyValuePair<string, object[]>("spritesheet", new object[] { "BunnyRun2.png", 3, 1, 39, 45, 0.09 }),
             };
 
         public override KeyValuePair<string, object[]> PreferredDrawBehavior
@@ -47,17 +60,13 @@ namespace DuckHunt.Model
         {
             if (isHit(point))
             {
-                UnitContainer.RemoveUnit(this);
+                destroy();
             }
         }
 
-        public override void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
+        public override void init(double width, double height, double posX, double posY, double maxLifeTime)
         {
-            Width = 100;
-            Height = 100;
-            PosX = posX;
-            PosY = posY;
-            MaxTimeVisable = 5000;
+
         }
     }
 }
