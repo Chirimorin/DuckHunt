@@ -27,7 +27,7 @@ namespace DuckHunt.Model
 
         private KeyValuePair<string, object[]>[] possibleDrawBehaviors =
             {
-                new KeyValuePair<string, object[]>("spritesheet", new object[] { "BunnyRun.png", 3, 1, 64, 64, 0.09 }),
+                new KeyValuePair<string, object[]>("spritesheet", new object[] { "BunnyRun2.png", 3, 1, 39, 45, 0.09 }),
             };
 
         public override KeyValuePair<string, object[]> PreferredDrawBehavior
@@ -53,8 +53,8 @@ namespace DuckHunt.Model
 
         public override void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
         {
-            Width = 100;
-            Height = 100;
+            Width = 78;
+            Height = 90;
             PosX = posX;
             PosY = posY;
             MaxTimeVisable = 5000;
