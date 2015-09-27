@@ -269,6 +269,7 @@ namespace DuckHunt.Behaviors.Move
             set { _mousePosition = value; }
         }
 
+
         #endregion
 
         public BaseMoveBehavior()
@@ -312,24 +313,26 @@ namespace DuckHunt.Behaviors.Move
         /// Zorgt dat de unit horizontaal binnen het scherm is
         /// </summary>
         /// <returns>true als de unit horizontaal buiten het scherm was</returns>
-        protected bool EnsureInScreenX(bool flipDirection)
+        protected bool EnsureInScreenX(bool flipDirection, bool onlyWhenMovingOut = true)
         {
-            bool result = EnsureInScreenX();
+            bool result = EnsureInScreenX(onlyWhenMovingOut);
 
             if (flipDirection && result)
                 VX = -VX;
 
             return result;
         }
-        private bool EnsureInScreenX()
+        private bool EnsureInScreenX(bool onlyWhenMovingOut)
         {
-            if (PosX < 0)
+            if (PosX < 0 &&
+                (!onlyWhenMovingOut || VX < 0))
             {
                 PosX = 0;
                 return true;
             }
 
-            if (PosXRight > WindowWidth)
+            if (PosXRight > WindowWidth &&
+                (!onlyWhenMovingOut || VX > 0))
             {
                 PosXRight = WindowWidth;
                 return true;
@@ -342,24 +345,26 @@ namespace DuckHunt.Behaviors.Move
         /// Zorgt dat de unit verticaal binnen her scherm is
         /// </summary>
         /// <returns>true als de unit verticaal buiten het scherm was</returns>
-        protected bool EnsureInScreenY(bool flipDirection)
+        protected bool EnsureInScreenY(bool flipDirection, bool onlyWhenMovingOut = true)
         {
-            bool result = EnsureInScreenY();
+            bool result = EnsureInScreenY(onlyWhenMovingOut);
 
             if (flipDirection && result)
                 VY = -VY;
 
             return result;
         }
-        private bool EnsureInScreenY()
+        private bool EnsureInScreenY(bool onlyWhenMovingOut)
         {
-            if (PosY < 0)
+            if (PosY < 0 &&
+                (!onlyWhenMovingOut || VY < 0))
             {
                 PosY = 0;
                 return true;
             }
 
-            if (PosYBottom > WindowHeight)
+            if (PosYBottom > WindowHeight &&
+                (!onlyWhenMovingOut || VY > 0))
             {
                 PosYBottom = WindowHeight;
                 return true;

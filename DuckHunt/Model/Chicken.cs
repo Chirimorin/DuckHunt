@@ -16,7 +16,7 @@ namespace DuckHunt.Model
 {
     public class Chicken : Unit
     {
-        public Chicken() : base(95, 70, 0, 0, double.PositiveInfinity) { }
+        public Chicken() : base(95, 70, -95, -70, double.PositiveInfinity) { }
 
         public Chicken(double width, double height, double posX, double posY, double maxLifeTime)
             : base(width, height, posX, posY, maxLifeTime)
