@@ -36,6 +36,19 @@ namespace DuckHunt.Behaviors
             }
         }
 
+        private static List<Unit> _disappearedUnits;
+        private static List<Unit> DisappearedUnits
+        {
+            get
+            {
+                if (_disappearedUnits == null)
+                {
+                    _disappearedUnits = new List<Unit>();
+                }
+                return _disappearedUnits;
+            }
+        }
+
         public static int NumUnits { get { return Units.Count; } }
 
         public static void AddUnit(Unit unit)

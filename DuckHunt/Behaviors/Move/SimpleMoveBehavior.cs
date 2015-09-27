@@ -24,9 +24,13 @@ namespace DuckHunt.Behaviors.Move
         protected override void Move()
         {
             baseMove();
-
-            EnsureInScreenX(true);
+            if (!ThisUnit.isMaxTimeVisableExpired())
+            {
+                EnsureInScreenX(true);
+            }
             EnsureInScreenY(true);
+
+            ThisUnit.removeWhenDisappeared();
         }
     }
 }

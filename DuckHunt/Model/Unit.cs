@@ -1,4 +1,5 @@
-﻿using DuckHunt.Behaviors.Draw;
+﻿using DuckHunt.Behaviors;
+using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -202,6 +203,17 @@ namespace DuckHunt.Model
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checkt of deze Unit uit het beeld is verdwenen en verwijderd deze Unit als dat zo is
+        /// </summary>
+        public virtual void removeWhenDisappeared()
+        {
+            if (PosX < 0 || PosX > MoveBehavior.WindowWidth || PosY < 0 || PosY > MoveBehavior.WindowHeight)
+            {
+                UnitContainer.RemoveUnit(this);
+            }
         }
         #endregion
 

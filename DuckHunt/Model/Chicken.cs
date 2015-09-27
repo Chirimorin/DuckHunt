@@ -18,11 +18,11 @@ namespace DuckHunt.Model
     {
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
-                //new KeyValuePair<string, object[]>("simple", null),
-                new KeyValuePair<string, object[]>("hug", null),
+                new KeyValuePair<string, object[]>("simple", null),
+                /*new KeyValuePair<string, object[]>("hug", null),
                 new KeyValuePair<string, object[]>("afraid", null),
                 new KeyValuePair<string, object[]>("random", null),
-                new KeyValuePair<string, object[]>("gravity", null),
+                new KeyValuePair<string, object[]>("gravity", null),*/
             };
 
         public override KeyValuePair<string, object[]> PreferredMoveBehavior
@@ -66,7 +66,7 @@ namespace DuckHunt.Model
             Height = 70;
             PosX = posX;
             PosY = posY;
-            MaxTimeVisable = maxTimeVisable;
+            MaxTimeVisable = 7000;
         }
     }
 }

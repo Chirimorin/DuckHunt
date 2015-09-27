@@ -23,16 +23,17 @@ namespace DuckHunt.Behaviors.Move
 
         protected override void Move()
         {
-            PosY = ((WindowHeight / 4) * 3);
+            PosY = ((WindowHeight / 4) * 3); // MOET NOG OP EEN ANDERE PLEK
 
 
             baseMoveX();
 
             if (!ThisUnit.isMaxTimeVisableExpired())
             {
-                Console.WriteLine("Tijd voorbij");
                 EnsureInScreenX(true);
             }
+
+            ThisUnit.removeWhenDisappeared();
         }
     }
 }
