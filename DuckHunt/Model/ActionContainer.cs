@@ -36,10 +36,20 @@ namespace DuckHunt.Model
         }
         #endregion
 
+        /// <summary>
+        /// Timestamp in ticks
+        /// </summary>
         public long Time { get; private set; }
         public readonly double TickTime;
         //public double TickTime { get; private set; }
+        /// <summary>
+        /// Tijd van deze frame in seconden
+        /// </summary>
         public double DeltaTime { get; private set; }
+        public double TimeSeconds
+        {
+            get { return Time * TickTime; }
+        }
 
         public double FPS
         {

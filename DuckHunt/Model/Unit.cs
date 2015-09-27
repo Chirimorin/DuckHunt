@@ -11,8 +11,28 @@ namespace DuckHunt.Model
     public abstract class Unit
     {
         private Stopwatch stopwatch = new Stopwatch();
+
+        private readonly double _birthTime;
+        /// <summary>
+        /// De leeftijd van de unit, in seconden. 
+        /// </summary>
+        public double LifeTime
+        {
+            get
+            {
+                lock(Locks.ActionContainer)
+                {
+                    return ActionContainer.Instance.TimeSeconds - _birthTime;
+                }
+            }
+        }
+
         public Unit()
         {
+            lock (Locks.ActionContainer)
+            {
+                _birthTime = ActionContainer.Instance.TimeSeconds;
+            }
             stopwatch.Start();
         }
 
@@ -198,12 +218,20 @@ namespace DuckHunt.Model
         /// <returns>true als deze Unit moet verdwijnen</returns>
         public virtual bool isMaxTimeVisableExpired()
         {
-            if (stopwatch.ElapsedMilliseconds >= MaxTimeVisable)
-            {
-                return true;
-            }
+            return LifeTime * 1000 > MaxTimeVisable;
 
-            return false;
+            // De if statement is al true of false, kun je direct returnen.
+
+            //return (stopwatch.ElapsedMilliseconds >= MaxTimeVisable);
+
+            // is hetzelfde als 
+
+            //if (stopwatch.ElapsedMilliseconds >= MaxTimeVisable)
+            //{
+            //    return true;
+            //}
+            //
+            //return false;
         }
         #endregion
 
@@ -233,13 +261,12 @@ namespace DuckHunt.Model
             if (!_isDestroyed)
             {
                 _isDestroyed = true;
-                Console.WriteLine("Unit verwijderen...");
                 //lock (Locks.UnitContainer)
                 {
-                    Console.WriteLine("Lock gekregen");
+                    // UNSAFE! 
+                    // lock geeft een deadlock hier bij click events. Dus heeft een andere thread de lock nog. 
                     UnitContainer.RemoveUnit(this);
                 }
-                Console.WriteLine("Unit verwijderd...");
             }
             else
             {
