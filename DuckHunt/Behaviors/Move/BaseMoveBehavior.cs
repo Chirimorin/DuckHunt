@@ -11,11 +11,15 @@ namespace DuckHunt.Behaviors.Move
 {
     public abstract class BaseMoveBehavior
     {
+        private Unit _thisUnit;
         /// <summary>
         /// De Unit die deze Move behavior heeft. 
         /// De Unit klasse zet deze zelf. 
         /// </summary>
-        public Unit ThisUnit { get; set; }
+        public virtual Unit ThisUnit {
+            get { return _thisUnit; }
+            set { _thisUnit = value; }
+        }
 
         protected Random Random { get; set; }
 

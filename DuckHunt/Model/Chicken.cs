@@ -16,6 +16,12 @@ namespace DuckHunt.Model
 {
     public class Chicken : Unit
     {
+        public Chicken() : base(95, 70, 0, 0, double.PositiveInfinity) { }
+
+        public Chicken(double width, double height, double posX, double posY, double maxLifeTime)
+            : base(width, height, posX, posY, maxLifeTime)
+        { }
+
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
                 //new KeyValuePair<string, object[]>("simple", null),
@@ -60,13 +66,9 @@ namespace DuckHunt.Model
             }
         }
 
-        public override void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
+        public override void init(double width, double height, double posX, double posY, double maxLifeTime)
         {
-            Width = 95;
-            Height = 70;
-            PosX = posX;
-            PosY = posY;
-            MaxTimeVisable = maxTimeVisable;
+
         }
     }
 }

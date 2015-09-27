@@ -47,17 +47,14 @@ namespace DuckHunt.Factories
             return createUnit(_types.ElementAt(random.Next(0, _types.Count)).Key);
         }
 
-        public Unit createUnit(string unit)
+        public Unit createUnit(string unit, params object[] args)
         {
-            Unit newUnit;
             if (_types.ContainsKey(unit))
             {
-                newUnit = (Unit)Activator.CreateInstance(_types[unit]);
+                Unit newUnit = (Unit)Activator.CreateInstance(_types[unit], args);
 
                 newUnit.MoveBehavior = MoveBehaviorFactory.Instance.createMoveBehavior(newUnit.PreferredMoveBehavior);
                 newUnit.DrawBehavior = DrawBehaviorFactory.Instance.createDrawBehavior(newUnit.PreferredDrawBehavior);
-
-                newUnit.init(25, 25);
 
                 lock (Locks.UnitContainer)
                 {

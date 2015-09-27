@@ -12,6 +12,13 @@ namespace DuckHunt.Model
 {
     public class Bunny : Unit
     {
+        public Bunny() : base(90, 78, -78, 0, 5)
+        { }
+
+        public Bunny(double width, double height, double posX, double posY, double maxLifeTime)
+            : base(width, height, posX, posY, maxLifeTime)
+        { }
+
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
                 new KeyValuePair<string, object[]>("horizontal", null)
@@ -51,13 +58,9 @@ namespace DuckHunt.Model
             }
         }
 
-        public override void init(double width, double height, double posX = 0, double posY = 0, int maxTimeVisable = 0)
+        public override void init(double width, double height, double posX, double posY, double maxLifeTime)
         {
-            Width = 78;
-            Height = 90;
-            PosX = posX;
-            PosY = posY;
-            MaxTimeVisable = 5000;
+
         }
     }
 }
