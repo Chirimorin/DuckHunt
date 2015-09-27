@@ -35,6 +35,7 @@ namespace DuckHunt.Behaviors.Move
         /// </summary>
         protected double Bouncyness { get; set; }
 
+        #region constructors
         /// <summary>
         /// MoveBehavior met een zwaartekracht gebaseerde Y-beweging.
         /// </summary>
@@ -49,6 +50,14 @@ namespace DuckHunt.Behaviors.Move
             DVX = 0;
         }
 
+        /// <summary>
+        /// MoveBehavior met een zwaartekracht gebaseerde Y-beweging.
+        /// </summary>
+        /// <param name="maxVY">Maximale valsnelheid (pixels/seconde)</param>
+        /// <param name="gravity">Valversnelling (pixels/seconde/seconde)</param>
+        /// <param name="bouncyness">Hoe ver de Unit terug stuitert als deze op de grond valt</param>
+        /// <param name="jumpPower">De snelheid waarmee de unit omhoog springt (pixels/seconde). 0 voor niet springen.</param>
+        /// <param name="vX">De x-snelheid waarmee de unit loopt. </param>
         public GravityMoveBehavior(double maxVY, double gravity, double bouncyness, double jumpPower, double vX) :base()
         {
             MaxVY = maxVY;
@@ -58,6 +67,7 @@ namespace DuckHunt.Behaviors.Move
 
             VX = vX;
         }
+        #endregion
 
         public static void RegisterSelf()
         {
@@ -81,13 +91,7 @@ namespace DuckHunt.Behaviors.Move
                 }
             }
 
-            if (ThisUnit.isMaxLifetimeExpired())
-            {
-                if (PosX > WindowWidth ||
-                    PosXRight < 0)
-                    ThisUnit.destroy();
-            }
-            else
+            if (!removeIfExpired())
             {
                 // Zorg dat de unit het scherm niet uit loopt
                 EnsureInScreenX(true);

@@ -52,6 +52,12 @@ namespace DuckHunt.Behaviors.Move
                     GoalVY = -GoalVY;
                     DVY = -DVY;
                 }
+
+                if (ThisUnit.isMaxLifetimeExpired())
+                {
+                    GoalVX = -GoalVX;
+                    DVX = -DVX;
+                }
             }
         }
     }

@@ -27,16 +27,9 @@ namespace DuckHunt.Behaviors.Move
 
             baseMoveX();
 
-            if (!ThisUnit.isMaxLifetimeExpired())
+            if (!removeIfExpired())
             {
                 EnsureInScreenX(true);
-            }
-            else
-            {
-                // Verwijder de unit als deze uit het beeld is
-                if (PosX > WindowWidth ||
-                    PosXRight < 0)
-                    ThisUnit.destroy();
             }
         }
     }

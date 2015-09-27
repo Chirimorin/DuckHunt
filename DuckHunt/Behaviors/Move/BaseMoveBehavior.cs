@@ -403,6 +403,28 @@ namespace DuckHunt.Behaviors.Move
         }
 
         /// <summary>
+        /// Als de MaxLifeTime van de unit voorbij is en of de unit buiten het scherm is
+        /// </summary>
+        /// <returns>true als de MaxLifeTime voorbij is</returns>
+        protected virtual bool removeIfExpired()
+        {
+            if (ThisUnit.isMaxLifetimeExpired())
+            {
+                if (PosX > WindowWidth ||
+                    PosXRight < 0 ||
+                    PosY > WindowHeight ||
+                    PosYBottom < 0)
+                {
+                    ThisUnit.destroy();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Veranderd een waarde in de tijd gebaseerde waarde
         /// </summary>
         /// <param name="value">De waarde per seconde</param>

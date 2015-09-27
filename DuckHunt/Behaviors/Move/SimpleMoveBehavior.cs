@@ -25,8 +25,11 @@ namespace DuckHunt.Behaviors.Move
         {
             baseMove();
 
-            EnsureInScreenX(true);
-            EnsureInScreenY(true);
+            if (!removeIfExpired())
+            {
+                EnsureInScreenX(true);
+                EnsureInScreenY(true);
+            }
         }
     }
 }

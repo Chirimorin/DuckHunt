@@ -39,18 +39,21 @@ namespace DuckHunt.Behaviors.Move
 
             updateGoals();
 
-            if (EnsureInScreenX(false))
+            if (!removeIfExpired())
             {
-                DVX = -DVX;
-                VX = -VX;
-                GoalVX = -GoalVX;
-            }
+                if (EnsureInScreenX(false))
+                {
+                    DVX = -DVX;
+                    VX = -VX;
+                    GoalVX = -GoalVX;
+                }
 
-            if (EnsureInScreenY(false))
-            {
-                DVY = -DVY;
-                VY = -VY;
-                GoalVY = -GoalVY;
+                if (EnsureInScreenY(false))
+                {
+                    DVY = -DVY;
+                    VY = -VY;
+                    GoalVY = -GoalVY;
+                }
             }
         }
 
@@ -62,17 +65,33 @@ namespace DuckHunt.Behaviors.Move
             if (ThisUnit != null)
             {
                 double minX = WindowWidth / 4;
+                double middleX = minX * 2;
                 double maxX = WindowWidth - minX;
                 double minY = WindowHeight / 4;
                 double maxY = WindowHeight - minY;
 
-                if ((PosXMiddle < minX &&
-                    GoalVX < 0) ||
-                    (PosXMiddle > maxX &&
-                    GoalVX > 0))
+
+
+                // Als de lifetime van de unit voorbij is, ga dan juist wel uit het scherm. 
+                if (ThisUnit.isMaxLifetimeExpired())
                 {
+                    if ((PosXMiddle < middleX &&
+                        GoalVX > 0) ||
+                        (PosXMiddle > middleX &&
+                        GoalVX < 0))
                     GoalVX = -GoalVX;
                     DVX = -DVX;
+                }
+                else
+                {
+                    if ((PosXMiddle < minX &&
+                        GoalVX < 0) ||
+                        (PosXMiddle > maxX &&
+                        GoalVX > 0))
+                    {
+                        GoalVX = -GoalVX;
+                        DVX = -DVX;
+                    }
                 }
 
                 if ((PosYMiddle < minY &&
