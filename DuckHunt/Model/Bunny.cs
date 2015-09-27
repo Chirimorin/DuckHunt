@@ -13,7 +13,12 @@ namespace DuckHunt.Model
     public class Bunny : Unit
     {
         public Bunny() : base(90, 78, -78, 0, 5)
-        { }
+        {
+            lock (Locks.ActionContainer)
+            {
+                PosYBottom = ActionContainer.Instance.WindowHeight;
+            }
+        }
 
         public Bunny(double width, double height, double posX, double posY, double maxLifeTime)
             : base(width, height, posX, posY, maxLifeTime)
@@ -21,7 +26,8 @@ namespace DuckHunt.Model
 
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
-                new KeyValuePair<string, object[]>("horizontal", null)
+                new KeyValuePair<string, object[]>("horizontal", null),
+                new KeyValuePair<string, object[]>("gravity", new object[] { 5000.0, 2000.0, 0.5, 1000.0, 500.0 }),
             };
 
         public override KeyValuePair<string, object[]> PreferredMoveBehavior

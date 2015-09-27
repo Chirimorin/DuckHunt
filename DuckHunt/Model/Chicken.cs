@@ -28,7 +28,6 @@ namespace DuckHunt.Model
                 new KeyValuePair<string, object[]>("hug", null),
                 new KeyValuePair<string, object[]>("afraid", null),
                 new KeyValuePair<string, object[]>("random", null),
-                new KeyValuePair<string, object[]>("gravity", null),
             };
 
         public override KeyValuePair<string, object[]> PreferredMoveBehavior

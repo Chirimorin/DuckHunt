@@ -49,6 +49,16 @@ namespace DuckHunt.Behaviors.Move
             DVX = 0;
         }
 
+        public GravityMoveBehavior(double maxVY, double gravity, double bouncyness, double jumpPower, double vX) :base()
+        {
+            MaxVY = maxVY;
+            Gravity = gravity;
+            Bouncyness = bouncyness;
+            JumpPower = jumpPower;
+
+            VX = vX;
+        }
+
         public static void RegisterSelf()
         {
             MoveBehaviorFactory.register("gravity", typeof(GravityMoveBehavior));
@@ -71,8 +81,17 @@ namespace DuckHunt.Behaviors.Move
                 }
             }
 
-            // Zorg dat de unit het scherm niet uit loopt
-            EnsureInScreenX(true);
+            if (ThisUnit.isMaxLifetimeExpired())
+            {
+                if (PosX > WindowWidth ||
+                    PosXRight < 0)
+                    ThisUnit.destroy();
+            }
+            else
+            {
+                // Zorg dat de unit het scherm niet uit loopt
+                EnsureInScreenX(true);
+            }
         }
 
         public override void FixedTimePassed()
