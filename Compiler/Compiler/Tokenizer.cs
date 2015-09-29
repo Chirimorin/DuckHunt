@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compiler
 {
-    public class Tokenizer
+    class Tokenizer
     {
         public Token StartToken { get; set; }
         private Token PreviousToken { get; set; }
@@ -58,7 +58,7 @@ namespace Compiler
             }
         }
 
-        private void ParseLine(string line, int lineNumber)
+        public void ParseLine(string line, int lineNumber)
         {
             string[] tokens = line.Split(' ');
             int character = 1;
@@ -68,9 +68,9 @@ namespace Compiler
                 if (tokens[i].Length != 0)
                 {
                     Token currentToken = new Token();
-                    currentToken.Value = tokens[i];
                     currentToken.Line = lineNumber;
                     currentToken.Character = character;
+                    currentToken.Value = tokens[i];
                     currentToken.Level = Level;
 
                     if (StartToken == null)
@@ -94,18 +94,16 @@ namespace Compiler
                     checkCodeIsValid(currentToken);
 
                     character += tokens[i].Length;
-                    //character++;
-                    //}
-                    //else
-                    //{
-                    //character++;
-                    //}
+                    character++;
                 }
-                character++;
+                else
+                {
+                    character++;
+                }
             }
         }
 
-        private Tokens getTokenType(string token)
+        public Tokens getTokenType(string token)
         {
             int number = 0;
             if (token[0] == '¤')

@@ -63,6 +63,15 @@ namespace DuckHunt.Model
         }
 
         private BaseDrawBehavior _drawBehavior;
+
+        public void FixedTimePassed(IGame game)
+        {
+            if (MoveBehavior != null)
+            {
+                MoveBehavior.FixedTimePassed(game);
+            }
+        }
+
         public BaseDrawBehavior DrawBehavior
         {
             get

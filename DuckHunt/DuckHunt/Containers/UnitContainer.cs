@@ -67,5 +67,13 @@ namespace DuckHunt.Containers
                 unit.Draw(game);
             }
         }
+        
+        public void FixedTimePassed(IGame game)
+        {
+            foreach(Unit unit in Units)
+            {
+                unit.FixedTimePassed(game);
+            }
+        }
     }
 }

@@ -227,10 +227,16 @@ namespace DuckHunt.Controllers
         {
             UnitContainer.MoveAllUnits(this);
 
-
             while (UnitContainer.NumUnits < 3)
             {
                 UnitFactory.Instance.createRandomUnit(this);
+            }
+
+            while(_accumulator > CONSTANTS.fixedTimeCalls)
+            {
+                UnitContainer.FixedTimePassed(this);
+                _accumulator -= CONSTANTS.fixedTimeCalls;
+                    
             }
 
             UnitContainer.ClearDestroyedUnits();

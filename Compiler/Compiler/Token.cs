@@ -10,15 +10,16 @@ namespace Compiler
     {
         public Token Previous { get; set; }
         public Token Next { get; set; }
+        public Token Partner { get; set; }
 
         public Tokens TokenType { get; set; }
-        public string Value { get; set; }
 
         public int Line { get; set; }
         public int Character { get; set; }
-        public int Level { get; set; }
 
-        public Token Partner { get; set; }
+        public string Value { get; set; }
+
+        public int Level { get; set; }
     }
 
     public enum Tokens
@@ -29,18 +30,18 @@ namespace Compiler
         SmallerEquals,
         GreaterThan,
         SmallerThan,
-        Number,
+        Number, 
         If,
         Else,
-        While,
-        Plus,
+        While, 
+        Plus, 
         Minus,
         EllipsisOpen, 
         EllipsisClose,
         BracketsOpen,
         BracketsClose,
-        Semicolon,
-        Becomes,
+        Semicolon, 
+        Becomes, 
         Print
     }
 }
