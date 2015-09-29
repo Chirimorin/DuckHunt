@@ -1,12 +1,17 @@
-﻿using DuckHunt.Model;
+﻿using DuckHunt.Controllers;
+using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DuckHunt.Containers
 {
+    /// <summary>
+    /// Unit container. Wordt alleen aangepast in the game thread en is dus altijd thread safe. 
+    /// </summary>
     public class UnitContainer
     {
         private List<Unit> _units;
@@ -29,25 +34,37 @@ namespace DuckHunt.Containers
             Units.Add(unit);
         }
 
-        public void RemoveUnit(Unit unit)
+        public void ClearDestroyedUnits()
         {
-            Units.Remove(unit);
-            //UnitsToDelete.Add(unit);
+            foreach (Unit unit in Units.Where(u => u.IsDestroyed))
+            {
+                unit.ClearGraphics();
+            }
+
+            Units.RemoveAll(u => u.IsDestroyed);
         }
 
-        public void MoveAllUnits()
+        public void HandleClick(Point point)
         {
             foreach(Unit unit in Units)
             {
-                unit.Move();
+                unit.onClick(point);
             }
         }
 
-        public void DrawAllUnits()
+        public void MoveAllUnits(IGame game)
         {
             foreach(Unit unit in Units)
             {
-                unit.Draw();
+                unit.Move(game);
+            }
+        }
+
+        public void DrawAllUnits(IGame game)
+        {
+            foreach(Unit unit in Units)
+            {
+                unit.Draw(game);
             }
         }
     }

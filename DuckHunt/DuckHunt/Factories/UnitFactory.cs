@@ -1,6 +1,7 @@
 ﻿using DuckHunt.Behaviors;
 using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
+using DuckHunt.Controllers;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
@@ -37,28 +38,27 @@ namespace DuckHunt.Factories
             Bunny.RegisterSelf();
         }
 
-        public Unit createRandomUnit()
+        public Unit createRandomUnit(IGame game)
         {
             if (_types == null ||
                 _types.Count == 0)
                 return null;
 
-            Random random = new Random();
-            return createUnit(_types.ElementAt(random.Next(0, _types.Count)).Key);
+            return createUnit(game, _types.ElementAt(game.Random.Next(0, _types.Count)).Key);
         }
 
-        public Unit createUnit(string unit, params object[] args)
+        public Unit createUnit(IGame game, string unit, params object[] args)
         {
             if (_types.ContainsKey(unit))
             {
-                Unit newUnit = (Unit)Activator.CreateInstance(_types[unit], args);
+                Unit newUnit = (Unit)Activator.CreateInstance(_types[unit], game);
 
                 newUnit.MoveBehavior = MoveBehaviorFactory.Instance.createMoveBehavior(newUnit.PreferredMoveBehavior);
                 newUnit.DrawBehavior = DrawBehaviorFactory.Instance.createDrawBehavior(newUnit.PreferredDrawBehavior);
 
                 lock (Locks.UnitContainer)
                 {
-                    OldUnitContainer.AddUnit(newUnit);
+                    game.UnitContainer.AddUnit(newUnit);
                 }
 
                 Console.WriteLine("Created unit " + unit);

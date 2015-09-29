@@ -75,6 +75,7 @@
     <Compile Include="Behaviors\Move\HugMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\RandomMoveBehavior.cs" />
+    <Compile Include="CONSTANTS.cs" />
     <Compile Include="Containers\InputContainer.cs" />
     <Compile Include="Containers\UnitContainer.cs" />
     <Compile Include="Controllers\Game.cs" />

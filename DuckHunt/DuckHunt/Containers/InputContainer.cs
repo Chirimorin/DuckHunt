@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DuckHunt.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,9 @@ using System.Windows;
 
 namespace DuckHunt.Containers
 {
+    /// <summary>
+    /// Input container. 
+    /// </summary>
     public class InputContainer
     {
         private List<Point> _clickedPoints;
@@ -27,6 +31,18 @@ namespace DuckHunt.Containers
         {
             get { return _mousePosition; }
             set { _mousePosition = value; }
+        }
+
+        public void HandleInputs(IGame game)
+        {
+            // foreach kan het aanpassen van collections tijdens loopen niet aan. Dit willen we ook niet. 
+            lock(Locks.InputContainer)
+            {
+                foreach (Point point in ClickedPoints)
+                {
+                    game.UnitContainer.HandleClick(point);
+                }
+            }
         }
     }
 }

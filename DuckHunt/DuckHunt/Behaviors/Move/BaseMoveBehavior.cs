@@ -21,8 +21,6 @@ namespace DuckHunt.Behaviors.Move
             set { _thisUnit = value; }
         }
 
-        protected Random Random { get; set; }
-
         #region Posities
         /// <summary>
         /// X-positie van de linker rand van de Unit (in pixels)
@@ -218,85 +216,16 @@ namespace DuckHunt.Behaviors.Move
         }
         #endregion
 
-        #region Container data
-        private double _windowWidth;
-        /// <summary>
-        /// Schermbreedte (in pixels)
-        /// </summary>
-        public double WindowWidth
-        {
-            get { return _windowWidth; }
-            set { _windowWidth = value; }
-        }
-
-        private double _windowHeight;
-        /// <summary>
-        /// Schermhoogte (in pixels)
-        /// </summary>
-        public double WindowHeight
-        {
-            get { return _windowHeight; }
-            set { _windowHeight = value; }
-        }
-
-        private double _dT;
-        /// <summary>
-        /// De tijd gepasseerd sinds de vorige frame (in seconden)
-        /// </summary>
-        public double DT
-        {
-            get { return _dT; }
-            set { _dT = value; }
-        }
-
-        private Point _mousePosition;
-        /// <summary>
-        /// De positie van de muis in deze frame.
-        /// </summary>
-        public Point MousePosition
-        {
-            get { return _mousePosition; }
-            set { _mousePosition = value; }
-        }
-
-
-        #endregion
-
-        public BaseMoveBehavior()
-        {
-            Random = OldGame.Instance.Random;
-        }
-
-        /// <summary>
-        /// Reset de data relevant aan een enkele frame en voert Move() uit.
-        /// </summary>
-        public virtual void NewFrame()
-        {
-            lock (Locks.ActionContainer)
-            {
-                WindowWidth = OldActionContainer.Instance.WindowWidth;
-                WindowHeight = OldActionContainer.Instance.WindowHeight;
-                DT = OldActionContainer.Instance.DeltaTime;
-            }
-
-            lock (Locks.InputContainer)
-            {
-                MousePosition = OldInputContainer.Instance.MousePosition;
-            }
-
-            Move();
-        }
-
         /// <summary>
         /// Wordt een vast aantal keren per seconde aangeroepen. 
         /// Alle random zonder condities (zoals een random kans om te springen) horen hier in te staan. 
         /// </summary>
-        public virtual void FixedTimePassed() { }
+        public virtual void FixedTimePassed(IGame game) { }
 
         /// <summary>
         /// De beweeg logica, deze moet uniek zijn voor elke moveBehavior
         /// </summary>
-        protected abstract void Move();
+        public abstract void Move(IGame game);
 
         /// <summary>
         /// Zorgt dat de unit horizontaal binnen het scherm is
@@ -320,10 +249,10 @@ namespace DuckHunt.Behaviors.Move
                 return true;
             }
 
-            if (PosXRight > WindowWidth &&
+            if (PosXRight > CONSTANTS.CANVAS_WIDTH &&
                 (!onlyWhenMovingOut || VX > 0))
             {
-                PosXRight = WindowWidth;
+                PosXRight = CONSTANTS.CANVAS_WIDTH;
                 return true;
             }
 
@@ -352,10 +281,10 @@ namespace DuckHunt.Behaviors.Move
                 return true;
             }
 
-            if (PosYBottom > WindowHeight &&
+            if (PosYBottom > CONSTANTS.CANVAS_HEIGHT &&
                 (!onlyWhenMovingOut || VY > 0))
             {
-                PosYBottom = WindowHeight;
+                PosYBottom = CONSTANTS.CANVAS_HEIGHT;
                 return true;
             }
 
@@ -365,43 +294,43 @@ namespace DuckHunt.Behaviors.Move
         /// <summary>
         /// Basis beweging over de X-as
         /// </summary>
-        protected virtual void baseMoveX()
+        protected virtual void baseMoveX(IGame game)
         {
             // VX houd zichzelf onder maxVX
-            VX += getTimeBased(DVX);
-            PosX += getTimeBased(VX);
+            VX += getTimeBased(DVX, game);
+            PosX += getTimeBased(VX, game);
         }
 
         /// <summary>
         /// Basis beweging over de Y-as
         /// </summary>
-        protected virtual void baseMoveY()
+        protected virtual void baseMoveY(IGame game)
         {
             // VY houd zichzelf onder MaxVY
-            VY += getTimeBased(DVY);
-            PosY += getTimeBased(VY);
+            VY += getTimeBased(DVY, game);
+            PosY += getTimeBased(VY, game);
         }
 
         /// <summary>
         /// Basis beweging over de X en Y-as
         /// </summary>
-        protected virtual void baseMove()
+        protected virtual void baseMove(IGame game)
         {
-            baseMoveX();
-            baseMoveY();
+            baseMoveX(game);
+            baseMoveY(game);
         }
 
         /// <summary>
         /// Als de MaxLifeTime van de unit voorbij is en of de unit buiten het scherm is
         /// </summary>
         /// <returns>true als de MaxLifeTime voorbij is</returns>
-        protected virtual bool removeIfExpired()
+        protected virtual bool removeIfExpired(IGame game)
         {
-            if (ThisUnit.isMaxLifetimeExpired())
+            if (ThisUnit.isMaxLifetimeExpired(game))
             {
-                if (PosX > WindowWidth ||
+                if (PosX > CONSTANTS.CANVAS_WIDTH ||
                     PosXRight < 0 ||
-                    PosY > WindowHeight ||
+                    PosY > CONSTANTS.CANVAS_HEIGHT ||
                     PosYBottom < 0)
                 {
                     ThisUnit.destroy();
@@ -418,9 +347,9 @@ namespace DuckHunt.Behaviors.Move
         /// </summary>
         /// <param name="value">De waarde per seconde</param>
         /// <returns>De waarde voor deze frame</returns>
-        protected double getTimeBased(double value)
+        protected double getTimeBased(double value, IGame game)
         {
-            return value * DT;
+            return value * game.DT;
         }
     }
 }

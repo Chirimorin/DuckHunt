@@ -1,4 +1,5 @@
-﻿using DuckHunt.Model;
+﻿using DuckHunt.Controllers;
+using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,46 +66,36 @@ namespace DuckHunt.Behaviors
 
         public static void MoveUnits()
         {
-            foreach(Unit unit in Units)
-            {
-                if (unit.MoveBehavior != null)
-                {
-                    unit.MoveBehavior.NewFrame();
-                }
-                else
-                {
-                    Console.WriteLine("Warning! Unit does not have a move behavior!");
-                }
-            }
+            
         }
 
         public static void FixedTimePassed()
         {
-            foreach (Unit unit in Units)
-            {
-                if (unit.MoveBehavior != null)
-                {
-                    unit.MoveBehavior.FixedTimePassed();
-                }
-            }
+            //foreach (Unit unit in Units)
+            //{
+            //    if (unit.MoveBehavior != null)
+            //    {
+            //        unit.MoveBehavior.FixedTimePassed();
+            //    }
+            //}
         }
 
         public static void DrawUnits()
         {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                foreach (Unit unit in Units)
-                {
-                    if (unit.DrawBehavior != null)
-                    {
-                        unit.DrawBehavior.Draw();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Warning! Unit does not have a draw behavior!");
-                    }
-                }
-            });
+            //Application.Current.Dispatcher.Invoke(delegate
+            //{
+            //    foreach (Unit unit in Units)
+            //    {
+            //        if (unit.DrawBehavior != null)
+            //        {
+            //            unit.DrawBehavior.Draw(game);
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Warning! Unit does not have a draw behavior!");
+            //        }
+            //    }
+            //});
         }
 
         public static void clicked(Point point)

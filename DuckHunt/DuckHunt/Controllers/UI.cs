@@ -3,32 +3,132 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace DuckHunt.Controllers
 {
-    class UI
+    /// <summary>
+    /// UI Controller class. 
+    /// </summary>
+    public class UI
     {
-        #region Lazy Singleton Implementation
-        // Lazy klasse is thread safe
-        private static readonly Lazy<UI> _instance
-            = new Lazy<UI>(() => new UI());
-
-        private UI() { }
-
-        public static UI Instance
-        {
-            get { return _instance.Value; }
-        }
-        #endregion
-
         private MainWindow _mainWindow;
+        private Game _game;
 
-        public MainWindow MainWindow
+        private Dispatcher _dispatcher;
+
+        private static UI _instance;
+
+        public UI()
         {
-            get { return _mainWindow; }
-            set { _mainWindow = value; }
+            // Sla de UI thread dispatcher op
+            _dispatcher = Dispatcher.CurrentDispatcher;
+
+            // Maak de main window aan
+            _mainWindow = new MainWindow();
+            _mainWindow.MainCanvas.Width = CONSTANTS.CANVAS_WIDTH;
+            _mainWindow.MainCanvas.Height = CONSTANTS.CANVAS_HEIGHT;
+            _mainWindow.Show();
+
+            // Registreer events
+            _mainWindow.Closing += Window_Closing;
+            _mainWindow.MainCanvas.MouseDown += MainCanvas_MouseDown;
+
+            // Maak de gameController aan
+            _game = new Game(this);
+            _game.StartGame();
+
+            _instance = this;
         }
 
+        /// <summary>
+        /// Als de window sluit, stop de gamethread.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_game != null)
+            {
+                _game.StopGame();
+            }
+        }
 
+        /// <summary>
+        /// Als er geklikt word, sla dit op. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // Click events komen altijd van de UI thread, geen invoke nodig. 
+            lock(Locks.InputContainer)
+            {
+                _game.InputContainer.ClickedPoints.Add(e.GetPosition(_mainWindow.MainCanvas));
+            }
+        }
+
+        /// <summary>
+        /// Slaat de huidige muispositie op in de inputContainer. Dit draait altijd op de UI thread. 
+        /// </summary>
+        public void UpdateMousePosition()
+        {
+            Invoke(() =>
+            {
+                lock (Locks.InputContainer)
+                {
+                    _game.InputContainer.MousePosition = Mouse.GetPosition(_mainWindow.MainCanvas);
+                }
+            });
+        }
+
+        public void UpdateScreen(IGame game)
+        {
+            Invoke(() => 
+            {
+                _mainWindow.FPS.Content = "FPS: " + game.FPS;
+                game.UnitContainer.DrawAllUnits(game);
+            });
+        }
+
+        public static void TryAddGraphics(UIElement element)
+        {
+            _instance.AddGraphics(element);
+        }
+        private void AddGraphics(UIElement element)
+        {
+            Invoke(() =>
+            {
+                _mainWindow.MainCanvas.Children.Add(element);
+            });
+        }
+
+        public static void TryRemoveGraphics(UIElement element)
+        {
+            _instance.RemoveGraphics(element);
+        }
+        private void RemoveGraphics(UIElement element)
+        {
+            Invoke(() =>
+            {
+                _mainWindow.MainCanvas.Children.Remove(element);
+            });
+        }
+
+        /// <summary>
+        /// Voert een functie uit op de UI thread.
+        /// </summary>
+        /// <param name="action">De actie die uitgevoerd moet worden.</param>
+        private void Invoke(Action action)
+        {
+            // Als de huidige thread access heeft, is de dispatcher niet nodig.
+            if (_dispatcher.CheckAccess())
+                action.Invoke();
+            else
+                _dispatcher.BeginInvoke(action);
+        }
     }
 }

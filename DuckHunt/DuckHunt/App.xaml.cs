@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DuckHunt.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,14 @@ namespace DuckHunt
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Startpositie van de applicatie. Start de UI controller op. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            new UI();
+        }
     }
 }

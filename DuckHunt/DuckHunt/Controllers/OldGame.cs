@@ -162,7 +162,7 @@ namespace DuckHunt.Controllers
 
                 while (OldUnitContainer.NumUnits < 3)
                 {
-                    UnitFactory.Instance.createRandomUnit();
+                    //UnitFactory.Instance.createRandomUnit();
                 }
 
                 OldUnitContainer.MoveUnits();

@@ -5,39 +5,48 @@ using System.Text;
 using System.Threading.Tasks;
 using DuckHunt.Containers;
 using System.Diagnostics;
+using System.Threading;
+using System.Windows.Threading;
+using DuckHunt.Factories;
 
 namespace DuckHunt.Controllers
 {
     public class Game : IGame
     {
-        #region Lazy Singleton Implementation
-        private static readonly Lazy<Game> _instance
-            = new Lazy<Game>(() => new Game());
-
-        private Game()
-        {
-            InputContainer = new InputContainer();
-            UnitContainer = new UnitContainer();
-
-            TickTime = 1.0 / Stopwatch.Frequency;
-            Time = Stopwatch.GetTimestamp();
-            // Calculate the minimum frame time. 
-            //if (FPSlimit)
-            //    minTicksPerFrame = Stopwatch.Frequency / maxFPS;
-        }
-
-        public static Game Instance
-        {
-            get { return _instance.Value; }
-        }
+        #region Lazy Singleton Implementation (oud)
+        //private static readonly Lazy<Game> _instance
+        //    = new Lazy<Game>(() => new Game());
+        //
+        ///// <summary>
+        ///// Game Controller
+        ///// </summary>
+        //private Game()
+        //{
+        //    // Readonly velden instellen. 
+        //    _tickTime = 1.0 / Stopwatch.Frequency;
+        //
+        //    // Bereken de minimale frame tijd
+        //    if (CONSTANTS.FPS_LIMIT > 0)
+        //        minTicksPerFrame = Stopwatch.Frequency / CONSTANTS.FPS_LIMIT;
+        //}
+        //
+        //public static Game Instance
+        //{ 
+        //    get { return _instance.Value; }
+        //}
         #endregion
 
-        #region containers
+
+        // ------------------------------------------------------ Variabelen ------------------------------------------------------ //
+
+        private UI _ui;
+
+        #region Containers
         private InputContainer _inputContainer;
         public InputContainer InputContainer
         {
             get { return _inputContainer; }
-            private set { InputContainer = value; }
+            private set { _inputContainer = value; }
         }
 
         private UnitContainer _unitContainer;
@@ -90,23 +99,152 @@ namespace DuckHunt.Controllers
             set { _time = value; }
         }
 
-        private readonly double TickTime;
+        private readonly double _tickTime;
         private long _totalTicks;
-        private double _accumulator = 0;
+
+        private double _accumulator;
         #endregion
 
+        #region Game loop info
+        private Thread _gameLoopThread;
+        private bool _isRunning = false;
+
+        private readonly long minTicksPerFrame = 1;
+        #endregion
+
+        // --------------------------------------------------------- CTOR --------------------------------------------------------- //
+
+        public Game(UI ui)
+        {
+            _ui = ui;
+
+            // Readonly velden instellen. 
+            _tickTime = 1.0 / Stopwatch.Frequency;
+
+            // Bereken de minimale frame tijd
+            if (CONSTANTS.FPS_LIMIT > 0)
+                minTicksPerFrame = Stopwatch.Frequency / CONSTANTS.FPS_LIMIT;
+        }
+
+        // ------------------------------------------------------- Functies ------------------------------------------------------- //
+
+        #region Start/Stop game
+        /// <summary>
+        /// Start de game loop. 
+        /// </summary>
+        /// <returns>true als de gameloop gestart is, false als deze al draaide.</returns>
+        public bool StartGame()
+        {
+            if (_isRunning)
+            {
+                // Game loop draait al, moet niet nog eens starten.
+                return false;
+            }
+
+            _gameLoopThread = new Thread(new ThreadStart(GameLoop));
+            _gameLoopThread.Start();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Stopt de gameloop
+        /// </summary>
+        public void StopGame()
+        {
+            _isRunning = false;
+        }
+        #endregion
+
+        /// <summary>
+        /// De gameloop. StartGame() start deze loop (in een nieuwe thread)
+        /// </summary>
+        private void GameLoop()
+        {
+            _isRunning = true;
+
+            // Nieuwe containers aanmaken aan het begin van het spel. 
+            InputContainer = new InputContainer();
+            UnitContainer = new UnitContainer();
+
+            // Begintijd vaststellen
+            UpdateTime();
+            // Accumulator moet 0 zijn hier, andere waarden worden meteen overschreven.
+            _accumulator = 0;
+
+            while (_isRunning)
+            {
+                UpdateTime();
+                HandleInputs();
+                UpdateGame();
+                UpdateScreen();
+
+                // Thread.Sleep en Thread.Yield zorgen voor haperen
+                // Wacht met een busy loop.
+                while (!TimePassed()) ;
+            }
+        }
+
+        /// <summary>
+        /// Controleert of de minimum frame tijd voorbij is
+        /// </summary>
+        /// <returns>true als de volgende frame kan starten</returns>
+        private bool TimePassed()
+        {
+            lock (Locks.ActionContainer)
+            {
+                return ((Stopwatch.GetTimestamp() - _totalTicks) > minTicksPerFrame);
+            }
+        }
+
+        /// <summary>
+        /// Update alle tijd waarden voor de huidige frame.
+        /// </summary>
         private void UpdateTime()
         {
             long ticks = Stopwatch.GetTimestamp();
 
-            DT = (ticks - _totalTicks) * (TickTime);
-            Time = ticks * TickTime;
+            DT = (ticks - _totalTicks) * (_tickTime);
+            Time = ticks * _tickTime;
             FPS = Math.Round(1d / DT, 1);
+
             _accumulator += DT;
 
             _totalTicks = ticks;
-            
         }
 
+        /// <summary>
+        /// Verwerkt user input
+        /// </summary>
+        private void HandleInputs()
+        {
+            _ui.UpdateMousePosition(); // Dispatcht zichzelf naar de UI thread.
+
+            InputContainer.HandleInputs(this);
+        }
+
+        /// <summary>
+        /// Update de game status. 
+        /// </summary>
+        private void UpdateGame()
+        {
+            UnitContainer.MoveAllUnits(this);
+
+
+            while(UnitContainer.NumUnits < 3)
+            {
+                UnitFactory.Instance.createRandomUnit(this);
+            }
+
+            UnitContainer.ClearDestroyedUnits();
+        }
+
+        /// <summary>
+        /// Update de elementen op het scherm
+        /// </summary>
+        private void UpdateScreen()
+        {
+            _ui.UpdateScreen(this); // Dispatcht zichzelf naar de UI thread.
+        }
     }
 }

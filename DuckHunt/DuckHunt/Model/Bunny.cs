@@ -12,7 +12,7 @@ namespace DuckHunt.Model
 {
     public class Bunny : Unit
     {
-        public Bunny() : base(90, 78, -78, 0, 5)
+        public Bunny(IGame game) : base(game, 90, 78, -78, 0, 5)
         {
             lock (Locks.ActionContainer)
             {
@@ -20,8 +20,8 @@ namespace DuckHunt.Model
             }
         }
 
-        public Bunny(double width, double height, double posX, double posY, double maxLifeTime)
-            : base(width, height, posX, posY, maxLifeTime)
+        public Bunny(IGame game, double width, double height, double posX, double posY, double maxLifeTime)
+            : base(game, width, height, posX, posY, maxLifeTime)
         { }
 
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
@@ -40,6 +40,7 @@ namespace DuckHunt.Model
 
         private KeyValuePair<string, object[]>[] possibleDrawBehaviors =
             {
+                //new KeyValuePair<string, object[]>("simple", null),
                 new KeyValuePair<string, object[]>("spritesheet", new object[] { "BunnyRun2.png", 3, 1, 39, 45, 0.09 }),
             };
 
@@ -62,11 +63,6 @@ namespace DuckHunt.Model
             {
                 destroy();
             }
-        }
-
-        public override void init(double width, double height, double posX, double posY, double maxLifeTime)
-        {
-
         }
     }
 }

@@ -74,14 +74,14 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("gravity", typeof(GravityMoveBehavior));
         }
         
-        protected override void Move()
+        public override void Move(IGame game)
         {
             // Beweeg volgens standaard regels
-            baseMove();
+            baseMove(game);
 
             if (EnsureInScreenY(false))
             {
-                if (VY > getTimeBased(DVY))
+                if (VY > getTimeBased(DVY, game))
                 {   // Unit was aan het vallen
                     VY = -VY * Bouncyness;
                 }
@@ -91,18 +91,18 @@ namespace DuckHunt.Behaviors.Move
                 }
             }
 
-            if (!removeIfExpired())
+            if (!removeIfExpired(game))
             {
                 // Zorg dat de unit het scherm niet uit loopt
                 EnsureInScreenX(true);
             }
         }
 
-        public override void FixedTimePassed()
+        public override void FixedTimePassed(IGame game)
         {
-            if (PosYBottom == WindowHeight && 
+            if (PosYBottom == CONSTANTS.CANVAS_WIDTH && 
                 VY == 0 &&
-                Random.Next(0,50) == 0)
+                game.Random.Next(0,50) == 0)
             {
                 Jump();
             }

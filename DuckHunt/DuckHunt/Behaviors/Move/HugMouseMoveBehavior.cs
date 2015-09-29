@@ -19,41 +19,31 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("hug", typeof(HugMouseMoveBehavior));
         }
 
-        protected override void Move()
+        protected override void updateGoals(IGame game, bool force = false)
         {
-            base.Move();
-        }
-
-        protected override void updateGoals(bool force = false)
-        {
-            randomGoals(force);
-
-            lock (Locks.InputContainer)
-            {
-                MousePosition = OldInputContainer.Instance.MousePosition;
-            }
+            randomGoals(game, force);
 
             if (ThisUnit != null)
             {
-                if ((PosXMiddle > MousePosition.X &&
+                if ((PosXMiddle > game.InputContainer.MousePosition.X &&
                 GoalVX > 0) ||
-                (PosXMiddle < MousePosition.X &&
+                (PosXMiddle < game.InputContainer.MousePosition.X &&
                 GoalVX < 0))
                 {
                     GoalVX = -GoalVX;
                     DVX = -DVX;
                 }
 
-                if ((PosYMiddle > MousePosition.Y &&
+                if ((PosYMiddle > game.InputContainer.MousePosition.Y &&
                 GoalVY > 0) ||
-                (PosYMiddle < MousePosition.Y &&
+                (PosYMiddle < game.InputContainer.MousePosition.Y &&
                 GoalVY < 0))
                 {
                     GoalVY = -GoalVY;
                     DVY = -DVY;
                 }
 
-                if (ThisUnit.isMaxLifetimeExpired())
+                if (ThisUnit.isMaxLifetimeExpired(game))
                 {
                     GoalVX = -GoalVX;
                     DVX = -DVX;

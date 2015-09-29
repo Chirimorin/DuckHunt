@@ -1,4 +1,5 @@
-﻿using DuckHunt.Factories;
+﻿using DuckHunt.Controllers;
+using DuckHunt.Factories;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
@@ -21,16 +22,9 @@ namespace DuckHunt.Behaviors.Draw
         }
 
         private Image _gfx;
-        private Image Gfx
+        public override UIElement Gfx
         {
-            get
-            {
-                return _gfx;
-            }
-            set
-            {
-                _gfx = value;
-            }
+            get { return _gfx; }
         }
 
         private BitmapSource[] _sprites;
@@ -99,35 +93,22 @@ namespace DuckHunt.Behaviors.Draw
                 }
             }
 
-            Gfx = new Image();
-            Gfx.Source = Sprites[0];
-            Gfx.RenderTransformOrigin = new Point(0.5, 0.5);
-            Gfx.RenderTransform = _transformRegular;
+            _gfx = new Image();
+            _gfx.Source = Sprites[0];
+            _gfx.RenderTransformOrigin = new Point(0.5, 0.5);
+            _gfx.RenderTransform = _transformRegular;
 
-            try
-            {
-                lock (Locks.DrawHelperContainer)
-                {
-                    OldDrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("SpritesheetDrawBehavior error: " + ex.Message);
-            }
+            TryAddGraphics();
         }
 
-        public override void Draw()
+        public override void Draw(IGame game)
         {
-            lock(Locks.ActionContainer)
-            {
-                _timePassed += OldActionContainer.Instance.DeltaTime;
-            }
+            _timePassed += game.DT;
 
             // Update sprites when needed. Even for low framerates
             while (_timePassed > _frameTime)
             {
-                Gfx.Source = Sprites[_currentFrame++];
+                _gfx.Source = Sprites[_currentFrame++];
                 _timePassed -= _frameTime;
 
                 if (_currentFrame == _frameCount)
@@ -135,31 +116,20 @@ namespace DuckHunt.Behaviors.Draw
             }
 
             if (Parent.MoveBehavior.VX < 0)
-                Gfx.RenderTransform = _transformFlipped;
+                _gfx.RenderTransform = _transformFlipped;
             else
-                Gfx.RenderTransform = _transformRegular;
+                _gfx.RenderTransform = _transformRegular;
 
-            Canvas.SetLeft(Gfx, PosX);
-            Canvas.SetTop(Gfx, PosY);
+            Canvas.SetLeft(_gfx, PosX);
+            Canvas.SetTop(_gfx, PosY);
         }
 
         public override void UpdateSize()
         {
             Application.Current.Dispatcher.Invoke(delegate
             {
-                Gfx.Width = Width;
-                Gfx.Height = Height;
-            });
-        }
-
-        public override void clearGraphics()
-        {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                lock (Locks.DrawHelperContainer)
-                {
-                    OldDrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
-                }
+                _gfx.Width = Width;
+                _gfx.Height = Height;
             });
         }
     }

@@ -1,6 +1,7 @@
 ﻿using DuckHunt.Behaviors;
 using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
+using DuckHunt.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,8 +11,6 @@ namespace DuckHunt.Model
 {
     public abstract class Unit
     {
-        private Stopwatch stopwatch = new Stopwatch();
-
         private readonly double _birthTime;
         /// <summary>
         /// De leeftijd van de unit, in seconden. 
@@ -27,7 +26,7 @@ namespace DuckHunt.Model
             }
         }
 
-        public Unit(double width, double height, double posX, double posY, double maxLifeTime)
+        public Unit(IGame game, double width, double height, double posX, double posY, double maxLifeTime)
         {
             Width = width;
             Height = height;
@@ -35,11 +34,7 @@ namespace DuckHunt.Model
             PosY = posY;
             MaxLifetime = maxLifeTime;
 
-            lock (Locks.ActionContainer)
-            {
-                _birthTime = OldActionContainer.Instance.TimeSeconds;
-            }
-            stopwatch.Start();
+            _birthTime = game.Time;
         }
 
         #region Behaviors
@@ -194,11 +189,17 @@ namespace DuckHunt.Model
 
         #region Tijd zichtbaar
         /// <summary>
-        /// Tijd dat het object in beeld blijft in milliseconden
+        /// Tijd dat het object in beeld blijft in seconden
         /// </summary>
-        public int MaxTimeVisable { get; set; }
         public double MaxLifetime { get; set; }
         #endregion
+
+        private bool _isDestroyed = false;
+        public bool IsDestroyed
+        {
+            get { return _isDestroyed; }
+            private set { _isDestroyed = value; }
+        }
 
         #region logica functies
         /// <summary>
@@ -223,20 +224,9 @@ namespace DuckHunt.Model
         /// Checkt of de tijd waarin deze Unit maximaal in beeld mag zijn, is verstreken
         /// </summary>
         /// <returns>true als deze Unit moet verdwijnen</returns>
-        public virtual bool isMaxLifetimeExpired()
+        public virtual bool isMaxLifetimeExpired(IGame game)
         {
-            return LifeTime > MaxLifetime;
-        }
-
-        /// <summary>
-        /// Checkt of deze Unit uit het beeld is verdwenen en verwijderd deze Unit als dat zo is
-        /// </summary>
-        public virtual void removeWhenDisappeared()
-        {
-            if (PosX < 0 || PosX > MoveBehavior.WindowWidth || PosY < 0 || PosY > MoveBehavior.WindowHeight)
-            {
-                OldUnitContainer.RemoveUnit(this);
-            }
+            return (game.Time - _birthTime) > MaxLifetime;
         }
         #endregion
 
@@ -247,47 +237,36 @@ namespace DuckHunt.Model
         /// <param name="point">Het punt waar geklikt is</param>
         public virtual void onClick(Point point) { }
         #endregion
-
-        public virtual void init(double width = double.NaN, double height = double.NaN, double posX = double.NaN, double posY = double.NaN, double maxLifeTime = double.PositiveInfinity)
-        {
-            // Waarom niet constructor? Weet ik ook niet... ;)
-        }
-
-        private bool _isDestroyed = false;
+        
         /// <summary>
         /// Verwijderd de unit uit het spel. 
         /// </summary>
         public virtual void destroy()
         {
-            if (!_isDestroyed)
-            {
-                _isDestroyed = true;
-                //lock (Locks.UnitContainer)
-                {
-                    // UNSAFE! 
-                    // lock geeft een deadlock hier bij click events. Dus heeft een andere thread de lock nog. 
-                    OldUnitContainer.RemoveUnit(this);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Unit is al verwijderd!");
-            }
+            _isDestroyed = true;
         }
 
-        public void Move()
+        public void Move(IGame game)
         {
             if (MoveBehavior != null)
             {
-                MoveBehavior.NewFrame();
+                MoveBehavior.Move(game);
             }
         }
 
-        public void Draw()
+        public void Draw(IGame game)
         {
             if (DrawBehavior != null)
             {
-                DrawBehavior.Draw();
+                DrawBehavior.Draw(game);
+            }
+        }
+
+        public void ClearGraphics()
+        {
+            if (DrawBehavior != null)
+            {
+                DrawBehavior.clearGraphics();
             }
         }
     }

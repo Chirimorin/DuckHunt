@@ -1,14 +1,18 @@
-﻿using DuckHunt.Model;
+﻿using DuckHunt.Controllers;
+using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DuckHunt.Behaviors.Draw
 {
     public abstract class BaseDrawBehavior
     {
+        public virtual UIElement Gfx { get; }
+
         private Unit _parent;
         public Unit Parent
         {
@@ -54,8 +58,21 @@ namespace DuckHunt.Behaviors.Draw
         }
 
         public abstract void UpdateSize();
-        public abstract void Draw();
+        public abstract void Draw(IGame game);
 
-        public abstract void clearGraphics();
+        public virtual void clearGraphics()
+        {
+            TryRemoveGraphics();
+        }
+
+        public virtual void TryAddGraphics()
+        {
+            UI.TryAddGraphics(Gfx);
+        }
+
+        public virtual void TryRemoveGraphics()
+        {
+            UI.TryRemoveGraphics(Gfx);
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DuckHunt.Controllers
 {
-    interface IGame
+    public interface IGame
     {
         InputContainer InputContainer { get; }
         UnitContainer UnitContainer { get; }

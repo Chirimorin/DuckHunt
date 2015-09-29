@@ -25,34 +25,12 @@ namespace DuckHunt
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// MainWindow word geopend en bijgehouden door de UI controller
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-
-            UI.Instance.MainWindow = this;
-            OldGame.Instance.StartGame();
-        }
-
-        private void RecalculateScreenSize(object sender, EventArgs e)
-        {
-            lock (Locks.ActionContainer)
-            {
-                OldActionContainer.Instance.WindowWidth = MainCanvas.ActualWidth;
-                OldActionContainer.Instance.WindowHeight = MainCanvas.ActualHeight;
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            OldGame.Instance.StopGame();
-        }
-
-        private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            lock (Locks.InputContainer)
-            {
-                OldInputContainer.Instance.ClickedPoints.Add(e.GetPosition(MainCanvas));
-            }
         }
     }
 }

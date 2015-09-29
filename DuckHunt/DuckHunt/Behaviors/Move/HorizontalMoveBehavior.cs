@@ -1,4 +1,5 @@
-﻿using DuckHunt.Factories;
+﻿using DuckHunt.Controllers;
+using DuckHunt.Factories;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,13 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("horizontal", typeof(HorizontalMoveBehavior));
         }
 
-        protected override void Move()
+        public override void Move(IGame game)
         {
-            PosYBottom = WindowHeight; // Ergens anders gaat dit mis, vooral als de window size veranderd.
+            PosYBottom = CONSTANTS.CANVAS_HEIGHT; 
 
-            baseMoveX();
+            baseMoveX(game);
 
-            if (!removeIfExpired())
+            if (!removeIfExpired(game))
             {
                 EnsureInScreenX(true);
             }

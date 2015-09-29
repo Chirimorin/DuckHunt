@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DuckHunt.Controllers;
 
 namespace DuckHunt.Behaviors.Move
 {
@@ -21,11 +22,11 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("simple", typeof(SimpleMoveBehavior));
         }
 
-        protected override void Move()
+        public override void Move(IGame game)
         {
-            baseMove();
+            baseMove(game);
 
-            if (!removeIfExpired())
+            if (!removeIfExpired(game))
             {
                 EnsureInScreenX(true);
                 EnsureInScreenY(true);

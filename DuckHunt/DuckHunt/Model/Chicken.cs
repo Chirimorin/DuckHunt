@@ -16,10 +16,10 @@ namespace DuckHunt.Model
 {
     public class Chicken : Unit
     {
-        public Chicken() : base(95, 70, -95, -70, 10.0) { }
+        public Chicken(IGame game) : base(game, 95, 70, -95, -70, 10.0) { }
 
-        public Chicken(double width, double height, double posX, double posY, double maxLifeTime)
-            : base(width, height, posX, posY, maxLifeTime)
+        public Chicken(IGame game, double width, double height, double posX, double posY, double maxLifeTime)
+            : base(game, width, height, posX, posY, maxLifeTime)
         { }
 
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
@@ -63,11 +63,6 @@ namespace DuckHunt.Model
             {
                 destroy();
             }
-        }
-
-        public override void init(double width, double height, double posX, double posY, double maxLifeTime)
-        {
-
         }
     }
 }

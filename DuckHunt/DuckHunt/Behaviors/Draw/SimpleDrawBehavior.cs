@@ -1,4 +1,5 @@
 ﻿using DuckHunt.Behaviors.Move;
+using DuckHunt.Controllers;
 using DuckHunt.Factories;
 using DuckHunt.Model;
 using System;
@@ -21,7 +22,8 @@ namespace DuckHunt.Behaviors.Draw
         }
 
         private Ellipse _gfx;
-        private Ellipse Gfx
+
+        public override UIElement Gfx
         {
             get
             {
@@ -37,22 +39,22 @@ namespace DuckHunt.Behaviors.Draw
         {
             get
             {
-                return Gfx.Fill;
+                return ((Ellipse)Gfx).Fill;
             }
             set
             {
-                Gfx.Fill = value;
+                ((Ellipse)Gfx).Fill = value;
             }
         }
         private Brush Stroke
         {
             get
             {
-                return Gfx.Stroke;
+                return ((Ellipse)Gfx).Stroke;
             }
             set
             {
-                Gfx.Stroke = value;
+                ((Ellipse)Gfx).Stroke = value;
             }
         }
 
@@ -60,11 +62,11 @@ namespace DuckHunt.Behaviors.Draw
         {
             get
             {
-                return Gfx.StrokeThickness;
+                return ((Ellipse)Gfx).StrokeThickness;
             }
             set
             {
-                Gfx.StrokeThickness = value;
+                ((Ellipse)Gfx).StrokeThickness = value;
             }
         }
 
@@ -74,20 +76,10 @@ namespace DuckHunt.Behaviors.Draw
             Stroke = Brushes.Black;
             StrokeThickness = 2;
 
-            try
-            {
-                lock(Locks.DrawHelperContainer)
-                {
-                    OldDrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("SimpleDrawBehavior error: " + ex.Message);
-            }
+            TryAddGraphics();
         }
 
-        public override void Draw()
+        public override void Draw(IGame game)
         {
             Canvas.SetLeft(Gfx, PosX);
             Canvas.SetTop(Gfx, PosY);
@@ -97,17 +89,9 @@ namespace DuckHunt.Behaviors.Draw
         {
             Application.Current.Dispatcher.Invoke(delegate
             {
-                Gfx.Width = Width;
-                Gfx.Height = Height;
+                ((Ellipse)Gfx).Width = Width;
+                ((Ellipse)Gfx).Height = Height;
             });
-        }
-
-        public override void clearGraphics()
-        {
-            lock (Locks.DrawHelperContainer)
-            {
-                OldDrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
-            }
         }
     }
 }

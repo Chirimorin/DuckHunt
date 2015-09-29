@@ -11,6 +11,7 @@ namespace DuckHunt.Behaviors.Move
 {
     public class RandomMoveBehavior : BaseMoveBehavior
     {
+        private bool goalsSet = false;
         protected double GoalVX { get; set; }
         protected double GoalVY { get; set; }
 
@@ -24,8 +25,6 @@ namespace DuckHunt.Behaviors.Move
 
             DVX = 1000;
             DVY = 1000;
-
-            updateGoals(true);
         }
 
         public static void RegisterSelf()
@@ -33,13 +32,13 @@ namespace DuckHunt.Behaviors.Move
             MoveBehaviorFactory.register("random", typeof(RandomMoveBehavior));
         }
 
-        protected override void Move()
+        public override void Move(IGame game)
         {
-            baseMove();
+            baseMove(game);
 
-            updateGoals();
+            updateGoals(game, !goalsSet);
 
-            if (!removeIfExpired())
+            if (!removeIfExpired(game))
             {
                 if (EnsureInScreenX(false))
                 {
@@ -57,23 +56,23 @@ namespace DuckHunt.Behaviors.Move
             }
         }
 
-        protected virtual void updateGoals(bool force = false)
+        protected virtual void updateGoals(IGame game, bool force = false)
         {
-            randomGoals(force);
+            randomGoals(game, force);
 
             // Ga richting het midden van het scherm als minder dan 25% van de rand af.
             if (ThisUnit != null)
             {
-                double minX = WindowWidth / 4;
+                double minX = CONSTANTS.CANVAS_WIDTH / 4;
                 double middleX = minX * 2;
-                double maxX = WindowWidth - minX;
-                double minY = WindowHeight / 4;
-                double maxY = WindowHeight - minY;
+                double maxX = CONSTANTS.CANVAS_WIDTH - minX;
+                double minY = CONSTANTS.CANVAS_HEIGHT / 4;
+                double maxY = CONSTANTS.CANVAS_HEIGHT - minY;
 
 
 
                 // Als de lifetime van de unit voorbij is, ga dan juist wel uit het scherm. 
-                if (ThisUnit.isMaxLifetimeExpired())
+                if (ThisUnit.isMaxLifetimeExpired(game))
                 {
                     if ((PosXMiddle < middleX &&
                         GoalVX > 0) ||
@@ -103,9 +102,11 @@ namespace DuckHunt.Behaviors.Move
                     DVY = -DVY;
                 }
             }
+
+            goalsSet = true;
         }
 
-        protected virtual void randomGoals(bool force = false)
+        protected virtual void randomGoals(IGame game, bool force = false)
         {
             // Update doelsnelheid voor X
             if (force ||
@@ -113,9 +114,9 @@ namespace DuckHunt.Behaviors.Move
                 GoalVX > 0 && VX > GoalVX)
             {
                 // Kies een nieuwe doelsnelheid
-                double newGoal = Random.Next((int)(MaxVX / 2), (int)(MaxVX));
+                double newGoal = game.Random.Next((int)(MaxVX / 2), (int)(MaxVX));
                 // 50% kans op links of rechts
-                if (Random.Next(0, 2) == 0)
+                if (game.Random.Next(0, 2) == 0)
                     newGoal = -newGoal;
                 GoalVX = newGoal;
             }
@@ -126,9 +127,9 @@ namespace DuckHunt.Behaviors.Move
                 GoalVY > 0 && VY > GoalVY)
             {
                 // Kies een nieuwe doelsnelheid
-                double newGoal = Random.Next((int)(MaxVY / 2), (int)(MaxVY));
+                double newGoal = game.Random.Next((int)(MaxVY / 2), (int)(MaxVY));
                 // 50% kans op links of rechts
-                if (Random.Next(0, 2) == 0)
+                if (game.Random.Next(0, 2) == 0)
                     newGoal = -newGoal;
                 GoalVY = newGoal;
             }
