@@ -108,7 +108,7 @@ namespace DuckHunt.Behaviors.Draw
             {
                 lock (Locks.DrawHelperContainer)
                 {
-                    DrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
+                    OldDrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
                 }
             }
             catch (Exception ex)
@@ -121,7 +121,7 @@ namespace DuckHunt.Behaviors.Draw
         {
             lock(Locks.ActionContainer)
             {
-                _timePassed += ActionContainer.Instance.DeltaTime;
+                _timePassed += OldActionContainer.Instance.DeltaTime;
             }
 
             // Update sprites when needed. Even for low framerates
@@ -158,7 +158,7 @@ namespace DuckHunt.Behaviors.Draw
             {
                 lock (Locks.DrawHelperContainer)
                 {
-                    DrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
+                    OldDrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
                 }
             });
         }

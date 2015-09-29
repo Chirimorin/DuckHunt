@@ -30,7 +30,7 @@ namespace DuckHunt.Behaviors.Move
 
             lock (Locks.InputContainer)
             {
-                MousePosition = InputContainer.Instance.MousePosition;
+                MousePosition = OldInputContainer.Instance.MousePosition;
             }
 
             if (ThisUnit != null)

@@ -7,19 +7,19 @@ using System.Windows.Controls;
 
 namespace DuckHunt.Model
 {
-    public class DrawHelperContainer
+    public class OldDrawHelperContainer
     {
         #region Lazy Singleton Implementation
         // The Lazy class guarantees Thread-safe lazy-construction of the object. 
-        private static readonly Lazy<DrawHelperContainer> _instance
-            = new Lazy<DrawHelperContainer>(() => new DrawHelperContainer());
+        private static readonly Lazy<OldDrawHelperContainer> _instance
+            = new Lazy<OldDrawHelperContainer>(() => new OldDrawHelperContainer());
 
-        private DrawHelperContainer()
+        private OldDrawHelperContainer()
         {
             
         }
 
-        public static DrawHelperContainer Instance
+        public static OldDrawHelperContainer Instance
         {
             get
             {

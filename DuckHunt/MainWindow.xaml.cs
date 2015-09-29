@@ -29,37 +29,29 @@ namespace DuckHunt
         {
             InitializeComponent();
 
-            Loaded += RecalculateScreenSize;
-            SizeChanged += RecalculateScreenSize;
-
-            lock(Locks.DrawHelperContainer)
-            {
-                DrawHelperContainer.Instance.Canvas = MainCanvas;
-                DrawHelperContainer.Instance.FPS = FPS;
-            }
-
-            GameController.Instance.StartGameLoop();
+            UI.Instance.MainWindow = this;
+            OldGame.Instance.StartGame();
         }
 
         private void RecalculateScreenSize(object sender, EventArgs e)
         {
             lock (Locks.ActionContainer)
             {
-                ActionContainer.Instance.WindowWidth = MainCanvas.ActualWidth;
-                ActionContainer.Instance.WindowHeight = MainCanvas.ActualHeight;
+                OldActionContainer.Instance.WindowWidth = MainCanvas.ActualWidth;
+                OldActionContainer.Instance.WindowHeight = MainCanvas.ActualHeight;
             }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            GameController.Instance.StopGameLoop();
+            OldGame.Instance.StopGame();
         }
 
         private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             lock (Locks.InputContainer)
             {
-                InputContainer.Instance.ClickedPoints.Add(e.GetPosition(MainCanvas));
+                OldInputContainer.Instance.ClickedPoints.Add(e.GetPosition(MainCanvas));
             }
         }
     }

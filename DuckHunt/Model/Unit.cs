@@ -22,7 +22,7 @@ namespace DuckHunt.Model
             {
                 lock(Locks.ActionContainer)
                 {
-                    return ActionContainer.Instance.TimeSeconds - _birthTime;
+                    return OldActionContainer.Instance.TimeSeconds - _birthTime;
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace DuckHunt.Model
 
             lock (Locks.ActionContainer)
             {
-                _birthTime = ActionContainer.Instance.TimeSeconds;
+                _birthTime = OldActionContainer.Instance.TimeSeconds;
             }
             stopwatch.Start();
         }
@@ -235,7 +235,7 @@ namespace DuckHunt.Model
         {
             if (PosX < 0 || PosX > MoveBehavior.WindowWidth || PosY < 0 || PosY > MoveBehavior.WindowHeight)
             {
-                UnitContainer.RemoveUnit(this);
+                OldUnitContainer.RemoveUnit(this);
             }
         }
         #endregion
@@ -266,12 +266,28 @@ namespace DuckHunt.Model
                 {
                     // UNSAFE! 
                     // lock geeft een deadlock hier bij click events. Dus heeft een andere thread de lock nog. 
-                    UnitContainer.RemoveUnit(this);
+                    OldUnitContainer.RemoveUnit(this);
                 }
             }
             else
             {
                 Console.WriteLine("Unit is al verwijderd!");
+            }
+        }
+
+        public void Move()
+        {
+            if (MoveBehavior != null)
+            {
+                MoveBehavior.NewFrame();
+            }
+        }
+
+        public void Draw()
+        {
+            if (DrawBehavior != null)
+            {
+                DrawBehavior.Draw();
             }
         }
     }

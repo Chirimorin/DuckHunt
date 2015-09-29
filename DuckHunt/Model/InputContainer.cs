@@ -7,16 +7,16 @@ using System.Windows;
 
 namespace DuckHunt.Model
 {
-    public class InputContainer
+    public class OldInputContainer
     {
         #region Lazy Singleton Implementation
         // The Lazy class guarantees Thread-safe lazy-construction of the object. 
-        private static readonly Lazy<InputContainer> _instance
-            = new Lazy<InputContainer>(() => new InputContainer());
+        private static readonly Lazy<OldInputContainer> _instance
+            = new Lazy<OldInputContainer>(() => new OldInputContainer());
 
-        private InputContainer() { }
+        private OldInputContainer() { }
 
-        public static InputContainer Instance
+        public static OldInputContainer Instance
         {
             get
             {

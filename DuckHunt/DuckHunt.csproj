@@ -75,12 +75,16 @@
     <Compile Include="Behaviors\Move\HugMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\RandomMoveBehavior.cs" />
+    <Compile Include="Containers\InputContainer.cs" />
+    <Compile Include="Containers\UnitContainer.cs" />
+    <Compile Include="Controllers\IGame.cs" />
+    <Compile Include="Controllers\UI.cs" />
     <Compile Include="Factories\DrawBehaviorFactory.cs" />
     <Compile Include="Factories\MoveBehaviorFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Behaviors\UnitContainer.cs" />
-    <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\Game.cs" />
     <Compile Include="Locks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

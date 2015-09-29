@@ -10,14 +10,14 @@ namespace DuckHunt.Model
     /// <summary>
     /// This class is responsible for keeping all data that needs to be exchanged between threads like input and output. 
     /// </summary>
-    class ActionContainer
+    class OldActionContainer
     {
         #region Lazy Singleton Implementation
         // The Lazy class guarantees Thread-safe lazy-construction of the object. 
-        private static readonly Lazy<ActionContainer> _instance
-            = new Lazy<ActionContainer>(() => new ActionContainer());
+        private static readonly Lazy<OldActionContainer> _instance
+            = new Lazy<OldActionContainer>(() => new OldActionContainer());
 
-        private ActionContainer()
+        private OldActionContainer()
         {
             Console.WriteLine("Frequency: " + Stopwatch.Frequency);
             // Frequency is door hardware bepaald. 
@@ -26,7 +26,7 @@ namespace DuckHunt.Model
             Time = Stopwatch.GetTimestamp();
         }
 
-        public static ActionContainer Instance
+        public static OldActionContainer Instance
         {
             get
             {

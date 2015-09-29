@@ -34,7 +34,7 @@ namespace DuckHunt.Model
         {
             get
             {
-                return possibleMoveBehaviors[GameController.Instance.Random.Next(0, possibleMoveBehaviors.Length)];
+                return possibleMoveBehaviors[OldGame.Instance.Random.Next(0, possibleMoveBehaviors.Length)];
             }
         }
 
@@ -48,7 +48,7 @@ namespace DuckHunt.Model
         {
             get
             {
-                return possibleDrawBehaviors[GameController.Instance.Random.Next(0, possibleDrawBehaviors.Length)];
+                return possibleDrawBehaviors[OldGame.Instance.Random.Next(0, possibleDrawBehaviors.Length)];
             }
         }
 

@@ -16,7 +16,7 @@ namespace DuckHunt.Model
         {
             lock (Locks.ActionContainer)
             {
-                PosYBottom = ActionContainer.Instance.WindowHeight;
+                PosYBottom = OldActionContainer.Instance.WindowHeight;
             }
         }
 
@@ -34,7 +34,7 @@ namespace DuckHunt.Model
         {
             get
             {
-                return possibleMoveBehaviors[GameController.Instance.Random.Next(0, possibleMoveBehaviors.Length)];
+                return possibleMoveBehaviors[OldGame.Instance.Random.Next(0, possibleMoveBehaviors.Length)];
             }
         }
 
@@ -47,7 +47,7 @@ namespace DuckHunt.Model
         {
             get
             {
-                return possibleDrawBehaviors[GameController.Instance.Random.Next(0, possibleDrawBehaviors.Length)];
+                return possibleDrawBehaviors[OldGame.Instance.Random.Next(0, possibleDrawBehaviors.Length)];
             }
         }
 

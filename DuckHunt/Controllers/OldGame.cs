@@ -14,21 +14,21 @@ using System.Windows.Threading;
 
 namespace DuckHunt.Controllers
 {
-    public class GameController
+    public class OldGame //: IGame
     {
         #region Lazy Singleton Implementation
         // The Lazy class guarantees Thread-safe lazy-construction of the object. 
-        private static readonly Lazy<GameController> _instance
-            = new Lazy<GameController>(() => new GameController());
+        private static readonly Lazy<OldGame> _instance
+            = new Lazy<OldGame>(() => new OldGame());
 
-        private GameController()
+        private OldGame()
         {
             // Calculate the minimum frame time. 
             if (FPSlimit)
                 minTicksPerFrame = Stopwatch.Frequency / maxFPS;
         }
 
-        public static GameController Instance
+        public static OldGame Instance
         {
             get
             {
@@ -65,15 +65,12 @@ namespace DuckHunt.Controllers
         /// Function to start the game loop.
         /// </summary>
         /// <returns>true if a new gameloop was started.</returns>
-        public bool StartGameLoop()
+        public bool StartGame()
         {
-            lock (Locks.GameState)
+            if (_isRunning)
             {
-                if (_isRunning)
-                {
-                    // Game loop is already running. 
-                    return false;
-                }
+                // Game loop is already running. 
+                return false;
             }
 
             _gameLoopThread = new Thread(new ThreadStart(GameLoop));
@@ -82,7 +79,7 @@ namespace DuckHunt.Controllers
             return true;
         }
 
-        public void StopGameLoop()
+        public void StopGame()
         {
             lock (Locks.GameState)
             {
@@ -124,7 +121,7 @@ namespace DuckHunt.Controllers
         {
             lock (Locks.ActionContainer)
             {
-                return ((Stopwatch.GetTimestamp() - ActionContainer.Instance.Time) > minTicksPerFrame);
+                return ((Stopwatch.GetTimestamp() - OldActionContainer.Instance.Time) > minTicksPerFrame);
             }
         }
 
@@ -135,8 +132,8 @@ namespace DuckHunt.Controllers
         {
             lock (Locks.ActionContainer)
             {
-                ActionContainer.Instance.updateTime();
-                accumulator += ActionContainer.Instance.DeltaTime;
+                OldActionContainer.Instance.updateTime();
+                accumulator += OldActionContainer.Instance.DeltaTime;
             }
         }
 
@@ -146,14 +143,14 @@ namespace DuckHunt.Controllers
             lock (Locks.UnitContainer)
                 {
                     System.Drawing.Point mousePosition = System.Windows.Forms.Control.MousePosition;
-                    InputContainer.Instance.MousePosition = new Point(mousePosition.X, mousePosition.Y);
+                    OldInputContainer.Instance.MousePosition = new Point(mousePosition.X, mousePosition.Y);
 
-                    foreach (Point point in InputContainer.Instance.ClickedPoints)
+                    foreach (Point point in OldInputContainer.Instance.ClickedPoints)
                     {
-                        UnitContainer.clicked(point);
+                        OldUnitContainer.clicked(point);
                     }
 
-                    InputContainer.Instance.ClickedPoints.Clear();
+                    OldInputContainer.Instance.ClickedPoints.Clear();
                 }
         }
 
@@ -161,18 +158,18 @@ namespace DuckHunt.Controllers
         {
             lock (Locks.UnitContainer)
             {
-                UnitContainer.RemoveDeadUnits();
+                OldUnitContainer.RemoveDeadUnits();
 
-                while (UnitContainer.NumUnits < 3)
+                while (OldUnitContainer.NumUnits < 3)
                 {
                     UnitFactory.Instance.createRandomUnit();
                 }
 
-                UnitContainer.MoveUnits();
+                OldUnitContainer.MoveUnits();
 
                 while (accumulator > fixedTimeCalls)
                 {
-                    UnitContainer.FixedTimePassed();
+                    OldUnitContainer.FixedTimePassed();
                     accumulator -= fixedTimeCalls;
                 }
             }
@@ -186,12 +183,12 @@ namespace DuckHunt.Controllers
                 {
                     lock (Locks.UnitContainer)
                     {
-                        UnitContainer.DrawUnits();
+                        OldUnitContainer.DrawUnits();
                     }
 
                     lock (Locks.ActionContainer)
                         lock (Locks.DrawHelperContainer)
-                            DrawHelperContainer.Instance.FPS.Content = ActionContainer.Instance.FPS + " FPS";
+                            OldDrawHelperContainer.Instance.FPS.Content = OldActionContainer.Instance.FPS + " FPS";
                 });
 
             }
@@ -203,7 +200,7 @@ namespace DuckHunt.Controllers
         {
             lock (Locks.UnitContainer)
             {
-                UnitContainer.RemoveAllUnits();
+                OldUnitContainer.RemoveAllUnits();
             }
         }
 

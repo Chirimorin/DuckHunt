@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:DuckHunt"
         mc:Ignorable="d"
         Title="Chicken Hunt" Height="auto" Width="auto"
-        WindowStyle="SingleBorderWindow" MinHeight="768" MinWidth="1024"
+        WindowStyle="SingleBorderWindow" 
         WindowState="Maximized" d:DesignWidth="861.211" d:DesignHeight="419.856" Closing="Window_Closing"  MouseDown="MainCanvas_MouseDown">
-    <Grid>
-        <Canvas Name="MainCanvas" Margin="0,0,0,0"></Canvas>
+    <Grid Background="Black">
+        <Viewbox Stretch="Uniform">
+            <Canvas Name="MainCanvas" Width="1280" Height="720" Background="White"></Canvas>
+        </Viewbox>
         <Label Name="FPS">Blah</Label>
     </Grid>
 </Window>

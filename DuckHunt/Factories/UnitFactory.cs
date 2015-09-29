@@ -58,7 +58,7 @@ namespace DuckHunt.Factories
 
                 lock (Locks.UnitContainer)
                 {
-                    UnitContainer.AddUnit(newUnit);
+                    OldUnitContainer.AddUnit(newUnit);
                 }
 
                 Console.WriteLine("Created unit " + unit);

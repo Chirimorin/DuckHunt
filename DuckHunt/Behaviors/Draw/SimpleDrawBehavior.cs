@@ -78,7 +78,7 @@ namespace DuckHunt.Behaviors.Draw
             {
                 lock(Locks.DrawHelperContainer)
                 {
-                    DrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
+                    OldDrawHelperContainer.Instance.Canvas.Children.Add(Gfx);
                 }
             }
             catch (Exception ex)
@@ -106,7 +106,7 @@ namespace DuckHunt.Behaviors.Draw
         {
             lock (Locks.DrawHelperContainer)
             {
-                DrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
+                OldDrawHelperContainer.Instance.Canvas.Children.Remove(Gfx);
             }
         }
     }

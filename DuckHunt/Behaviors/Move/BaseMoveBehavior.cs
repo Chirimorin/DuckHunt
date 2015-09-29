@@ -249,16 +249,6 @@ namespace DuckHunt.Behaviors.Move
             set { _dT = value; }
         }
 
-        private double _fps;
-        /// <summary>
-        /// Aantal frames per seconde, berekend aan de hand van DT
-        /// </summary>
-        public double FPS
-        {
-            get { return _fps; }
-            set { _fps = value; }
-        }
-
         private Point _mousePosition;
         /// <summary>
         /// De positie van de muis in deze frame.
@@ -274,7 +264,7 @@ namespace DuckHunt.Behaviors.Move
 
         public BaseMoveBehavior()
         {
-            Random = GameController.Instance.Random;
+            Random = OldGame.Instance.Random;
         }
 
         /// <summary>
@@ -284,15 +274,14 @@ namespace DuckHunt.Behaviors.Move
         {
             lock (Locks.ActionContainer)
             {
-                WindowWidth = ActionContainer.Instance.WindowWidth;
-                WindowHeight = ActionContainer.Instance.WindowHeight;
-                DT = ActionContainer.Instance.DeltaTime;
-                FPS = ActionContainer.Instance.FPS;
+                WindowWidth = OldActionContainer.Instance.WindowWidth;
+                WindowHeight = OldActionContainer.Instance.WindowHeight;
+                DT = OldActionContainer.Instance.DeltaTime;
             }
 
             lock (Locks.InputContainer)
             {
-                MousePosition = InputContainer.Instance.MousePosition;
+                MousePosition = OldInputContainer.Instance.MousePosition;
             }
 
             Move();

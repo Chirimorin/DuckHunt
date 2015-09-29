@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace DuckHunt.Behaviors
 {
-    static class UnitContainer
+    static class OldUnitContainer
     {
         private static List<Unit> _units;
         private static List<Unit> Units
@@ -33,19 +33,6 @@ namespace DuckHunt.Behaviors
                     _unitsToDelete = new List<Unit>();
                 }
                 return _unitsToDelete;
-            }
-        }
-
-        private static List<Unit> _disappearedUnits;
-        private static List<Unit> DisappearedUnits
-        {
-            get
-            {
-                if (_disappearedUnits == null)
-                {
-                    _disappearedUnits = new List<Unit>();
-                }
-                return _disappearedUnits;
             }
         }
 
