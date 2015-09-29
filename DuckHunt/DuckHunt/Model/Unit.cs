@@ -11,23 +11,16 @@ namespace DuckHunt.Model
 {
     public abstract class Unit
     {
+        // TODO: Dit moet niet hier, is alleen voor even omdat geen references bij properties...
+        protected Random random;
+
         private readonly double _birthTime;
-        /// <summary>
-        /// De leeftijd van de unit, in seconden. 
-        /// </summary>
-        public double LifeTime
-        {
-            get
-            {
-                lock(Locks.ActionContainer)
-                {
-                    return OldActionContainer.Instance.TimeSeconds - _birthTime;
-                }
-            }
-        }
 
         public Unit(IGame game, double width, double height, double posX, double posY, double maxLifeTime)
         {
+            random = game.Random;
+
+
             Width = width;
             Height = height;
             PosX = posX;

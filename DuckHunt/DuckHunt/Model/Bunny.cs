@@ -14,10 +14,7 @@ namespace DuckHunt.Model
     {
         public Bunny(IGame game) : base(game, 90, 78, -78, 0, 5)
         {
-            lock (Locks.ActionContainer)
-            {
-                PosYBottom = OldActionContainer.Instance.WindowHeight;
-            }
+            PosYBottom = CONSTANTS.CANVAS_HEIGHT;
         }
 
         public Bunny(IGame game, double width, double height, double posX, double posY, double maxLifeTime)
@@ -34,7 +31,7 @@ namespace DuckHunt.Model
         {
             get
             {
-                return possibleMoveBehaviors[OldGame.Instance.Random.Next(0, possibleMoveBehaviors.Length)];
+                return possibleMoveBehaviors[random.Next(0, possibleMoveBehaviors.Length)];
             }
         }
 
@@ -48,7 +45,7 @@ namespace DuckHunt.Model
         {
             get
             {
-                return possibleDrawBehaviors[OldGame.Instance.Random.Next(0, possibleDrawBehaviors.Length)];
+                return possibleDrawBehaviors[random.Next(0, possibleDrawBehaviors.Length)];
             }
         }
 

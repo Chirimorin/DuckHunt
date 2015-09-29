@@ -191,10 +191,7 @@ namespace DuckHunt.Controllers
         /// <returns>true als de volgende frame kan starten</returns>
         private bool TimePassed()
         {
-            lock (Locks.ActionContainer)
-            {
-                return ((Stopwatch.GetTimestamp() - _totalTicks) > minTicksPerFrame);
-            }
+            return ((Stopwatch.GetTimestamp() - _totalTicks) > minTicksPerFrame);
         }
 
         /// <summary>
@@ -231,7 +228,7 @@ namespace DuckHunt.Controllers
             UnitContainer.MoveAllUnits(this);
 
 
-            while(UnitContainer.NumUnits < 3)
+            while (UnitContainer.NumUnits < 3)
             {
                 UnitFactory.Instance.createRandomUnit(this);
             }

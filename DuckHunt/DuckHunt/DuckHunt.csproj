@@ -85,8 +85,6 @@
     <Compile Include="Factories\MoveBehaviorFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
-    <Compile Include="Behaviors\UnitContainer.cs" />
-    <Compile Include="Controllers\OldGame.cs" />
     <Compile Include="Locks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -94,11 +92,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ActionContainer.cs" />
     <Compile Include="Model\Bunny.cs" />
     <Compile Include="Model\Chicken.cs" />
-    <Compile Include="Model\DrawHelperContainer.cs" />
-    <Compile Include="Model\InputContainer.cs" />
     <Compile Include="Model\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
