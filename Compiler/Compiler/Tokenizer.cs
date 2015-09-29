@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler
 {
-    class Tokenizer
+    public class Tokenizer
     {
         public Token StartToken { get; set; }
         private Token PreviousToken { get; set; }
@@ -57,7 +57,7 @@ namespace Compiler
             }
         }
 
-        public void ParseLine(string line, int lineNumber)
+        private void ParseLine(string line, int lineNumber)
         {
             string[] tokens = line.Split(' ');
             int character = 1;
@@ -67,9 +67,9 @@ namespace Compiler
                 if (tokens[i].Length != 0)
                 {
                     Token currentToken = new Token();
+                    currentToken.Value = tokens[i];
                     currentToken.Line = lineNumber;
                     currentToken.Character = character;
-                    currentToken.Value = tokens[i];
                     currentToken.Level = Level;
 
                     if (StartToken == null)
@@ -90,19 +90,19 @@ namespace Compiler
                         throw new TokenNotFoundException(currentToken);
                     }
 
-
-
                     character += tokens[i].Length;
-                    character++;
+                    //character++;
+                    //}
+                    //else
+                    //{
+                    //character++;
+                    //}
                 }
-                else
-                {
-                    character++;
-                }
+                character++;
             }
         }
 
-        public Tokens getTokenType(string token)
+        private Tokens getTokenType(string token)
         {
             int number = 0;
             if (token[0] == '¤')
@@ -122,5 +122,180 @@ namespace Compiler
                 throw new Exception("Invalid token");
             }
         }
+
+        private void CheckCodeIsValid(Token token)
+        {
+            if (token.TokenType == Tokens.Identifier)
+            {
+                if (token.Previous != null &&
+                       (token.Previous.TokenType == Tokens.Identifier ||
+                        token.Previous.TokenType == Tokens.Number ||
+                        token.Previous.TokenType == Tokens.If ||
+                        token.Previous.TokenType == Tokens.Else ||
+                        token.Previous.TokenType == Tokens.While ||
+                        token.Previous.TokenType == Tokens.EllipsisClose))
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else if (token.Value.Length < 2)
+                {
+                    // Exception: Naam variabele niet goed
+                }
+            }
+            else if ((token.TokenType == Tokens.Equals ||
+                        token.TokenType == Tokens.GreaterEquals ||
+                        token.TokenType == Tokens.SmallerEquals ||
+                        token.TokenType == Tokens.GreaterThan ||
+                        token.TokenType == Tokens.SmallerThan)
+
+                        && (token.Previous == null ||
+
+                        (token.Previous != null &&
+                        token.Previous.TokenType != Tokens.Identifier &&
+                        token.Previous.TokenType != Tokens.Number &&
+                        token.Previous.TokenType != Tokens.EllipsisClose)))
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+            else if (token.TokenType == Tokens.Number
+
+                        && (token.Previous == null ||
+
+                        (token.Previous != null &&
+                        token.Previous.TokenType != Tokens.Equals &&
+                        token.Previous.TokenType != Tokens.GreaterEquals &&
+                        token.Previous.TokenType != Tokens.SmallerEquals &&
+                        token.Previous.TokenType != Tokens.GreaterThan &&
+                        token.Previous.TokenType != Tokens.SmallerThan &&
+                        token.Previous.TokenType != Tokens.EllipsisOpen &&
+                        token.Previous.TokenType != Tokens.Becomes &&
+                        token.Previous.TokenType != Tokens.Print)))
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+            else if (token.TokenType == Tokens.If)
+            {
+                if (token.Previous != null && token.Previous.TokenType != Tokens.BracketsClose &&
+                    token.Previous.TokenType != Tokens.Semicolon)
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else
+                {
+                    TokenStack.Push(token);
+                }
+            }
+            else if (token.TokenType == Tokens.Else)
+            {
+                if (token.Previous == null || (token.Previous != null && token.Previous.TokenType != Tokens.BracketsClose))
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else if (TokenStack.Peek().TokenType != Tokens.If)
+                {
+                    // Exception If ontbreekt
+                }
+                else
+                {
+                    TokenStack.Pop();
+                }
+            }
+            else if (token.TokenType == Tokens.While && token.Previous != null &&
+                     token.Previous.TokenType != Tokens.BracketsClose && token.Previous.TokenType != Tokens.Semicolon)
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+            else if ((token.TokenType == Tokens.Plus || token.TokenType == Tokens.Minus)
+
+                        && (token.Previous == null ||
+
+                       (token.Previous != null && token.Previous.TokenType != Tokens.Identifier &&
+                        token.Previous.TokenType != Tokens.Number)))
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+            else if (token.TokenType == Tokens.EllipsisOpen)
+            {
+                if (token.Previous == null || (token.Previous != null &&
+                       (token.Previous.TokenType == Tokens.Identifier ||
+                        token.Previous.TokenType == Tokens.Number ||
+                        token.Previous.TokenType == Tokens.Else ||
+                        token.Previous.TokenType == Tokens.BracketsOpen ||
+                        token.Previous.TokenType == Tokens.BracketsClose ||
+                        token.Previous.TokenType == Tokens.Semicolon)))
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else
+                {
+                    TokenStack.Push(token);
+                }
+            }
+            else if (token.TokenType == Tokens.EllipsisClose)
+            {
+                if (token.Previous == null || (token.Previous != null && token.Previous.TokenType != Tokens.Identifier &&
+                    token.Previous.TokenType != Tokens.Number))
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else if (TokenStack.Peek().TokenType != Tokens.EllipsisOpen)
+                {
+                    //Exception: Mist openingshaakje
+                }
+                else
+                {
+                    TokenStack.Pop();
+                }
+            }
+            else if (token.TokenType == Tokens.BracketsOpen)
+            {
+                if (token.Previous == null || (token.Previous != null && token.Previous.TokenType != Tokens.EllipsisClose))
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else
+                {
+                    TokenStack.Push(token);
+                }
+            }
+            else if (token.TokenType == Tokens.BracketsClose)
+            {
+                if (token.Previous == null || (token.Previous != null && token.Previous.TokenType != Tokens.BracketsOpen &&
+                    token.Previous.TokenType != Tokens.Semicolon))
+                {
+                    // Exception: Teken staat op een rare plaats
+                }
+                else if (TokenStack.Peek().TokenType != Tokens.BracketsOpen)
+                {
+                    //Exception: Mist openings accolade
+                }
+                else
+                {
+                    TokenStack.Pop();
+                }
+            }
+            else if (token.TokenType == Tokens.Semicolon &&
+
+                       (token.Previous == null ||
+
+                       (token.Previous != null &&
+                        token.Previous.TokenType != Tokens.Identifier &&
+                        token.Previous.TokenType != Tokens.Number &&
+                        token.Previous.TokenType != Tokens.EllipsisClose)))
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+            else if (token.TokenType == Tokens.Becomes && (token.Previous == null || (token.Previous != null &&
+                     token.Previous.TokenType != Tokens.Identifier)))
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+            else if (token.TokenType == Tokens.Print && token.Previous != null && token.Previous.TokenType != Tokens.BracketsClose
+                && token.Previous.TokenType != Tokens.Semicolon)
+            {
+                // Exception: Teken staat op een rare plaats
+            }
+        }
+  
     }
 }

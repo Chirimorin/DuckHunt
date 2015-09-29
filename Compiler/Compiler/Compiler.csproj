@@ -53,15 +53,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="definitie.txt" />
-    <Content Include="script - Normal.txt" />
-    <Content Include="script.txt">
+    <Content Include="scripts\definitie.txt" />
+    <Content Include="scripts\script - Normal.txt" />
+    <Content Include="scripts\script.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Script2.txt">
+    <Content Include="scripts\script2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Script2 - Normal.txt" />
+    <Content Include="scripts\script2 - Normal.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
