@@ -1,0 +1,20 @@
+﻿if					while
+else				print
+while				else
+==					>
+>=					+>
+<=					=>
+>					+
+<					=
+
+identifiers			begin met ¤
+=					-
++					==
+-					<
+
+print				if
+
+( )					¡ !
+{ }					» «
+
+;					~
