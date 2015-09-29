@@ -23,7 +23,7 @@ namespace DuckHunt.Model
 
         private KeyValuePair<string, object[]>[] possibleMoveBehaviors =
             {
-                new KeyValuePair<string, object[]>("horizontal", null),
+                //new KeyValuePair<string, object[]>("horizontal", null),
                 new KeyValuePair<string, object[]>("gravity", new object[] { 5000.0, 2000.0, 0.5, 1000.0, 500.0 }),
             };
 

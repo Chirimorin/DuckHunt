@@ -100,7 +100,7 @@ namespace DuckHunt.Behaviors.Move
 
         public override void FixedTimePassed(IGame game)
         {
-            if (PosYBottom == CONSTANTS.CANVAS_WIDTH && 
+            if (PosYBottom == CONSTANTS.CANVAS_HEIGHT && 
                 VY == 0 &&
                 game.Random.Next(0,50) == 0)
             {
