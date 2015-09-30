@@ -18,7 +18,7 @@ namespace Compiler
         public int Character { get; set; }
         public int Level { get; set; }
 
-        public Token Partner { get; set; }
+        public Tokens Partner { get; set; }
     }
 
     public enum Tokens

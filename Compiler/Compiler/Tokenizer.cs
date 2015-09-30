@@ -91,15 +91,20 @@ namespace Compiler
                         throw new TokenNotFoundException(currentToken);
                     }
 
+                    setPartner(currentToken);
+
                     checkCodeIsValid(currentToken);
 
+                    if (currentToken.TokenType == Tokens.EllipsisOpen || currentToken.TokenType == Tokens.BracketsOpen)
+                    {
+                        Level++;
+                    }
+                    else if (currentToken.TokenType == Tokens.EllipsisClose || currentToken.TokenType == Tokens.BracketsClose)
+                    {
+                        Level--;
+                    }
+
                     character += tokens[i].Length;
-                    /*character++;
-                }
-                else
-                {
-                    character++;
-                }*/
                 }
                 character++;
             }
@@ -108,21 +113,46 @@ namespace Compiler
         private Tokens getTokenType(string token)
         {
             int number = 0;
-            if (token[0] == '¤')
-            {   // Identifier
+            if (token[0] == '¤') // Identifier
+            {   
                 return Tokens.Identifier;
             }
-            else if (int.TryParse(token, out number))
-            {   // Number
+            else if (int.TryParse(token, out number)) // Number
+            {   
                 return Tokens.Number;
             }
             else if (allTokens.Any(t => t.Key == token))
             {
                 return allTokens.Where(t => t.Key == token).First().Value;
             }
-            else
-            {   // Token bestaat niet
+            else // Token bestaat niet
+            {   
                 throw new Exception("Invalid token");
+            }
+        }
+
+        private void setPartner(Token token)
+        {
+            switch (token.TokenType)
+            {
+                case Tokens.If:
+                    token.Partner = Tokens.Else;
+                    break;
+                case Tokens.Else:
+                    token.Partner = Tokens.If;
+                    break;
+                case Tokens.EllipsisOpen:
+                    token.Partner = Tokens.EllipsisClose;
+                    break;
+                case Tokens.EllipsisClose:
+                    token.Partner = Tokens.EllipsisOpen;
+                    break;
+                case Tokens.BracketsOpen:
+                    token.Partner = Tokens.BracketsClose;
+                    break;
+                case Tokens.BracketsClose:
+                    token.Partner = Tokens.BracketsOpen;
+                    break;
             }
         }
 
@@ -200,7 +230,10 @@ namespace Compiler
                 }
                 else
                 {
-                    TokenStack.Pop();
+                    if (TokenStack.Count > 0)
+                    {
+                        TokenStack.Pop();
+                    }
                 }
             }
             else if (token.TokenType == Tokens.While && token.Previous != null &&
@@ -247,7 +280,9 @@ namespace Compiler
                 }
                 else
                 {
-                    TokenStack.Pop();
+                    if (TokenStack.Count > 0) {
+                        TokenStack.Pop();
+                    }
                 }
             }
             else if (token.TokenType == Tokens.BracketsOpen)
@@ -274,7 +309,10 @@ namespace Compiler
                 }
                 else
                 {
-                    TokenStack.Pop();
+                    if (TokenStack.Count > 0)
+                    {
+                        TokenStack.Pop();
+                    }
                 }
             }
             else if (token.TokenType == Tokens.Semicolon &&
