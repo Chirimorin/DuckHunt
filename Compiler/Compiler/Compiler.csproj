@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="exceptions\InvalidVariableNameException.cs" />
+    <Compile Include="exceptions\LevelNot0Exception.cs" />
+    <Compile Include="exceptions\MissingPartnerTokenException.cs" />
     <Compile Include="exceptions\UnexpectedTokenException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

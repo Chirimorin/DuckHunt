@@ -17,7 +17,7 @@ namespace Compiler
             {
                 tokenizer.ReadFile("scripts/testScript.txt");
             }
-            catch (TokenNotFoundException e)
+            /*catch (TokenNotFoundException e)
             {
                 Console.WriteLine("Error: " + e.Message);
             }
@@ -25,7 +25,20 @@ namespace Compiler
             {
                 Console.WriteLine("Error: " + e.Message);
             }
+            catch (MissingPartnerTokenException e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+            }*/
 
+            catch (Exception ex)
+            {
+                if (ex is TokenNotFoundException || ex is UnexpectedTokenException || ex is MissingPartnerTokenException || 
+                    ex is LevelNot0Exception || ex is InvalidVariableNameException)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+            
             Console.WriteLine("Done!");
             Console.ReadKey();
         }

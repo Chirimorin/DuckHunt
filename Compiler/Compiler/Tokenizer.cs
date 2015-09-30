@@ -54,7 +54,7 @@ namespace Compiler
 
             if (Level != 0)
             {
-                // Brackets matchen niet
+                throw new LevelNot0Exception(); // Brackets matchen niet
             }
         }
 
@@ -172,7 +172,7 @@ namespace Compiler
                 }
                 else if (token.Value.Length < 2)
                 {
-                    // Exception: Naam variabele niet goed
+                    throw new InvalidVariableNameException(token); // Exception: Naam variabele niet goed
                 }
             }
             else if ((token.TokenType == Tokens.Equals ||
@@ -226,7 +226,7 @@ namespace Compiler
                 }
                 else if (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.If)
                 {
-                    // Exception If ontbreekt
+                    throw new MissingPartnerTokenException(token); // Exception If ontbreekt
                 }
                 else
                 {
@@ -276,7 +276,7 @@ namespace Compiler
                 }
                 else if (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.EllipsisOpen)
                 {
-                    //Exception: Mist openingshaakje
+                    throw new MissingPartnerTokenException(token); // Exception: Mist openingshaakje
                 }
                 else
                 {
@@ -305,7 +305,7 @@ namespace Compiler
                 }
                 else if (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.BracketsOpen)
                 {
-                    //Exception: Mist openings accolade
+                    throw new MissingPartnerTokenException(token); // Exception: Mist openings accolade
                 }
                 else
                 {
