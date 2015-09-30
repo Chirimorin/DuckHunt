@@ -13,30 +13,6 @@ namespace DuckHunt.Controllers
 {
     public class Game : IGame
     {
-        #region Lazy Singleton Implementation (oud)
-        //private static readonly Lazy<Game> _instance
-        //    = new Lazy<Game>(() => new Game());
-        //
-        ///// <summary>
-        ///// Game Controller
-        ///// </summary>
-        //private Game()
-        //{
-        //    // Readonly velden instellen. 
-        //    _tickTime = 1.0 / Stopwatch.Frequency;
-        //
-        //    // Bereken de minimale frame tijd
-        //    if (CONSTANTS.FPS_LIMIT > 0)
-        //        minTicksPerFrame = Stopwatch.Frequency / CONSTANTS.FPS_LIMIT;
-        //}
-        //
-        //public static Game Instance
-        //{ 
-        //    get { return _instance.Value; }
-        //}
-        #endregion
-
-
         // ------------------------------------------------------ Variabelen ------------------------------------------------------ //
 
         private UI _ui;
@@ -236,7 +212,6 @@ namespace DuckHunt.Controllers
             {
                 UnitContainer.FixedTimePassed(this);
                 _accumulator -= CONSTANTS.fixedTimeCalls;
-                    
             }
 
             UnitContainer.ClearDestroyedUnits();
