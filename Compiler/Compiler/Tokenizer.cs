@@ -105,6 +105,8 @@ namespace Compiler
                     }
 
                     character += tokens[i].Length;
+
+                    PreviousToken = currentToken;
                 }
                 character++;
             }
@@ -208,8 +210,8 @@ namespace Compiler
             }
             else if (token.TokenType == Tokens.If)
             {
-                if (token.Previous != null && token.Previous.TokenType != Tokens.BracketsClose &&
-                    token.Previous.TokenType != Tokens.Semicolon)
+                if (token.Previous != null && token.Previous.TokenType != Tokens.EllipsisOpen && 
+                    token.Previous.TokenType != Tokens.BracketsClose && token.Previous.TokenType != Tokens.Semicolon)
                 {
                     throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
                 }
@@ -236,7 +238,7 @@ namespace Compiler
                     }
                 }
             }
-            else if (token.TokenType == Tokens.While && token.Previous != null &&
+            else if (token.TokenType == Tokens.While && token.Previous != null  && token.Previous.TokenType != Tokens.EllipsisOpen &&
                      token.Previous.TokenType != Tokens.BracketsClose && token.Previous.TokenType != Tokens.Semicolon)
             {
                 throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
@@ -331,8 +333,8 @@ namespace Compiler
             {
                 throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
             }
-            else if (token.TokenType == Tokens.Print && token.Previous != null && token.Previous.TokenType != Tokens.BracketsClose
-                && token.Previous.TokenType != Tokens.Semicolon)
+            else if (token.TokenType == Tokens.Print && token.Previous != null && token.Previous.TokenType != Tokens.EllipsisOpen &&
+                token.Previous.TokenType != Tokens.BracketsClose && token.Previous.TokenType != Tokens.Semicolon)
             {
                 throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
             }

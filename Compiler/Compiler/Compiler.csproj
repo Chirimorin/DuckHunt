@@ -58,14 +58,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\definitie.txt" />
-    <Content Include="scripts\script _Normal.txt" />
+    <Content Include="scripts\script  - normal.txt" />
     <Content Include="scripts\script.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="scripts\script2 - normal.txt" />
     <Content Include="scripts\script2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="scripts\script2_Normal.txt" />
     <Content Include="scripts\testScript.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
