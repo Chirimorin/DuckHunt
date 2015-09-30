@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compiler
 {
-    class Tokenizer
+    public class Tokenizer
     {
         public Token StartToken { get; set; }
         private Token PreviousToken { get; set; }
@@ -58,7 +58,7 @@ namespace Compiler
             }
         }
 
-        public void ParseLine(string line, int lineNumber)
+        private void ParseLine(string line, int lineNumber)
         {
             string[] tokens = line.Split(' ');
             int character = 1;
@@ -68,9 +68,9 @@ namespace Compiler
                 if (tokens[i].Length != 0)
                 {
                     Token currentToken = new Token();
+                    currentToken.Value = tokens[i];
                     currentToken.Line = lineNumber;
                     currentToken.Character = character;
-                    currentToken.Value = tokens[i];
                     currentToken.Level = Level;
 
                     if (StartToken == null)
@@ -94,16 +94,18 @@ namespace Compiler
                     checkCodeIsValid(currentToken);
 
                     character += tokens[i].Length;
-                    character++;
+                    /*character++;
                 }
                 else
                 {
                     character++;
+                }*/
                 }
+                character++;
             }
         }
 
-        public Tokens getTokenType(string token)
+        private Tokens getTokenType(string token)
         {
             int number = 0;
             if (token[0] == '¤')
@@ -192,7 +194,7 @@ namespace Compiler
                 {
                     throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
                 }
-                else if (TokenStack.Peek().TokenType != Tokens.If)
+                else if (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.If)
                 {
                     // Exception If ontbreekt
                 }
@@ -239,7 +241,7 @@ namespace Compiler
                 {
                     throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
                 }
-                else if (TokenStack.Peek().TokenType != Tokens.EllipsisOpen)
+                else if (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.EllipsisOpen)
                 {
                     //Exception: Mist openingshaakje
                 }
@@ -266,7 +268,7 @@ namespace Compiler
                 {
                     throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
                 }
-                else if (TokenStack.Peek().TokenType != Tokens.BracketsOpen)
+                else if (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.BracketsOpen)
                 {
                     //Exception: Mist openings accolade
                 }
