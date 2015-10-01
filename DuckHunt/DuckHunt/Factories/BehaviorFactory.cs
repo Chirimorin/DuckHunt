@@ -25,7 +25,7 @@ namespace DuckHunt.Factories
                             //return new SimpleMoveBehavior(0, 0);
                             return new AliveChickenMoveBehavior(1000, 1000, 1000, 1000);
                         case "dead":
-                            return new AliveChickenMoveBehavior(1000, 1000, 1000, 1000);
+                            return new DeadUnitMoveBehavior(1000, 1000);
                         default:
                             throw new ArgumentException("Onbekende state: " + state, "state");
                     }

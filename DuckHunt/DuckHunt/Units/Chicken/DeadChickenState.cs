@@ -12,15 +12,28 @@ namespace DuckHunt.Units.Chicken
 {
     public class DeadChickenState : BaseUnitState
     {
+        private double Timer { get; set; }
+        private double DespawnTime { get; set; }
+
         public DeadChickenState(string unit, string name) : base(unit, name)
         {
-            //DrawBehavior = OldDrawBehaviorFactory.Instance.createDrawBehavior(new KeyValuePair<string, object[]>("spritesheet", new object[] { "ChickenFly.png", 4, 2, 97, 72, 0.07 }));
-            //MoveBehavior = OldMoveBehaviorFactory.Instance.createMoveBehavior(new KeyValuePair<string, object[]>("random", null));
+            Timer = 0;
+            DespawnTime = 5;
         }
 
         public override void onClick(Unit unit, Point point)
         {
             // Doe niks
+        }
+
+        public override void Update(Unit unit, IGame game)
+        {
+            base.Update(unit, game);
+
+            Timer += game.DT;
+
+            if (Timer > DespawnTime)
+                unit.destroy();
         }
     }
 }

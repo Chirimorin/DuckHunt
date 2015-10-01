@@ -52,11 +52,11 @@ namespace DuckHunt.Containers
             }
         }
 
-        public void MoveAllUnits(IGame game)
+        public void UpdateAllUnits(IGame game)
         {
             foreach(Unit unit in Units)
             {
-                unit.Move(game);
+                unit.Update(game);
             }
         }
 

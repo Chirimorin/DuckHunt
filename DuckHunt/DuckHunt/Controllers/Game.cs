@@ -202,7 +202,7 @@ namespace DuckHunt.Controllers
         /// </summary>
         private void UpdateGame()
         {
-            UnitContainer.MoveAllUnits(this);
+            UnitContainer.UpdateAllUnits(this);
 
             while (UnitContainer.NumUnits < 1)
             {

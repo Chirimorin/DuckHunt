@@ -142,12 +142,9 @@ namespace DuckHunt.Units
             get { return _state; }
             set
             {
-                Console.WriteLine("New state");
                 if (_state != null)
                 {
-                    Console.WriteLine("cleanup start");
                     _state.CleanUp();
-                    Console.WriteLine("cleanup done");
                 }
                 _state = value;
             }
@@ -188,9 +185,9 @@ namespace DuckHunt.Units
         #endregion
 
         #region Update
-        public void Move(IGame game)
+        public void Update(IGame game)
         {
-            State.Move(this, game);
+            State.Update(this, game);
         }
 
         public void FixedTimePassed(IGame game)
@@ -210,6 +207,7 @@ namespace DuckHunt.Units
         public virtual void destroy()
         {
             IsDestroyed = true;
+            State.CleanUp();
         }
 
         public virtual bool isHit(Point point)

@@ -50,7 +50,7 @@ namespace DuckHunt.Units
         #region Functions
         public abstract void onClick(Unit unit, Point point);
 
-        public virtual void Move(Unit unit, IGame game)
+        public virtual void Update(Unit unit, IGame game)
         {
             MoveBehavior.Move(unit, game);
         }
