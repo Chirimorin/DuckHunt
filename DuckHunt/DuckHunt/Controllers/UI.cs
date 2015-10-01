@@ -65,7 +65,7 @@ namespace DuckHunt.Controllers
         public void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // Click events komen altijd van de UI thread, geen invoke nodig. 
-            lock(Locks.InputContainer)
+            lock(Locks.ClickedPoints)
             {
                 _game.InputContainer.ClickedPoints.Add(e.GetPosition(_mainWindow.MainCanvas));
             }
@@ -78,10 +78,7 @@ namespace DuckHunt.Controllers
         {
             Invoke(() =>
             {
-                lock (Locks.InputContainer)
-                {
-                    _game.InputContainer.MousePosition = Mouse.GetPosition(_mainWindow.MainCanvas);
-                }
+                _game.InputContainer.MousePosition = Mouse.GetPosition(_mainWindow.MainCanvas);
             });
         }
 

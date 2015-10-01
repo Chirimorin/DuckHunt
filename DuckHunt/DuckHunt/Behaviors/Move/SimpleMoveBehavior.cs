@@ -21,7 +21,6 @@ namespace DuckHunt.Behaviors.Move
 
             if (screenEntered(unit))
             {
-                Console.WriteLine("Unit is in screen: {0};{1}", unit.PosX, unit.PosY);
                 bounceLeft(unit);
                 bounceRight(unit);
                 bounceTop(unit);
@@ -29,7 +28,6 @@ namespace DuckHunt.Behaviors.Move
             }
             else
             {
-                Console.WriteLine("Unit is not in screen");
                 MoveIntoScreen(unit);
             }
         }

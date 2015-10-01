@@ -38,9 +38,8 @@ namespace DuckHunt.Factories
         {
             Console.WriteLine("Creating draw behavior for " + unit + " in state " + state);
 
-            return UI.Invoke<IDrawBehavior>(delegate ()
+            return UI.Invoke<IDrawBehavior>(new Func<IDrawBehavior>(() =>
             {
-                Console.WriteLine("Draw behavior invoked");
                 switch (unit)
                 {
                     case "chicken":
@@ -56,7 +55,7 @@ namespace DuckHunt.Factories
                     default:
                         throw new ArgumentException("onbekende unit: " + unit, "unit");
                 }
-            });
+            }));
         }
 
     }

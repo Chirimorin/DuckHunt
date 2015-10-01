@@ -8,7 +8,7 @@ namespace DuckHunt
 {
     public static class Locks
     {
-        public static object InputContainer = new object { };
+        public static object ClickedPoints = new object { };
         public static object UnitContainer = new object { };
     }
 }

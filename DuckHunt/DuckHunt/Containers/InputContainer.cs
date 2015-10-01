@@ -35,8 +35,8 @@ namespace DuckHunt.Containers
 
         public void HandleInputs(IGame game)
         {
-            // foreach kan het aanpassen van collections tijdens loopen niet aan. Dit willen we ook niet. 
-            lock(Locks.InputContainer)
+            // foreach kan het aanpassen van collections tijdens loopen niet aan. Dit willen we dus niet. 
+            lock(Locks.ClickedPoints)
             {
                 foreach (Point point in ClickedPoints)
                 {
