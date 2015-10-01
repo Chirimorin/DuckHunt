@@ -34,7 +34,7 @@ namespace DuckHunt.Behaviors.Move
 
             if (OnGround)
             {
-                unit.VX = 0.75 * unit.VX;
+                unit.VX = 0.95 * unit.VX;
             }
         }
 

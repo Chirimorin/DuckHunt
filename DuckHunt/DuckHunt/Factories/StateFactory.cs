@@ -21,6 +21,8 @@ namespace DuckHunt.Factories
                     {
                         case "alive":
                             return new AliveChickenState(unit, state);
+                        case "fleeing":
+                            return new FleeingChickenState(unit, state);
                         case "dead":
                             return new DeadChickenState(unit, state);
                         default:

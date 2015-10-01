@@ -61,6 +61,7 @@
     <Compile Include="Behaviors\Draw\SpriteSheetDrawBehavior.cs" />
     <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\Chicken\AliveChickenMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Chicken\FleeingChickenMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\DeadUnitMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Factories\BehaviorFactory.cs" />

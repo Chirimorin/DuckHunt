@@ -36,11 +36,6 @@ namespace DuckHunt.Containers
 
         public void ClearDestroyedUnits()
         {
-            foreach (Unit unit in Units.Where(u => u.IsDestroyed))
-            {
-                //unit.ClearGraphics();
-            }
-
             Units.RemoveAll(u => u.IsDestroyed);
         }
 
