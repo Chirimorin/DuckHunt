@@ -1,35 +1,36 @@
-﻿using DuckHunt.Factories;
-using DuckHunt.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DuckHunt.Controllers;
+using DuckHunt.Units;
 
 namespace DuckHunt.Behaviors.Move
 {
-    class SimpleMoveBehavior : BaseMoveBehavior
+    public class SimpleMoveBehavior : BaseMoveBehavior
     {
-        public SimpleMoveBehavior() : base()
+        public SimpleMoveBehavior(double dVX, double dVY) : base(dVX, dVY)
         {
-            VX = 500;
-            VY = 300;
+            
         }
 
-        public static void RegisterSelf()
+        public override void Move(Unit unit, IGame game)
         {
-            MoveBehaviorFactory.register("simple", typeof(SimpleMoveBehavior));
-        }
+            BaseMove(unit, game);
 
-        public override void Move(IGame game)
-        {
-            baseMove(game);
-
-            if (!removeIfExpired(game))
+            if (screenEntered(unit))
             {
-                EnsureInScreenX(true);
-                EnsureInScreenY(true);
+                Console.WriteLine("Unit is in screen: {0};{1}", unit.PosX, unit.PosY);
+                bounceLeft(unit);
+                bounceRight(unit);
+                bounceTop(unit);
+                bounceBottom(unit);
+            }
+            else
+            {
+                Console.WriteLine("Unit is not in screen");
+                MoveIntoScreen(unit);
             }
         }
     }

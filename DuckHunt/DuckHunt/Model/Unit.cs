@@ -1,6 +1,5 @@
 ﻿using DuckHunt.Behaviors;
-using DuckHunt.Behaviors.Draw;
-using DuckHunt.Behaviors.Move;
+using DuckHunt.Behaviors.OldMove;
 using DuckHunt.Controllers;
 using System;
 using System.Collections.Generic;
@@ -62,7 +61,7 @@ namespace DuckHunt.Model
             }
         }
 
-        private BaseDrawBehavior _drawBehavior;
+        //private BaseDrawBehavior _drawBehavior;
 
         public void FixedTimePassed(IGame game)
         {
@@ -72,22 +71,22 @@ namespace DuckHunt.Model
             }
         }
 
-        public BaseDrawBehavior DrawBehavior
-        {
-            get
-            {
-                return _drawBehavior;
-            }
-            set
-            {
-                if (_drawBehavior != null)
-                {
-                    _drawBehavior.Parent = null;
-                }
-                _drawBehavior = value;
-                _drawBehavior.Parent = this;
-            }
-        }
+        //public BaseDrawBehavior DrawBehavior
+        //{
+        //    get
+        //    {
+        //        return _drawBehavior;
+        //    }
+        //    set
+        //    {
+        //        if (_drawBehavior != null)
+        //        {
+        //            _drawBehavior.Parent = null;
+        //        }
+        //        _drawBehavior = value;
+        //        _drawBehavior.Parent = this;
+        //    }
+        //}
 
         /// <summary>
         /// De draw behavior bepaald door de Unit zelf
@@ -168,8 +167,8 @@ namespace DuckHunt.Model
             set
             {
                 _width = value;
-                if (DrawBehavior != null)
-                    DrawBehavior.UpdateSize();
+                //if (DrawBehavior != null)
+                //    DrawBehavior.UpdateSize();
             }
         }
 
@@ -183,8 +182,8 @@ namespace DuckHunt.Model
             set
             {
                 _height = value;
-                if (DrawBehavior != null)
-                    DrawBehavior.UpdateSize();
+                //if (DrawBehavior != null)
+                //    DrawBehavior.UpdateSize();
             }
         }
         #endregion
@@ -211,13 +210,13 @@ namespace DuckHunt.Model
         /// <returns>true als deze Unit het punt raakt</returns>
         public virtual bool isHit(Point point)
         {
-            if (DrawBehavior != null)
-            {
-                return (point.X > PosX &&
-                   point.X < PosX + Width &&
-                   point.Y > PosY &&
-                   point.Y < PosY + Height);
-            }
+            //if (DrawBehavior != null)
+            //{
+            //    return (point.X > PosX &&
+            //       point.X < PosX + Width &&
+            //       point.Y > PosY &&
+            //       point.Y < PosY + Height);
+            //}
 
             return false;
         }
@@ -258,18 +257,18 @@ namespace DuckHunt.Model
 
         public void Draw(IGame game)
         {
-            if (DrawBehavior != null)
-            {
-                DrawBehavior.Draw(game);
-            }
+            //if (DrawBehavior != null)
+            //{
+            //    DrawBehavior.Draw(game);
+            //}
         }
 
         public void ClearGraphics()
         {
-            if (DrawBehavior != null)
-            {
-                DrawBehavior.clearGraphics();
-            }
+            //if (DrawBehavior != null)
+            //{
+            //    DrawBehavior.clearGraphics();
+            //}
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DuckHunt.Behaviors.Move
+namespace DuckHunt.Behaviors.OldMove
 {
     public class RandomMoveBehavior : BaseMoveBehavior
     {
@@ -29,7 +29,7 @@ namespace DuckHunt.Behaviors.Move
 
         public static void RegisterSelf()
         {
-            MoveBehaviorFactory.register("random", typeof(RandomMoveBehavior));
+            //OldMoveBehaviorFactory.register("random", typeof(RandomMoveBehavior));
         }
 
         public override void Move(IGame game)

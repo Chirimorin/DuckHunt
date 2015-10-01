@@ -1,131 +1,16 @@
 ﻿using DuckHunt.Controllers;
-using DuckHunt.Model;
+using DuckHunt.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace DuckHunt.Behaviors.Move
 {
     public abstract class BaseMoveBehavior
     {
-        private Unit _thisUnit;
-        /// <summary>
-        /// De Unit die deze Move behavior heeft. 
-        /// De Unit klasse zet deze zelf. 
-        /// </summary>
-        public virtual Unit ThisUnit {
-            get { return _thisUnit; }
-            set { _thisUnit = value; }
-        }
-
-        #region Posities
-        /// <summary>
-        /// X-positie van de linker rand van de Unit (in pixels)
-        /// </summary>
-        public double PosX
-        {
-            get { return ThisUnit.PosX; }
-            set { ThisUnit.PosX = value; }
-        }
-        /// <summary>
-        /// X-positie van het midden van de Unit (in pixels)
-        /// </summary>
-        public double PosXMiddle
-        {
-            get { return ThisUnit.PosXMiddle; }
-            set { ThisUnit.PosXMiddle = value; }
-        }
-        /// <summary>
-        /// X-positie van de rechter rand van de Unit (in pixels)
-        /// </summary>
-        public double PosXRight
-        {
-            get { return ThisUnit.PosXRight; }
-            set { ThisUnit.PosXRight = value; }
-        }
-
-        /// <summary>
-        /// Y-positie van de bovenste rand van de Unit (in pixels)
-        /// </summary>
-        public double PosY
-        {
-            get { return ThisUnit.PosY; }
-            set { ThisUnit.PosY = value; }
-        }
-        /// <summary>
-        /// Y-positie van het midden van de Unit (in pixels)
-        /// </summary>
-        public double PosYMiddle
-        {
-            get { return ThisUnit.PosYMiddle; }
-            set { ThisUnit.PosYMiddle = value; }
-        }
-        /// <summary>
-        /// Y-positie van de onderste rand van de Unit (in pixels)
-        /// </summary>
-        public double PosYBottom
-        {
-            get { return ThisUnit.PosYBottom; }
-            set { ThisUnit.PosYBottom = value; }
-        }
-        #endregion
-
-        #region Afmetingen
-        /// <summary>
-        /// Breedte van de Unit (in pixels)
-        /// </summary>
-        public double Width
-        {
-            get { return ThisUnit.Width; }
-            set { ThisUnit.Width = value; }
-        }
-
-        /// <summary>
-        /// Hoogte van de Unit (in pixels)
-        /// </summary>
-        public double Height
-        {
-            get { return ThisUnit.Height; }
-            set { ThisUnit.Height = value; }
-        }
-        #endregion
-
-        #region Snelheid & versnelling
-        private double _vX;
-        /// <summary>
-        /// X-snelheid (pixels/seconde)
-        /// Naar links = negatief
-        /// Naar rechts = positief
-        /// </summary>
-        public virtual double VX
-        {
-            get { return _vX; }
-            set
-            {
-                if (value > MaxVX)
-                    _vX = MaxVX;
-                else if (value < -MaxVX)
-                    _vX = -MaxVX;
-                else
-                    _vX = value;
-            }
-        }
-
-        private double _maxVX = double.PositiveInfinity;
-        /// <summary>
-        /// Maximale X-snelheid (pixels/seconde)
-        /// Geldt voor beide richtingen.
-        /// </summary>
-        public virtual double MaxVX
-        {
-            get { return _maxVX; }
-            set { _maxVX = value; }
-        }
-
-
+        #region versnelling
         private double _dVX;
         /// <summary>
         /// X-versnelling (pixels/seconde/seconde)
@@ -133,59 +18,8 @@ namespace DuckHunt.Behaviors.Move
         public double DVX
         {
             get { return _dVX; }
-            set
-            {
-                if (value > MaxDVX)
-                    _dVX = MaxDVX;
-                else if (value < -MaxDVX)
-                    _dVX = -MaxDVX;
-                else
-                    _dVX = value;
-            }
+            set { _dVX = value; }
         }
-
-        private double _maxDVX = double.PositiveInfinity;
-        /// <summary>
-        /// Maximale X-versnelling (pixels/seconde/seconde)
-        /// </summary>
-        public virtual double MaxDVX
-        {
-            get { return _maxDVX; }
-            set { _maxDVX = value; }
-        }
-
-
-        private double _vY;
-        /// <summary>
-        /// Y-snelheid (pixels/seconde)
-        /// Naar boven = negatief
-        /// Naar beneden = positief
-        /// </summary>
-        public virtual double VY
-        {
-            get { return _vY; }
-            set
-            {
-                if (value > MaxVY)
-                    _vY = MaxVY;
-                else if (value < -MaxVY)
-                    _vY = -MaxVY;
-                else
-                    _vY = value;
-            }
-        }
-
-        private double _maxVY = double.PositiveInfinity;
-        /// <summary>
-        /// Maximale Y-snelheid (pixels/second)
-        /// Geldt voor beide richtingen
-        /// </summary>
-        public virtual double MaxVY
-        {
-            get { return _maxVY; }
-            set { _maxVY = value; }
-        }
-
 
         private double _dVY;
         /// <summary>
@@ -194,160 +28,199 @@ namespace DuckHunt.Behaviors.Move
         public virtual double DVY
         {
             get { return _dVY; }
-            set
-            {
-                if (value > MaxDVY)
-                    _dVY = MaxDVY;
-                else if (value < -MaxDVY)
-                    _dVY = -MaxDVY;
-                else
-                    _dVY = value;
-            }
+            set { _dVY = value; }
         }
 
-        private double _maxDVY = double.PositiveInfinity;
-        /// <summary>
-        /// Maximale Y-vernselling (pixels/seconde/seconde)
-        /// </summary>
-        public virtual double MaxDVY
+        private double _maxVX = double.PositiveInfinity;
+        public double MaxVX
         {
-            get { return _maxDVY; }
-            set { _maxDVY = value; }
+            get { return _maxVX; }
+            set { _maxVX = value; }
+        }
+
+        private double _maxVY = double.PositiveInfinity;
+        public double MaxVY
+        {
+            get { return _maxVY; }
+            set { _maxVY = value; }
         }
         #endregion
 
+        private bool _screenEntered = false;
+        private bool ScreenEntered
+        {
+            get { return _screenEntered; }
+            set { _screenEntered = value; }
+        }
+
+
+        public BaseMoveBehavior(double dVX, double dVY)
+        {
+            DVX = dVX;
+            DVY = dVY;
+        }
+
+        #region Events
         /// <summary>
         /// Wordt een vast aantal keren per seconde aangeroepen. 
         /// Alle random zonder condities (zoals een random kans om te springen) horen hier in te staan. 
         /// </summary>
-        public virtual void FixedTimePassed(IGame game) { }
+        public virtual void FixedTimePassed(Unit unit, IGame game) { }
 
         /// <summary>
         /// De beweeg logica, deze moet uniek zijn voor elke moveBehavior
         /// </summary>
-        public abstract void Move(IGame game);
+        public abstract void Move(Unit unit, IGame game);
+        #endregion
 
-        /// <summary>
-        /// Zorgt dat de unit horizontaal binnen het scherm is
-        /// </summary>
-        /// <returns>true als de unit horizontaal buiten het scherm was</returns>
-        protected bool EnsureInScreenX(bool flipDirection, bool onlyWhenMovingOut = true)
-        {
-            bool result = EnsureInScreenX(onlyWhenMovingOut);
-
-            if (flipDirection && result)
-                VX = -VX;
-
-            return result;
-        }
-        private bool EnsureInScreenX(bool onlyWhenMovingOut)
-        {
-            if (PosX < 0 &&
-                (!onlyWhenMovingOut || VX < 0))
-            {
-                PosX = 0;
-                return true;
-            }
-
-            if (PosXRight > CONSTANTS.CANVAS_WIDTH &&
-                (!onlyWhenMovingOut || VX > 0))
-            {
-                PosXRight = CONSTANTS.CANVAS_WIDTH;
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Zorgt dat de unit verticaal binnen her scherm is
-        /// </summary>
-        /// <returns>true als de unit verticaal buiten het scherm was</returns>
-        protected bool EnsureInScreenY(bool flipDirection, bool onlyWhenMovingOut = true)
-        {
-            bool result = EnsureInScreenY(onlyWhenMovingOut);
-
-            if (flipDirection && result)
-                VY = -VY;
-
-            return result;
-        }
-        private bool EnsureInScreenY(bool onlyWhenMovingOut)
-        {
-            if (PosY < 0 &&
-                (!onlyWhenMovingOut || VY < 0))
-            {
-                PosY = 0;
-                return true;
-            }
-
-            if (PosYBottom > CONSTANTS.CANVAS_HEIGHT &&
-                (!onlyWhenMovingOut || VY > 0))
-            {
-                PosYBottom = CONSTANTS.CANVAS_HEIGHT;
-                return true;
-            }
-
-            return false;
-        }
-
+        #region Beweging
         /// <summary>
         /// Basis beweging over de X-as
         /// </summary>
-        protected virtual void baseMoveX(IGame game)
+        protected virtual void BaseMoveX(Unit unit, IGame game)
         {
-            // VX houd zichzelf onder maxVX
-            VX += getTimeBased(DVX, game);
-            PosX += getTimeBased(VX, game);
+            unit.VX += GetTimeBased(DVX, game);
+            if (unit.VX > MaxVX)
+                unit.VX = MaxVX;
+            else if (unit.VX < -MaxVX)
+                unit.VX = -MaxVX;
+
+            unit.PosX += GetTimeBased(unit.VX, game);
         }
 
         /// <summary>
         /// Basis beweging over de Y-as
         /// </summary>
-        protected virtual void baseMoveY(IGame game)
+        protected virtual void BaseMoveY(Unit unit, IGame game)
         {
-            // VY houd zichzelf onder MaxVY
-            VY += getTimeBased(DVY, game);
-            PosY += getTimeBased(VY, game);
+            unit.VY += GetTimeBased(DVY, game);
+            if (unit.VY > MaxVY)
+                unit.VY = MaxVY;
+            else if (unit.VY < -MaxVY)
+                unit.VY = -MaxVY;
+
+            unit.PosY += GetTimeBased(unit.VY, game);
         }
 
         /// <summary>
         /// Basis beweging over de X en Y-as
         /// </summary>
-        protected virtual void baseMove(IGame game)
+        protected virtual void BaseMove(Unit unit, IGame game)
         {
-            baseMoveX(game);
-            baseMoveY(game);
+            BaseMoveX(unit, game);
+            BaseMoveY(unit, game);
         }
 
-        /// <summary>
-        /// Als de MaxLifeTime van de unit voorbij is en of de unit buiten het scherm is
-        /// </summary>
-        /// <returns>true als de MaxLifeTime voorbij is</returns>
-        protected virtual bool removeIfExpired(IGame game)
+        protected virtual void MoveIntoScreen(Unit unit)
         {
-            if (ThisUnit.isMaxLifetimeExpired(game))
+            if ((unit.PosX < 0 && unit.VX < 0) ||
+                (unit.PosXRight > CONSTANTS.CANVAS_WIDTH && unit.VX > 0))
+                FlipXSpeed(unit);
+            
+            if ((unit.PosY < 0 && unit.VY < 0) ||
+                (unit.PosYBottom > CONSTANTS.CANVAS_HEIGHT && unit.VY > 0))
+                FlipYSpeed(unit);
+        }
+
+        protected virtual void FlipXAcceleration(Unit unit)
+        {
+            DVX = -DVX;
+        }
+
+        protected virtual void FlipXSpeed(Unit unit)
+        {
+            FlipXAcceleration(unit);
+            unit.VX = -unit.VX;
+        }
+
+        protected virtual void FlipYAcceleration(Unit unit)
+        {
+            DVY = -DVY;
+        }
+
+        protected virtual void FlipYSpeed(Unit unit)
+        {
+            FlipYAcceleration(unit);
+            unit.VY = -unit.VY;
+        }
+        #endregion
+
+        #region Collision
+        protected bool isInScreenLeft(Unit unit)
+        {
+            return unit.PosX >= 0;
+        }
+
+        protected virtual void bounceLeft(Unit unit)
+        {
+            if (!isInScreenLeft(unit))
             {
-                if (PosX > CONSTANTS.CANVAS_WIDTH ||
-                    PosXRight < 0 ||
-                    PosY > CONSTANTS.CANVAS_HEIGHT ||
-                    PosYBottom < 0)
-                {
-                    ThisUnit.destroy();
-                }
-
-                return true;
+                unit.PosX = 0;
+                FlipXSpeed(unit);
             }
-
-            return false;
         }
+
+        protected bool isInScreenRight(Unit unit)
+        {
+            return unit.PosXRight <= CONSTANTS.CANVAS_WIDTH;
+        }
+
+        protected virtual void bounceRight(Unit unit)
+        {
+            if (!isInScreenRight(unit))
+            {
+                unit.PosXRight = CONSTANTS.CANVAS_WIDTH;
+                FlipXSpeed(unit);
+            }
+        }
+
+        protected bool isInScreenTop(Unit unit)
+        {
+            return unit.PosY >= 0;
+        }
+
+        protected virtual void bounceTop(Unit unit)
+        {
+            if (!isInScreenTop(unit))
+            {
+                unit.PosY = 0;
+                FlipYSpeed(unit);
+            }
+        }
+
+        protected bool isInScreenBottom(Unit unit)
+        {
+            return unit.PosYBottom <= CONSTANTS.CANVAS_HEIGHT;
+        }
+
+        protected virtual void bounceBottom(Unit unit)
+        {
+            if (!isInScreenBottom(unit))
+            {
+                unit.PosYBottom = CONSTANTS.CANVAS_HEIGHT;
+                FlipYSpeed(unit);
+            }
+        }
+
+        protected bool screenEntered(Unit unit)
+        {
+            if (!ScreenEntered)
+            {
+                ScreenEntered = (isInScreenBottom(unit) &&
+                                 isInScreenTop(unit) &&
+                                 isInScreenLeft(unit) &&
+                                 isInScreenRight(unit));
+            }
+            return ScreenEntered;
+        }
+        #endregion
 
         /// <summary>
         /// Veranderd een waarde in de tijd gebaseerde waarde
         /// </summary>
         /// <param name="value">De waarde per seconde</param>
         /// <returns>De waarde voor deze frame</returns>
-        protected double getTimeBased(double value, IGame game)
+        protected double GetTimeBased(double value, IGame game)
         {
             return value * game.DT;
         }

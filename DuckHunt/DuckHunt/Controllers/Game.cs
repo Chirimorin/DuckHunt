@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Threading;
 using DuckHunt.Factories;
+using DuckHunt.Units;
 
 namespace DuckHunt.Controllers
 {
@@ -203,9 +204,11 @@ namespace DuckHunt.Controllers
         {
             UnitContainer.MoveAllUnits(this);
 
-            while (UnitContainer.NumUnits < 3)
+            while (UnitContainer.NumUnits < 1)
             {
-                UnitFactory.Instance.createRandomUnit(this);
+                Unit newUnit = UnitFactory.createRandomUnit();
+                newUnit.BirthTime = Time;
+                UnitContainer.AddUnit(newUnit);
             }
 
             while(_accumulator > CONSTANTS.fixedTimeCalls)

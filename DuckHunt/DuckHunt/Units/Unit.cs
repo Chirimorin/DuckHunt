@@ -11,6 +11,12 @@ namespace DuckHunt.Units
     public abstract class Unit
     {
         #region Properties
+        private readonly string _name;
+        public string Name
+        {
+            get { return _name; }
+        }
+
         #region Afmetingen
         private double _width;
         /// <summary>
@@ -111,31 +117,46 @@ namespace DuckHunt.Units
         #endregion
 
         #region Leeftijd
-        private readonly double _birthTime;
+        private double _birthTime;
+        public double BirthTime
+        {
+            get { return _birthTime; }
+            set { _birthTime = value; }
+        }
 
         private bool _isDestroyed = false;
         public bool IsDestroyed
         {
             get { return _isDestroyed; }
-            private set { _isDestroyed = value; }
+            protected set { _isDestroyed = value; }
         }
         #endregion
 
         #region State
-        private IUnitState _state;
+        private BaseUnitState _state;
         /// <summary>
         /// De huidige state van de unit
         /// </summary>
-        public IUnitState State
+        public BaseUnitState State
         {
             get { return _state; }
-            set { _state = value; }
+            set
+            {
+                Console.WriteLine("New state");
+                if (_state != null)
+                {
+                    Console.WriteLine("cleanup start");
+                    _state.CleanUp();
+                    Console.WriteLine("cleanup done");
+                }
+                _state = value;
+            }
         }
         #endregion
         #endregion
 
         #region CTOR
-        public Unit(IGame game,
+        public Unit(string name, 
             double width, 
             double height, 
             double posX, 
@@ -143,7 +164,7 @@ namespace DuckHunt.Units
             double vX, 
             double vY)
         {
-            _birthTime = game.Time;
+            _name = name;
 
             Width = width;
             Height = height;
@@ -182,6 +203,21 @@ namespace DuckHunt.Units
         public void Draw(IGame game)
         {
             State.Draw(this, game);
+        }
+        #endregion
+
+        #region Algemeen
+        public virtual void destroy()
+        {
+            IsDestroyed = true;
+        }
+
+        public virtual bool isHit(Point point)
+        {
+            return (point.X > PosX &&
+                point.X < PosXRight &&
+                point.Y > PosY &&
+                point.Y < PosYBottom);
         }
         #endregion
         #endregion

@@ -1,36 +1,35 @@
-﻿using DuckHunt.Controllers;
-using DuckHunt.Factories;
+﻿using DuckHunt.Factories;
 using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DuckHunt.Controllers;
 
-namespace DuckHunt.Behaviors.Move
+namespace DuckHunt.Behaviors.OldMove
 {
-    class HorizontalMoveBehavior : BaseMoveBehavior
+    class SimpleMoveBehavior : BaseMoveBehavior
     {
-        public HorizontalMoveBehavior() : base()
+        public SimpleMoveBehavior() : base()
         {
             VX = 500;
-            VY = 0;
+            VY = 300;
         }
 
         public static void RegisterSelf()
         {
-            MoveBehaviorFactory.register("horizontal", typeof(HorizontalMoveBehavior));
+            //OldMoveBehaviorFactory.register("simple", typeof(SimpleMoveBehavior));
         }
 
         public override void Move(IGame game)
         {
-            PosYBottom = CONSTANTS.CANVAS_HEIGHT; 
-
-            baseMoveX(game);
+            baseMove(game);
 
             if (!removeIfExpired(game))
             {
                 EnsureInScreenX(true);
+                EnsureInScreenY(true);
             }
         }
     }

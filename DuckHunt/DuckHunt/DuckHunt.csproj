@@ -57,8 +57,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\Draw\IDrawBehavior.cs" />
+    <Compile Include="Behaviors\Draw\SpriteSheetDrawBehavior.cs" />
+    <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Chicken\AliveChickenMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
+    <Compile Include="Factories\BehaviorFactory.cs" />
+    <Compile Include="Factories\StateFactory.cs" />
+    <Compile Include="Factories\UnitFactory.cs" />
+    <Compile Include="Units\BaseUnitState.cs" />
+    <Compile Include="Units\Chicken\AliveChickenState.cs" />
     <Compile Include="Units\Chicken\Chicken.cs" />
-    <Compile Include="Units\IUnitState.cs" />
+    <Compile Include="Units\Chicken\DeadChickenState.cs" />
+    <Compile Include="Units\Chicken\FleeingChickenState.cs" />
     <Compile Include="Units\Unit.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -68,26 +79,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behaviors\Draw\BaseDrawBehavior.cs" />
-    <Compile Include="Behaviors\Draw\ImageDrawBehavior.cs" />
-    <Compile Include="Behaviors\Draw\SimpleDrawBehavior.cs" />
-    <Compile Include="Behaviors\Draw\SpriteSheetDrawBehavior.cs" />
-    <Compile Include="Behaviors\Move\AfraidOfMouseMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\GravityMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\HorizontalMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\HugMouseMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\RandomMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\AfraidOfMouseMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\GravityMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\HorizontalMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\HugMouseMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\BaseMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\RandomMoveBehavior.cs" />
     <Compile Include="CONSTANTS.cs" />
     <Compile Include="Containers\InputContainer.cs" />
     <Compile Include="Containers\UnitContainer.cs" />
     <Compile Include="Controllers\Game.cs" />
     <Compile Include="Controllers\IGame.cs" />
     <Compile Include="Controllers\UI.cs" />
-    <Compile Include="Factories\DrawBehaviorFactory.cs" />
-    <Compile Include="Factories\MoveBehaviorFactory.cs" />
-    <Compile Include="Factories\UnitFactory.cs" />
-    <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
+    <Compile Include="Behaviors\OldMove\SimpleMoveBehavior.cs" />
     <Compile Include="Locks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -96,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Bunny.cs" />
-    <Compile Include="Model\Chicken.cs" />
     <Compile Include="Model\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

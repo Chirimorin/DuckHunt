@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DuckHunt.Behaviors.Move
+namespace DuckHunt.Behaviors.OldMove
 {
     public class GravityMoveBehavior : BaseMoveBehavior
     {
@@ -71,7 +71,7 @@ namespace DuckHunt.Behaviors.Move
 
         public static void RegisterSelf()
         {
-            MoveBehaviorFactory.register("gravity", typeof(GravityMoveBehavior));
+            //OldMoveBehaviorFactory.register("gravity", typeof(GravityMoveBehavior));
         }
         
         public override void Move(IGame game)

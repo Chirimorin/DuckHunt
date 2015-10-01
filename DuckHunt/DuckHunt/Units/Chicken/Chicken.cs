@@ -1,4 +1,5 @@
 ﻿using DuckHunt.Controllers;
+using DuckHunt.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,17 @@ namespace DuckHunt.Units.Chicken
 {
     public class Chicken : Unit
     {
-        public Chicken(IGame game)
-            : base(game, 95, 70, -95, 0, 1, 1)
-        { }
-
-        public static void RegisterSelf()
+        public Chicken(string name, 
+            double width,
+            double height,
+            double posX,
+            double posY,
+            double vX,
+            double vY)
+            : base(name, width, height, posX, posY, vX, vY)
         {
-            //UnitFactory.register("chicken", typeof(Chicken));
+            State = StateFactory.createState(Name, "alive");
         }
+        
     }
 }

@@ -51,7 +51,7 @@ namespace DuckHunt.Model
 
         public static void RegisterSelf()
         {
-            UnitFactory.register("bunny", typeof(Bunny));
+            //OldUnitFactory.register("bunny", typeof(Bunny));
         }
 
         public override void onClick(Point point)

@@ -18,7 +18,7 @@ namespace DuckHunt.Controllers
         private MainWindow _mainWindow;
         private Game _game;
 
-        private Dispatcher _dispatcher;
+        private static Dispatcher _dispatcher;
 
         private static UI _instance;
 
@@ -62,7 +62,7 @@ namespace DuckHunt.Controllers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        public void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // Click events komen altijd van de UI thread, geen invoke nodig. 
             lock(Locks.InputContainer)
@@ -122,13 +122,21 @@ namespace DuckHunt.Controllers
         /// Voert een functie uit op de UI thread.
         /// </summary>
         /// <param name="action">De actie die uitgevoerd moet worden.</param>
-        private void Invoke(Action action)
+        public static void Invoke(Action action)
         {
             // Als de huidige thread access heeft, is de dispatcher niet nodig.
             if (_dispatcher.CheckAccess())
                 action.Invoke();
             else
                 _dispatcher.BeginInvoke(action);
+        }
+
+        public static T Invoke<T>(Func<T> action)
+        {
+            if (_dispatcher.CheckAccess())
+                return action.Invoke();
+            else
+                return _dispatcher.Invoke<T>(action);
         }
     }
 }

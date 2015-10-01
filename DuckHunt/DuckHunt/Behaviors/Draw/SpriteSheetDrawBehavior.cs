@@ -1,28 +1,22 @@
-﻿using DuckHunt.Controllers;
-using DuckHunt.Factories;
-using DuckHunt.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DuckHunt.Controllers;
+using DuckHunt.Units;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.IO;
 
 namespace DuckHunt.Behaviors.Draw
 {
-    class SpriteSheetDrawBehavior : BaseDrawBehavior
+    public class SpriteSheetDrawBehavior : IDrawBehavior
     {
-        public static void RegisterSelf()
-        {
-            DrawBehaviorFactory.register("spritesheet", typeof(SpriteSheetDrawBehavior));
-        }
-
         private Image _gfx;
-        public override UIElement Gfx
+        public UIElement Gfx
         {
             get { return _gfx; }
         }
@@ -97,11 +91,9 @@ namespace DuckHunt.Behaviors.Draw
             _gfx.Source = Sprites[0];
             _gfx.RenderTransformOrigin = new Point(0.5, 0.5);
             _gfx.RenderTransform = _transformRegular;
-
-            TryAddGraphics();
         }
 
-        public override void Draw(IGame game)
+        public void Draw(Unit unit, IGame game)
         {
             _timePassed += game.DT;
 
@@ -115,22 +107,15 @@ namespace DuckHunt.Behaviors.Draw
                     _currentFrame = 0;
             }
 
-            if (Parent.MoveBehavior.VX < 0)
+            if (unit.VX < 0)
                 _gfx.RenderTransform = _transformFlipped;
             else
                 _gfx.RenderTransform = _transformRegular;
 
-            Canvas.SetLeft(_gfx, PosX);
-            Canvas.SetTop(_gfx, PosY);
-        }
-
-        public override void UpdateSize()
-        {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                _gfx.Width = Width;
-                _gfx.Height = Height;
-            });
+            _gfx.Width = unit.Width;
+            _gfx.Height = unit.Height;
+            Canvas.SetLeft(_gfx, unit.PosX);
+            Canvas.SetTop(_gfx, unit.PosY);
         }
     }
 }

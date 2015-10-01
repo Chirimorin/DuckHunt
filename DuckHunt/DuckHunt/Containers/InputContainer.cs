@@ -42,6 +42,7 @@ namespace DuckHunt.Containers
                 {
                     game.UnitContainer.HandleClick(point);
                 }
+                ClickedPoints.Clear();
             }
         }
     }

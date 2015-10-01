@@ -8,15 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace DuckHunt.Behaviors.Move
+namespace DuckHunt.Behaviors.OldMove
 {
-    public class AfraidOfMouseMoveBehavior : RandomMoveBehavior
+    public class HugMouseMoveBehavior : RandomMoveBehavior
     {
-        public AfraidOfMouseMoveBehavior() : base() { }
+        public HugMouseMoveBehavior() : base() { }
 
         public new static void RegisterSelf()
         {
-            MoveBehaviorFactory.register("afraid", typeof(AfraidOfMouseMoveBehavior));
+            //OldMoveBehaviorFactory.register("hug", typeof(HugMouseMoveBehavior));
         }
 
         protected override void updateGoals(IGame game, bool force = false)
@@ -26,21 +26,27 @@ namespace DuckHunt.Behaviors.Move
             if (ThisUnit != null)
             {
                 if ((PosXMiddle > game.InputContainer.MousePosition.X &&
-                GoalVX < 0) ||
+                GoalVX > 0) ||
                 (PosXMiddle < game.InputContainer.MousePosition.X &&
-                GoalVX > 0))
+                GoalVX < 0))
                 {
                     GoalVX = -GoalVX;
                     DVX = -DVX;
                 }
 
                 if ((PosYMiddle > game.InputContainer.MousePosition.Y &&
-                GoalVY < 0) ||
+                GoalVY > 0) ||
                 (PosYMiddle < game.InputContainer.MousePosition.Y &&
-                GoalVY > 0))
+                GoalVY < 0))
                 {
                     GoalVY = -GoalVY;
                     DVY = -DVY;
+                }
+
+                if (ThisUnit.isMaxLifetimeExpired(game))
+                {
+                    GoalVX = -GoalVX;
+                    DVX = -DVX;
                 }
             }
         }

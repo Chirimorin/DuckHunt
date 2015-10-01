@@ -1,5 +1,5 @@
 ﻿using DuckHunt.Controllers;
-using DuckHunt.Model;
+using DuckHunt.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace DuckHunt.Containers
         {
             foreach (Unit unit in Units.Where(u => u.IsDestroyed))
             {
-                unit.ClearGraphics();
+                //unit.ClearGraphics();
             }
 
             Units.RemoveAll(u => u.IsDestroyed);
