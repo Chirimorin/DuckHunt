@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Compiler.exceptions
 {
-    public class LevelNot0Exception : Exception
+    public class BracketsNotMatchingException : Exception
     {
-        public LevelNot0Exception() : base(String.Format("Missing partner token")) { }
+        public BracketsNotMatchingException() : base(String.Format("Brackets not matching")) { }
     }
 }
