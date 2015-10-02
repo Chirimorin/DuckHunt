@@ -60,14 +60,19 @@
     <Compile Include="Behaviors\Draw\IDrawBehavior.cs" />
     <Compile Include="Behaviors\Draw\SpriteSheetDrawBehavior.cs" />
     <Compile Include="Behaviors\Move\BaseMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\Chicken\AliveChickenMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\Chicken\FleeingChickenMoveBehavior.cs" />
-    <Compile Include="Behaviors\Move\DeadUnitMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Running\GravityMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Flying\RandomFlightMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Flying\FlyingFleeMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Common\DeadUnitMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Running\RunningFleeMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Factories\BehaviorFactory.cs" />
     <Compile Include="Factories\StateFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
     <Compile Include="Units\BaseUnitState.cs" />
+    <Compile Include="Units\Bunny\Bunny.cs" />
+    <Compile Include="Units\Bunny\AliveBunnyState.cs" />
+    <Compile Include="Units\Bunny\FleeingBunnyState.cs" />
     <Compile Include="Units\Common\AliveUnitState.cs" />
     <Compile Include="Units\Chicken\Chicken.cs" />
     <Compile Include="Units\Common\DeadUnitState.cs" />
@@ -130,20 +135,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Chicken spritesheet.png" />
-    <None Include="Images\Chicken.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Images\ChickenFly.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\BunnyRun.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Images\BunnyRun2.png" />
+    <EmbeddedResource Include="Images\BunnyRun.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\ChickenDead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\BunnyDead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\BunnyJump.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

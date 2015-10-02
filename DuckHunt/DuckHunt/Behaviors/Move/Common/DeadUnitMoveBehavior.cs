@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DuckHunt.Controllers;
 using DuckHunt.Units;
 
-namespace DuckHunt.Behaviors.Move
+namespace DuckHunt.Behaviors.Move.Common
 {
     public class DeadUnitMoveBehavior : BaseMoveBehavior
     {
@@ -23,7 +23,7 @@ namespace DuckHunt.Behaviors.Move
         {
             BaseMove(unit, game);
 
-            if (screenEntered(unit) && !isInScreenBottom(unit))
+            if (!isInScreenBottom(unit))
             {
                 unit.PosYBottom = CONSTANTS.CANVAS_HEIGHT;
 
@@ -37,11 +37,6 @@ namespace DuckHunt.Behaviors.Move
             {
                 unit.VX = 0.90 * unit.VX;
             }
-        }
-
-        protected override void bounceBottom(Unit unit)
-        {
-            base.bounceBottom(unit);
         }
     }
 }

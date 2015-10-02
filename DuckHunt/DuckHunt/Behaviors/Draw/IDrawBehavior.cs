@@ -14,5 +14,6 @@ namespace DuckHunt.Behaviors.Draw
         UIElement Gfx { get; }
 
         void Draw(Unit unit, IGame game);
+        void Reset();
     }
 }

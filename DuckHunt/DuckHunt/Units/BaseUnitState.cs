@@ -21,14 +21,14 @@ namespace DuckHunt.Units
         }
 
         private IDrawBehavior _drawBehavior;
-        protected IDrawBehavior DrawBehavior
+        protected virtual IDrawBehavior DrawBehavior
         {
             get { return _drawBehavior; }
             set { _drawBehavior = value; }
         }
 
         private BaseMoveBehavior _moveBehavior;
-        protected BaseMoveBehavior MoveBehavior
+        protected virtual BaseMoveBehavior MoveBehavior
         {
             get { return _moveBehavior; }
             set { _moveBehavior = value; }

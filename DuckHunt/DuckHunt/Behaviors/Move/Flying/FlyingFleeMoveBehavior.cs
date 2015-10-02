@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using DuckHunt.Controllers;
 using DuckHunt.Units;
 
-namespace DuckHunt.Behaviors.Move.Chicken
+namespace DuckHunt.Behaviors.Move.Flying
 {
-    public class FleeingChickenMoveBehavior : BaseMoveBehavior
+    public class FlyingFleeMoveBehavior : BaseMoveBehavior
     {
-        public FleeingChickenMoveBehavior(double dVX, double dVY, double maxVX, double maxVY) : base(dVX, dVY)
+        public FlyingFleeMoveBehavior(double dVX, double dVY, double maxVX, double maxVY) : base(dVX, dVY)
         {
             MaxVX = maxVX;
             MaxVY = maxVY;

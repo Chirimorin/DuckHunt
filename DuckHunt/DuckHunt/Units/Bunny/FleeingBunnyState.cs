@@ -1,18 +1,15 @@
-﻿using System;
+﻿using DuckHunt.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using DuckHunt.Behaviors.OldMove;
-using DuckHunt.Controllers;
-using DuckHunt.Factories;
 
-namespace DuckHunt.Units.Common
+namespace DuckHunt.Units.Bunny
 {
-    public class FleeingUnitState : AliveUnitState
+    public class FleeingBunnyState : AliveBunnyState
     {
-        public FleeingUnitState(string unit, string name) : base(unit, name, double.PositiveInfinity)
+        public FleeingBunnyState(string unit, string name) : base(unit, name, double.PositiveInfinity)
         {
         }
 

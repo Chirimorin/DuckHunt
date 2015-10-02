@@ -206,7 +206,7 @@ namespace DuckHunt.Controllers
 
             while (UnitContainer.NumUnits < 1)
             {
-                Unit newUnit = UnitFactory.createRandomUnit();
+                Unit newUnit = UnitFactory.createRandomUnit(this);
                 newUnit.BirthTime = Time;
                 UnitContainer.AddUnit(newUnit);
             }

@@ -12,12 +12,10 @@ namespace DuckHunt.Units.Common
 {
     public class AliveUnitState : BaseUnitState
     {
-        private double Timer { get; set; }
-        private double FleeTime { get; set; }
+        protected double FleeTime { get; set; }
 
         public AliveUnitState(string unit, string name, double fleeTime) : base(unit, name)
         {
-            Timer = 0;
             FleeTime = fleeTime;
         }
 
@@ -32,10 +30,8 @@ namespace DuckHunt.Units.Common
         public override void Update(Unit unit, IGame game)
         {
             base.Update(unit, game);
-
-            Timer += game.DT;
-
-            if (Timer > FleeTime)
+            
+            if ((game.Time - unit.BirthTime) > FleeTime)
                 unit.State = StateFactory.createState(unit.Name, "fleeing");
         }
     }

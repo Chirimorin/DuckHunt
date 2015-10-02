@@ -32,6 +32,8 @@ namespace DuckHunt.Behaviors.Draw
             set { _sprites = value; }
         }
 
+        private bool _loop;
+        private bool _animationCompleted = false;
         private int _frameCount;
         private int _currentFrame;
         private double _timePassed;
@@ -40,9 +42,10 @@ namespace DuckHunt.Behaviors.Draw
         TransformGroup _transformRegular;
         TransformGroup _transformFlipped;
 
-        public SpriteSheetDrawBehavior(string filename, int xImages, int yImages, int spriteWidth, int spriteHeight, double frameTime, double angle)
+        public SpriteSheetDrawBehavior(string filename, int xImages, int yImages, int spriteWidth, int spriteHeight, double frameTime, double angle, bool loop)
         {
             // Voorbereiding
+            _loop = loop;
             _frameTime = frameTime;
             _frameCount = xImages * yImages;
             _currentFrame = 0;
@@ -101,16 +104,24 @@ namespace DuckHunt.Behaviors.Draw
 
         public void Draw(Unit unit, IGame game)
         {
-            _timePassed += game.DT;
-
-            // Update sprites when needed. Even for low framerates
-            while (_timePassed > _frameTime)
+            if (_loop || !_animationCompleted)
             {
-                _gfx.Source = Sprites[_currentFrame++];
-                _timePassed -= _frameTime;
+                _timePassed += game.DT;
 
-                if (_currentFrame == _frameCount)
-                    _currentFrame = 0;
+                // Update sprites when needed. Even for low framerates
+                while (_timePassed > _frameTime)
+                {
+                    _gfx.Source = Sprites[_currentFrame++];
+                    _timePassed -= _frameTime;
+
+                    if (_currentFrame == _frameCount)
+                    {
+                        if (_loop)
+                            _currentFrame = 0;
+                        else
+                            _animationCompleted = true;
+                    }
+                }
             }
 
             if (unit.VX < 0)
@@ -122,6 +133,12 @@ namespace DuckHunt.Behaviors.Draw
             _gfx.Height = unit.Height;
             Canvas.SetLeft(_gfx, unit.PosX);
             Canvas.SetTop(_gfx, unit.PosY);
+        }
+
+        public void Reset()
+        {
+            _currentFrame = 0;
+            _animationCompleted = false;
         }
     }
 }

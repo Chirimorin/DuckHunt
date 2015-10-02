@@ -1,12 +1,14 @@
 ﻿using DuckHunt.Behaviors.Draw;
 using DuckHunt.Behaviors.Move;
-using DuckHunt.Behaviors.Move.Chicken;
+using DuckHunt.Behaviors.Move.Running;
+using DuckHunt.Behaviors.Move.Flying;
 using DuckHunt.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DuckHunt.Behaviors.Move.Common;
 
 namespace DuckHunt.Factories
 {
@@ -22,9 +24,21 @@ namespace DuckHunt.Factories
                     switch (state)
                     {
                         case "alive":
-                            return new AliveChickenMoveBehavior(1000, 1000, 1000, 1000);
+                            return new RandomFlightMoveBehavior(1000, 1000, 1000, 1000);
                         case "fleeing":
-                            return new FleeingChickenMoveBehavior(1000, -100, 1000, 500);
+                            return new FlyingFleeMoveBehavior(1000, -100, 1000, 500);
+                        case "dead":
+                            return new DeadUnitMoveBehavior(1000, 1000);
+                        default:
+                            throw new ArgumentException("Onbekende state: " + state, "state");
+                    }
+                case "bunny":
+                    switch (state)
+                    {
+                        case "alive":
+                            return new GravityMoveBehavior(0, 850, 1000, 1000, 500, 0, 50);
+                        case "fleeing":
+                            return new RunningFleeMoveBehavior(0, 850, 1000, 1000, 500, 0, 50);
                         case "dead":
                             return new DeadUnitMoveBehavior(1000, 1000);
                         default:
@@ -48,9 +62,22 @@ namespace DuckHunt.Factories
                         {
                             case "alive":
                             case "fleeing":
-                                return new SpriteSheetDrawBehavior("ChickenFly.png", 4, 2, 97, 72, 0.07, 0);
+                                return new SpriteSheetDrawBehavior("ChickenFly.png", 4, 2, 97, 72, 0.07, 0, true);
                             case "dead":
-                                return new SpriteSheetDrawBehavior("ChickenDead.png", 4, 2, 103, 76, 0.07, 12.5);
+                                return new SpriteSheetDrawBehavior("ChickenDead.png", 4, 2, 103, 76, 0.07, 12.5, true);
+                            default:
+                                throw new ArgumentException("Onbekende state: " + state, "state");
+                        }
+                    case "bunny":
+                        switch (state)
+                        {
+                            case "alive":
+                            case "fleeing":
+                                return new SpriteSheetDrawBehavior("BunnyRun.png", 4, 1, 40, 40, 0.09, 0, true);
+                            case "jumping":
+                                return new SpriteSheetDrawBehavior("BunnyJump.png", 6, 1, 40, 40, 0.20, 0, false);
+                            case "dead":
+                                return new SpriteSheetDrawBehavior("BunnyDead.png", 5, 1, 40, 40, 0.09, 0, false);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");
                         }

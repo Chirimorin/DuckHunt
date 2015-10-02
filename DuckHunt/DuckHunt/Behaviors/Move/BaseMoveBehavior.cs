@@ -151,13 +151,15 @@ namespace DuckHunt.Behaviors.Move
             return unit.PosX >= 0;
         }
 
-        protected virtual void bounceLeft(Unit unit)
+        protected virtual bool bounceLeft(Unit unit)
         {
             if (!isInScreenLeft(unit))
             {
                 unit.PosX = 0;
                 FlipXSpeed(unit);
+                return true;
             }
+            return false;
         }
 
         protected bool isInScreenRight(Unit unit)
@@ -165,13 +167,15 @@ namespace DuckHunt.Behaviors.Move
             return unit.PosXRight <= CONSTANTS.CANVAS_WIDTH;
         }
 
-        protected virtual void bounceRight(Unit unit)
+        protected virtual bool bounceRight(Unit unit)
         {
             if (!isInScreenRight(unit))
             {
                 unit.PosXRight = CONSTANTS.CANVAS_WIDTH;
                 FlipXSpeed(unit);
+                return true;
             }
+            return false;
         }
 
         protected bool isInScreenTop(Unit unit)
@@ -179,13 +183,15 @@ namespace DuckHunt.Behaviors.Move
             return unit.PosY >= 0;
         }
 
-        protected virtual void bounceTop(Unit unit)
+        protected virtual bool bounceTop(Unit unit)
         {
             if (!isInScreenTop(unit))
             {
                 unit.PosY = 0;
                 FlipYSpeed(unit);
+                return true;
             }
+            return false;
         }
 
         protected bool isInScreenBottom(Unit unit)
@@ -193,13 +199,15 @@ namespace DuckHunt.Behaviors.Move
             return unit.PosYBottom <= CONSTANTS.CANVAS_HEIGHT;
         }
 
-        protected virtual void bounceBottom(Unit unit)
+        protected virtual bool bounceBottom(Unit unit)
         {
             if (!isInScreenBottom(unit))
             {
                 unit.PosYBottom = CONSTANTS.CANVAS_HEIGHT;
                 FlipYSpeed(unit);
+                return true;
             }
+            return false;
         }
 
         protected bool screenEntered(Unit unit)

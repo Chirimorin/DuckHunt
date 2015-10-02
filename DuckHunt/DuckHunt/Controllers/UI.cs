@@ -76,7 +76,7 @@ namespace DuckHunt.Controllers
         /// </summary>
         public void UpdateMousePosition()
         {
-            Invoke(() =>
+            BeginInvoke(() =>
             {
                 _game.InputContainer.MousePosition = Mouse.GetPosition(_mainWindow.MainCanvas);
             });
@@ -84,7 +84,7 @@ namespace DuckHunt.Controllers
 
         public void UpdateScreen(IGame game)
         {
-            Invoke(() => 
+            BeginInvoke(() => 
             {
                 _mainWindow.FPS.Content = "FPS: " + game.FPS;
                 game.UnitContainer.DrawAllUnits(game);
@@ -97,8 +97,9 @@ namespace DuckHunt.Controllers
         }
         private void AddGraphics(UIElement element)
         {
-            Invoke(() =>
+            BeginInvoke(() =>
             {
+                Console.WriteLine("Starting to add gfx");
                 _mainWindow.MainCanvas.Children.Add(element);
             });
         }
@@ -109,8 +110,9 @@ namespace DuckHunt.Controllers
         }
         private void RemoveGraphics(UIElement element)
         {
-            Invoke(() =>
+            BeginInvoke(() =>
             {
+                Console.WriteLine("Starting to remove gfx");
                 _mainWindow.MainCanvas.Children.Remove(element);
             });
         }
@@ -119,7 +121,7 @@ namespace DuckHunt.Controllers
         /// Voert een functie uit op de UI thread.
         /// </summary>
         /// <param name="action">De actie die uitgevoerd moet worden.</param>
-        public static void Invoke(Action action)
+        public static void BeginInvoke(Action action)
         {
             // Als de huidige thread access heeft, is de dispatcher niet nodig.
             if (_dispatcher.CheckAccess())
@@ -128,6 +130,12 @@ namespace DuckHunt.Controllers
                 _dispatcher.BeginInvoke(action);
         }
 
+        /// <summary>
+        /// Voert een funcite synchroon uit op de UI thread, met return value.
+        /// </summary>
+        /// <typeparam name="T">Het type van de return value</typeparam>
+        /// <param name="action">De actie die uitgevoerd moet worden</param>
+        /// <returns>De waarde die de actie returned</returns>
         public static T Invoke<T>(Func<T> action)
         {
             if (_dispatcher.CheckAccess())

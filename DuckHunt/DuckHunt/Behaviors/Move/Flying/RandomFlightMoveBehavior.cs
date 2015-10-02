@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using DuckHunt.Controllers;
 using DuckHunt.Units;
 
-namespace DuckHunt.Behaviors.Move.Chicken
+namespace DuckHunt.Behaviors.Move.Flying
 {
-    public class AliveChickenMoveBehavior : BaseMoveBehavior
+    public class RandomFlightMoveBehavior : BaseMoveBehavior
     {
         private double _goalVX = double.NaN;
         protected double GoalVX
@@ -24,7 +24,7 @@ namespace DuckHunt.Behaviors.Move.Chicken
             set { _goalVY = value; }
         }
 
-        public AliveChickenMoveBehavior(double dVX, double dVY, double maxVX, double maxVY) : base(dVX, dVY)
+        public RandomFlightMoveBehavior(double dVX, double dVY, double maxVX, double maxVY) : base(dVX, dVY)
         {
             MaxVX = maxVX;
             MaxVY = maxVY;
