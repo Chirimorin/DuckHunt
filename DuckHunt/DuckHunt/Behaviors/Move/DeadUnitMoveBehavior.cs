@@ -26,15 +26,16 @@ namespace DuckHunt.Behaviors.Move
             if (screenEntered(unit) && !isInScreenBottom(unit))
             {
                 unit.PosYBottom = CONSTANTS.CANVAS_HEIGHT;
-                unit.VY = 0;
-                DVY = 0;
 
                 OnGround = true;
             }
+        }
 
+        public override void FixedTimePassed(Unit unit, IGame game)
+        {
             if (OnGround)
             {
-                unit.VX = 0.95 * unit.VX;
+                unit.VX = 0.90 * unit.VX;
             }
         }
 

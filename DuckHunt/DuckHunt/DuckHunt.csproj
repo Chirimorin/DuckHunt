@@ -68,10 +68,10 @@
     <Compile Include="Factories\StateFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
     <Compile Include="Units\BaseUnitState.cs" />
-    <Compile Include="Units\Chicken\AliveChickenState.cs" />
+    <Compile Include="Units\Common\AliveUnitState.cs" />
     <Compile Include="Units\Chicken\Chicken.cs" />
-    <Compile Include="Units\Chicken\DeadChickenState.cs" />
-    <Compile Include="Units\Chicken\FleeingChickenState.cs" />
+    <Compile Include="Units\Common\DeadUnitState.cs" />
+    <Compile Include="Units\Common\FleeingUnitState.cs" />
     <Compile Include="Units\Unit.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -8,22 +8,25 @@ using DuckHunt.Behaviors.OldMove;
 using DuckHunt.Controllers;
 using DuckHunt.Factories;
 
-namespace DuckHunt.Units.Chicken
+namespace DuckHunt.Units.Common
 {
-    public class DeadChickenState : BaseUnitState
+    public class AliveUnitState : BaseUnitState
     {
         private double Timer { get; set; }
-        private double DespawnTime { get; set; }
+        private double FleeTime { get; set; }
 
-        public DeadChickenState(string unit, string name) : base(unit, name)
+        public AliveUnitState(string unit, string name, double fleeTime) : base(unit, name)
         {
             Timer = 0;
-            DespawnTime = 5;
+            FleeTime = fleeTime;
         }
 
         public override void onClick(Unit unit, Point point)
         {
-            // Doe niks
+            if (unit.isHit(point))
+            {
+                unit.State = StateFactory.createState(unit.Name, "dead");
+            }
         }
 
         public override void Update(Unit unit, IGame game)
@@ -32,8 +35,8 @@ namespace DuckHunt.Units.Chicken
 
             Timer += game.DT;
 
-            if (Timer > DespawnTime)
-                unit.destroy();
+            if (Timer > FleeTime)
+                unit.State = StateFactory.createState(unit.Name, "fleeing");
         }
     }
 }

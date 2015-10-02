@@ -1,5 +1,6 @@
 ﻿using DuckHunt.Units;
 using DuckHunt.Units.Chicken;
+using DuckHunt.Units.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace DuckHunt.Factories
                     switch (state)
                     {
                         case "alive":
-                            return new AliveChickenState(unit, state);
+                            return new AliveUnitState(unit, state, 10);
                         case "fleeing":
-                            return new FleeingChickenState(unit, state);
+                            return new FleeingUnitState(unit, state);
                         case "dead":
-                            return new DeadChickenState(unit, state);
+                            return new DeadUnitState(unit, state, 3.0, 0.5);
                         default:
                             throw new ArgumentException("Onbekende state: " + state, "state");
                     }

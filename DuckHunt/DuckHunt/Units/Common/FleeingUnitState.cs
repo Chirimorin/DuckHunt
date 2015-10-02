@@ -8,11 +8,11 @@ using DuckHunt.Behaviors.OldMove;
 using DuckHunt.Controllers;
 using DuckHunt.Factories;
 
-namespace DuckHunt.Units.Chicken
+namespace DuckHunt.Units.Common
 {
-    public class FleeingChickenState : BaseUnitState
+    public class FleeingUnitState : BaseUnitState
     {
-        public FleeingChickenState(string unit, string name) : base(unit, name)
+        public FleeingUnitState(string unit, string name) : base(unit, name)
         {
             
         }
@@ -29,6 +29,7 @@ namespace DuckHunt.Units.Chicken
         {
             base.Update(unit, game);
 
+            // Als de unit buiten het scherm is, verwijder hem. 
             if (unit.PosXRight < 0 ||
                 unit.PosX > CONSTANTS.CANVAS_WIDTH ||
                 unit.PosYBottom < 0 ||
