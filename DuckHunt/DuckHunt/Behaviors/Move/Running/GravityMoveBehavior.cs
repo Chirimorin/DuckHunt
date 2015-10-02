@@ -30,11 +30,13 @@ namespace DuckHunt.Behaviors.Move.Running
 
             if (bounceBottom(unit))
             {
-                unit.VY = unit.VY * Bouncyness;
-
-                if (unit.VY >= GetTimeBased(-DVY, game))
+                if (unit.VY >= GetTimeBased(DVY, game))
                 {
                     unit.VY = 0;
+                }
+                else
+                {
+                    unit.VY = unit.VY * Bouncyness;
                 }
             }
 

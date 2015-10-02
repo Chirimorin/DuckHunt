@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DuckHunt"
         mc:Ignorable="d"
-        Title="Chicken Hunt" Height="auto" Width="auto"
+        Title="Chicken Hunt" Height="757" Width="1296"
         MinWidth="640" MinHeight="360"
-        d:DesignWidth="1280" d:DesignHeight="720"
         Background="Black">
 
     <Viewbox Stretch="Uniform">

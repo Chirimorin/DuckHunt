@@ -99,7 +99,6 @@ namespace DuckHunt.Controllers
         {
             BeginInvoke(() =>
             {
-                Console.WriteLine("Starting to add gfx");
                 _mainWindow.MainCanvas.Children.Add(element);
             });
         }
@@ -112,7 +111,6 @@ namespace DuckHunt.Controllers
         {
             BeginInvoke(() =>
             {
-                Console.WriteLine("Starting to remove gfx");
                 _mainWindow.MainCanvas.Children.Remove(element);
             });
         }

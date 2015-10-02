@@ -24,11 +24,11 @@ namespace DuckHunt.Factories
                     switch (state)
                     {
                         case "alive":
-                            return new RandomFlightMoveBehavior(1000, 1000, 1000, 1000);
+                            return new RandomFlightMoveBehavior(900, 900, 750, 750);
                         case "fleeing":
-                            return new FlyingFleeMoveBehavior(1000, -100, 1000, 500);
+                            return new FlyingFleeMoveBehavior(1000, -100, 750, 500);
                         case "dead":
-                            return new DeadUnitMoveBehavior(1000, 1000);
+                            return new DeadUnitMoveBehavior(900, 500);
                         default:
                             throw new ArgumentException("Onbekende state: " + state, "state");
                     }
@@ -36,11 +36,11 @@ namespace DuckHunt.Factories
                     switch (state)
                     {
                         case "alive":
-                            return new GravityMoveBehavior(0, 850, 1000, 1000, 500, 0, 50);
+                            return new GravityMoveBehavior(0, 900, 500, 500, 400, 0, 100);
                         case "fleeing":
-                            return new RunningFleeMoveBehavior(0, 850, 1000, 1000, 500, 0, 50);
+                            return new RunningFleeMoveBehavior(0, 900, 500, 500, 400, 0, 150);
                         case "dead":
-                            return new DeadUnitMoveBehavior(1000, 1000);
+                            return new DeadUnitMoveBehavior(900, 500);
                         default:
                             throw new ArgumentException("Onbekende state: " + state, "state");
                     }
@@ -73,11 +73,11 @@ namespace DuckHunt.Factories
                         {
                             case "alive":
                             case "fleeing":
-                                return new SpriteSheetDrawBehavior("BunnyRun.png", 4, 1, 40, 40, 0.09, 0, true);
+                                return new SpriteSheetDrawBehavior("BunnyRun.png", 4, 1, 40, 40, 0.075, 0, true);
                             case "jumping":
-                                return new SpriteSheetDrawBehavior("BunnyJump.png", 6, 1, 40, 40, 0.20, 0, false);
+                                return new SpriteSheetDrawBehavior("BunnyJump.png", 6, 1, 40, 40, 0.15, 0, false);
                             case "dead":
-                                return new SpriteSheetDrawBehavior("BunnyDead.png", 5, 1, 40, 40, 0.09, 0, false);
+                                return new SpriteSheetDrawBehavior("BunnyDead.png", 5, 1, 40, 40, 0.1, 0, false);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");
                         }

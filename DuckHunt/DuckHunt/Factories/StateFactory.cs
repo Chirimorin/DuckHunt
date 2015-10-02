@@ -26,7 +26,7 @@ namespace DuckHunt.Factories
                         case "fleeing":
                             return new FleeingUnitState(unit, state);
                         case "dead":
-                            return new DeadUnitState(unit, state, 2.0, 0.75);
+                            return new DeadUnitState(unit, state, 1.50, 0.75);
                         default:
                             throw new ArgumentException("Onbekende state: " + state, "state");
                     }
@@ -38,7 +38,7 @@ namespace DuckHunt.Factories
                         case "fleeing":
                             return new FleeingBunnyState(unit, state);
                         case "dead":
-                            return new DeadUnitState(unit, state, 2.0, 0.75);
+                            return new DeadUnitState(unit, state, 1.50, 0.75);
                         default:
                             throw new ArgumentException("Onbekende state: " + state, "state");
                     }
