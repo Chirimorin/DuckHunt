@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
+using System.Reflection;
 
 namespace DuckHunt.Behaviors.Draw
 {
@@ -54,8 +55,9 @@ namespace DuckHunt.Behaviors.Draw
             // Rechthoek aanmaken ter grootte van de sprites
             System.Drawing.Rectangle cropRect = new System.Drawing.Rectangle(0, 0, spriteWidth, spriteHeight);
 
-            // Spritesheet inladen
-            System.Drawing.Bitmap src = System.Drawing.Image.FromFile(Path.GetFullPath(@"Images\" + filename)) as System.Drawing.Bitmap;
+            // Spritesheet inladen vanuit embedded resources
+            System.Drawing.Bitmap src = new System.Drawing.Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("DuckHunt.Images." + filename));
+
             System.Drawing.Bitmap target;
 
             for (int row = 0; row < xImages; row++)

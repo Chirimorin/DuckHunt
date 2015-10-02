@@ -130,27 +130,20 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Chicken spritesheet.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Images\Chicken.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Images\Chicken spritesheet.png" />
+    <None Include="Images\Chicken.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\ChickenFly.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Images\ChickenFly.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\BunnyRun.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Images\BunnyRun.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\BunnyRun2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Images\BunnyRun2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\ChickenDead.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
