@@ -37,10 +37,10 @@ namespace DuckHunt.Behaviors.Draw
         private double _timePassed;
         private readonly double _frameTime;
 
-        ScaleTransform _transformRegular;
-        ScaleTransform _transformFlipped;
+        TransformGroup _transformRegular;
+        TransformGroup _transformFlipped;
 
-        public SpriteSheetDrawBehavior(string filename, int xImages, int yImages, int spriteWidth, int spriteHeight, double frameTime)
+        public SpriteSheetDrawBehavior(string filename, int xImages, int yImages, int spriteWidth, int spriteHeight, double frameTime, double angle)
         {
             // Voorbereiding
             _frameTime = frameTime;
@@ -48,9 +48,13 @@ namespace DuckHunt.Behaviors.Draw
             _currentFrame = 0;
             _timePassed = 0;
             Sprites = new BitmapSource[_frameCount];
-            _transformRegular = new ScaleTransform(1, 1);
-            _transformFlipped = new ScaleTransform(-1, 1);
+            _transformRegular = new TransformGroup();
+            _transformRegular.Children.Add(new ScaleTransform(1, 1));
+            _transformRegular.Children.Add(new RotateTransform(angle));
 
+            _transformFlipped = new TransformGroup();
+            _transformFlipped.Children.Add(new ScaleTransform(-1, 1));
+            _transformFlipped.Children.Add(new RotateTransform(-angle));
 
             // Rechthoek aanmaken ter grootte van de sprites
             System.Drawing.Rectangle cropRect = new System.Drawing.Rectangle(0, 0, spriteWidth, spriteHeight);

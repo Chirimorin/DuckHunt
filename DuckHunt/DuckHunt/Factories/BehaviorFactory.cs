@@ -48,9 +48,9 @@ namespace DuckHunt.Factories
                         {
                             case "alive":
                             case "fleeing":
-                                return new SpriteSheetDrawBehavior("ChickenFly.png", 4, 2, 97, 72, 0.07);
+                                return new SpriteSheetDrawBehavior("ChickenFly.png", 4, 2, 97, 72, 0.07, 0);
                             case "dead":
-                                return new SpriteSheetDrawBehavior("ChickenDead.png", 4, 2, 103, 76, 0.07);
+                                return new SpriteSheetDrawBehavior("ChickenDead.png", 4, 2, 103, 76, 0.07, 12.5);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");
                         }
