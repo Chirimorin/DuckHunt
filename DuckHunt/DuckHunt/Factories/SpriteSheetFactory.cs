@@ -28,7 +28,7 @@ namespace DuckHunt.Factories
                 while (!reader.EndOfStream)
                 {
                     string[] line = line = reader.ReadLine().Split(';');
-                    if (line.Length < 3)
+                    if (line.Length != 3)
                         throw new FileFormatException("Error tijdens het lezen van SpriteSheetsInfo.txt (regel had " + line.Length + " elementen, 3 verwacht");
                     string fileName = line[0];
                     int xImages = int.Parse(line[1]);

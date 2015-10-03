@@ -16,6 +16,10 @@ namespace DuckHunt.Factories
         {
             Console.WriteLine("Creating state " + state + " for " + unit);
 
+            // Despawn de unit meteen
+            if (state == "endlevel")
+                return new DeadUnitState(unit, state, 0.5, 0.5);
+
             switch (unit)
             {
                 case "chicken":

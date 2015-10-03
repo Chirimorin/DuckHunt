@@ -12,10 +12,9 @@ namespace DuckHunt.Factories
 {
     public static class UnitFactory
     {
-        private static string[] possibleUnits = new string[] { "chicken", "bunny" };
-        public static Unit createRandomUnit(IGame game)
+        public static Unit createRandomUnit(IGame game, string[] allowedUnits)
         {
-            return createUnit(possibleUnits[game.Random.Next(possibleUnits.Length)]);
+            return createUnit(allowedUnits[game.Random.Next(allowedUnits.Length)]);
         }
 
         public static Unit createUnit(string type)

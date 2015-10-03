@@ -13,6 +13,12 @@
         <Grid>
             <Canvas Name="MainCanvas" Background="White"></Canvas>
             <Label Name="FPS" IsHitTestVisible="False"></Label>
+            <Label Name="CurrentLevel" 
+                   IsHitTestVisible="False" 
+                   HorizontalAlignment="Center"
+                   FontSize="20"
+                   FontWeight="Bold">
+            </Label>
         </Grid>
     </Viewbox>
 </Window>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using DuckHunt.Behaviors.OldMove;
 using DuckHunt.Controllers;
 using DuckHunt.Factories;
 

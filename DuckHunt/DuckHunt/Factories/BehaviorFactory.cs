@@ -18,6 +18,10 @@ namespace DuckHunt.Factories
         {
             Console.WriteLine("Creating move behavior for " + unit + " in state " + state);
 
+            // Despawn de unit meteen
+            if (state == "endlevel")
+                return new DeadUnitMoveBehavior(0, 0);
+
             switch (unit)
             {
                 case "chicken":
@@ -64,6 +68,7 @@ namespace DuckHunt.Factories
                             case "fleeing":
                                 return new SpriteSheetDrawBehavior("ChickenFly.png", 0.07, 0, true);
                             case "dead":
+                            case "endlevel":
                                 return new SpriteSheetDrawBehavior("ChickenDead.png", 0.07, 12.5, true);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");
@@ -77,6 +82,7 @@ namespace DuckHunt.Factories
                             case "jumping":
                                 return new SpriteSheetDrawBehavior("BunnyJump.png", 0.15, 0, false);
                             case "dead":
+                            case "endlevel":
                                 return new SpriteSheetDrawBehavior("BunnyDead.png", 0.1, 0, false);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");

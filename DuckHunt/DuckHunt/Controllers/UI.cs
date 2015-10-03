@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DuckHunt.Factories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,11 +65,7 @@ namespace DuckHunt.Controllers
         /// <param name="e"></param>
         public void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            // Click events komen altijd van de UI thread, geen invoke nodig. 
-            lock(Locks.ClickedPoints)
-            {
-                _game.InputContainer.ClickedPoints.Add(e.GetPosition(_mainWindow.MainCanvas));
-            }
+            _game.InputContainer.AddClick(e.GetPosition(_mainWindow.MainCanvas));
         }
 
         /// <summary>
@@ -87,6 +84,7 @@ namespace DuckHunt.Controllers
             BeginInvoke(() => 
             {
                 _mainWindow.FPS.Content = "FPS: " + game.FPS;
+                _mainWindow.CurrentLevel.Content = LevelFactory.Instance.CurrentLevel.Name;
                 game.UnitContainer.DrawAllUnits(game);
             });
         }

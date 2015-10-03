@@ -1,4 +1,5 @@
 ﻿using DuckHunt.Controllers;
+using DuckHunt.Factories;
 using DuckHunt.Units;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Windows;
 namespace DuckHunt.Containers
 {
     /// <summary>
-    /// Unit container. Wordt alleen aangepast in the game thread en is dus altijd thread safe. 
+    /// Unit container. Wordt alleen aangepast in the game thread.
     /// </summary>
     public class UnitContainer
     {
@@ -39,17 +40,46 @@ namespace DuckHunt.Containers
             Units.RemoveAll(u => u.IsDestroyed);
         }
 
-        public void HandleClick(Point point)
+        /// <summary>
+        /// Verwijderd alle units direct
+        /// </summary>
+        public void ClearAllUnits()
         {
-            foreach(Unit unit in Units)
+            foreach (Unit unit in Units)
             {
+                unit.destroy();
+            }
+            ClearDestroyedUnits();
+        }
+
+        /// <summary>
+        /// Haalt alle units netjes weg
+        /// </summary>
+        public void CleanupUnits()
+        {
+            foreach (Unit unit in Units)
+            {
+                if (unit.State.Name != "endlevel")
+                    unit.State = StateFactory.createState(unit.Name, "endlevel");
+            }
+        }
+
+        public bool HandleClick(Point point)
+        {
+            bool hit = false;
+
+            foreach (Unit unit in Units)
+            {
+                hit = hit || unit.isHit(point);
                 unit.onClick(point);
             }
+
+            return hit;
         }
 
         public void UpdateAllUnits(IGame game)
         {
-            foreach(Unit unit in Units)
+            foreach (Unit unit in Units)
             {
                 unit.Update(game);
             }
@@ -57,15 +87,15 @@ namespace DuckHunt.Containers
 
         public void DrawAllUnits(IGame game)
         {
-            foreach(Unit unit in Units)
+            foreach (Unit unit in Units)
             {
                 unit.Draw(game);
             }
         }
-        
+
         public void FixedTimePassed(IGame game)
         {
-            foreach(Unit unit in Units)
+            foreach (Unit unit in Units)
             {
                 unit.FixedTimePassed(game);
             }

@@ -144,6 +144,8 @@ namespace DuckHunt.Controllers
             InputContainer = new InputContainer();
             UnitContainer = new UnitContainer();
 
+            LevelFactory.Instance.NewGame(this);
+
             // Begintijd vaststellen
             UpdateTime();
             // Accumulator moet 0 zijn hier, andere waarden worden meteen overschreven.
@@ -202,11 +204,13 @@ namespace DuckHunt.Controllers
         /// </summary>
         private void UpdateGame()
         {
+            LevelFactory.Instance.CurrentLevel.Update(this);
+
             UnitContainer.UpdateAllUnits(this);
 
-            while (UnitContainer.NumUnits < 1)
+            Unit newUnit = LevelFactory.Instance.CurrentLevel.TryCreateUnit(this);
+            if (newUnit != null)
             {
-                Unit newUnit = UnitFactory.createRandomUnit(this);
                 newUnit.BirthTime = Time;
                 UnitContainer.AddUnit(newUnit);
             }

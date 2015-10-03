@@ -1,7 +1,6 @@
 ﻿using DuckHunt.Behaviors;
 using DuckHunt.Factories;
 using DuckHunt.Controllers;
-using DuckHunt.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

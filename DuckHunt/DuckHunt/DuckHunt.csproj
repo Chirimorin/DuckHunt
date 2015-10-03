@@ -71,7 +71,12 @@
     <Compile Include="Factories\SpriteSheetFactory.cs" />
     <Compile Include="Factories\StateFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
+    <Compile Include="Levels\GameOver.cs" />
+    <Compile Include="Levels\ILevel.cs" />
     <Compile Include="Levels\BaseLevel.cs" />
+    <Compile Include="Levels\Level1.cs" />
+    <Compile Include="Levels\Level1Bonus.cs" />
+    <Compile Include="Levels\Level2.cs" />
     <Compile Include="Units\BaseUnitState.cs" />
     <Compile Include="Units\Bunny\Bunny.cs" />
     <Compile Include="Units\Bunny\AliveBunnyState.cs" />
@@ -89,28 +94,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behaviors\OldMove\AfraidOfMouseMoveBehavior.cs" />
-    <Compile Include="Behaviors\OldMove\GravityMoveBehavior.cs" />
-    <Compile Include="Behaviors\OldMove\HorizontalMoveBehavior.cs" />
-    <Compile Include="Behaviors\OldMove\HugMouseMoveBehavior.cs" />
-    <Compile Include="Behaviors\OldMove\BaseMoveBehavior.cs" />
-    <Compile Include="Behaviors\OldMove\RandomMoveBehavior.cs" />
     <Compile Include="CONSTANTS.cs" />
     <Compile Include="Containers\InputContainer.cs" />
     <Compile Include="Containers\UnitContainer.cs" />
     <Compile Include="Controllers\Game.cs" />
     <Compile Include="Controllers\IGame.cs" />
     <Compile Include="Controllers\UI.cs" />
-    <Compile Include="Behaviors\OldMove\SimpleMoveBehavior.cs" />
-    <Compile Include="Locks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Bunny.cs" />
-    <Compile Include="Model\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

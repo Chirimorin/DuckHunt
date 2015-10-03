@@ -13,17 +13,12 @@ namespace DuckHunt.Containers
     /// </summary>
     public class InputContainer
     {
+        private object clickedPointsLock = new object();
+
         private List<Point> _clickedPoints;
         public List<Point> ClickedPoints
         {
-            get
-            {
-                if (_clickedPoints == null)
-                {
-                    _clickedPoints = new List<Point>();
-                }
-                return _clickedPoints;
-            }
+            get { return _clickedPoints; }
         }
 
         private Point _mousePosition;
@@ -33,16 +28,59 @@ namespace DuckHunt.Containers
             set { _mousePosition = value; }
         }
 
+        private int _numClicks;
+        public int NumClicks
+        {
+            get { return _numClicks; }
+            private set { _numClicks = value; }
+        }
+
+        private int _numHits;
+        public int NumHits
+        {
+            get { return _numHits; }
+            private set { _numHits = value; }
+        }
+
+        private int _numMisses;
+        public int NumMisses
+        {
+            get { return _numMisses; }
+            private set { _numMisses = value; }
+        }
+
+
+
+        public InputContainer()
+        {
+            _clickedPoints = new List<Point>();
+        }
+
         public void HandleInputs(IGame game)
         {
             // foreach kan het aanpassen van collections tijdens loopen niet aan. Dit willen we dus niet. 
-            lock(Locks.ClickedPoints)
+            lock (clickedPointsLock)
             {
+                NumClicks = ClickedPoints.Count;
+                NumHits = 0;
+                NumMisses = 0;
+
                 foreach (Point point in ClickedPoints)
                 {
-                    game.UnitContainer.HandleClick(point);
+                    if (game.UnitContainer.HandleClick(point))
+                        NumHits++;
+                    else
+                        NumMisses++;
                 }
                 ClickedPoints.Clear();
+            }
+        }
+
+        public void AddClick(Point point)
+        {
+            lock (clickedPointsLock)
+            {
+                ClickedPoints.Add(point);
             }
         }
     }
