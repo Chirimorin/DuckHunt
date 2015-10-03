@@ -165,7 +165,7 @@ namespace DuckHunt.Factories
         private int GetMaxShots(int level)
         {
             // We willen minimaal 1 schot per unit, met 3 bonus schoten voor ieder level
-            int result = GetMaxLivingUnits(level) + 3;
+            int result = GetMaxSpawns(level) + 3;
 
             // In eerdere levels krijg je extra schoten
             if (level < 15)
