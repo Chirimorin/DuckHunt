@@ -62,9 +62,9 @@ namespace DuckHunt.Factories
                         {
                             case "alive":
                             case "fleeing":
-                                return new SpriteSheetDrawBehavior("ChickenFly.png", 4, 2, 97, 72, 0.07, 0, true);
+                                return new SpriteSheetDrawBehavior("ChickenFly.png", 0.07, 0, true);
                             case "dead":
-                                return new SpriteSheetDrawBehavior("ChickenDead.png", 4, 2, 103, 76, 0.07, 12.5, true);
+                                return new SpriteSheetDrawBehavior("ChickenDead.png", 0.07, 12.5, true);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");
                         }
@@ -73,11 +73,11 @@ namespace DuckHunt.Factories
                         {
                             case "alive":
                             case "fleeing":
-                                return new SpriteSheetDrawBehavior("BunnyRun.png", 4, 1, 40, 40, 0.075, 0, true);
+                                return new SpriteSheetDrawBehavior("BunnyRun.png", 0.075, 0, true);
                             case "jumping":
-                                return new SpriteSheetDrawBehavior("BunnyJump.png", 6, 1, 40, 40, 0.15, 0, false);
+                                return new SpriteSheetDrawBehavior("BunnyJump.png", 0.15, 0, false);
                             case "dead":
-                                return new SpriteSheetDrawBehavior("BunnyDead.png", 5, 1, 40, 40, 0.1, 0, false);
+                                return new SpriteSheetDrawBehavior("BunnyDead.png", 0.1, 0, false);
                             default:
                                 throw new ArgumentException("Onbekende state: " + state, "state");
                         }

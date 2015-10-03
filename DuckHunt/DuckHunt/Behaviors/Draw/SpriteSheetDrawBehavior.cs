@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
 using System.Reflection;
+using DuckHunt.Factories;
 
 namespace DuckHunt.Behaviors.Draw
 {
@@ -22,25 +23,16 @@ namespace DuckHunt.Behaviors.Draw
             get { return _gfx; }
         }
 
-        private BitmapSource[] _sprites;
-        /// <summary>
-        /// Houd alle losse sprites bij
-        /// </summary>
-        public BitmapSource[] Sprites
-        {
-            get { return _sprites; }
-            set { _sprites = value; }
-        }
+        private readonly int _frameCount;
+        private readonly double _frameTime;
+        private readonly bool _loop;
+        private readonly BitmapSource[] _sprites;
+        private readonly TransformGroup _transformRegular;
+        private readonly TransformGroup _transformFlipped;
 
-        private bool _loop;
-        private bool _animationCompleted = false;
-        private int _frameCount;
+        private bool _animationCompleted;
         private int _currentFrame;
         private double _timePassed;
-        private readonly double _frameTime;
-
-        TransformGroup _transformRegular;
-        TransformGroup _transformFlipped;
 
         public SpriteSheetDrawBehavior(string filename, int xImages, int yImages, int spriteWidth, int spriteHeight, double frameTime, double angle, bool loop)
         {
@@ -50,7 +42,6 @@ namespace DuckHunt.Behaviors.Draw
             _frameCount = xImages * yImages;
             _currentFrame = 0;
             _timePassed = 0;
-            Sprites = new BitmapSource[_frameCount];
             _transformRegular = new TransformGroup();
             _transformRegular.Children.Add(new ScaleTransform(1, 1));
             _transformRegular.Children.Add(new RotateTransform(angle));
@@ -59,45 +50,39 @@ namespace DuckHunt.Behaviors.Draw
             _transformFlipped.Children.Add(new ScaleTransform(-1, 1));
             _transformFlipped.Children.Add(new RotateTransform(-angle));
 
-            // Rechthoek aanmaken ter grootte van de sprites
-            System.Drawing.Rectangle cropRect = new System.Drawing.Rectangle(0, 0, spriteWidth, spriteHeight);
-
-            // Spritesheet inladen vanuit embedded resources
-            System.Drawing.Bitmap src = new System.Drawing.Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("DuckHunt.Images." + filename));
-
-            System.Drawing.Bitmap target;
-
-            for (int row = 0; row < xImages; row++)
-            {
-                for (int col = 0; col < yImages; col++)
-                {
-                    // Zoek de positie van de huidige sprite
-                    int currentX = row * spriteWidth;
-                    int currentY = col * spriteHeight;
-                    cropRect.X = currentX;
-                    cropRect.Y = currentY;
-
-                    // Maak een bitmap om de losse sprite op te tekenen
-                    target = new System.Drawing.Bitmap(cropRect.Width, cropRect.Height);
-
-                    // Snij de sprite uit
-                    using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(target))
-                    {
-                        g.DrawImage(src, new System.Drawing.Rectangle(0, 0, target.Width, target.Height), cropRect, System.Drawing.GraphicsUnit.Pixel);
-                    }
-
-                    // Zet de sprite om in een BitmapSource
-                    BitmapSource frame = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(target.GetHbitmap(), IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight(target.Width, target.Height));
-
-                    // Sla de sprite op in de array van sprites
-                    int index = row + col * xImages;
-                    Sprites[index] = frame;
-                }
-            }
+            _sprites = SpriteSheetFactory.Instance.ProcessSpriteSheet(filename, xImages, yImages);
 
             _gfx = new Image();
-            _gfx.Source = Sprites[0];
+            _gfx.Source = _sprites[0];
+            _gfx.RenderTransformOrigin = new Point(0.5, 0.5);
+            _gfx.RenderTransform = _transformRegular;
+        }
+
+        public SpriteSheetDrawBehavior(string fileName, double frameTime, double angle, bool loop)
+        {
+            // Beginstate voor non-readonly variabelen
+            Reset();
+
+            // Sprites ophalen
+            _sprites = SpriteSheetFactory.Instance.GetSprites(fileName);
+
+            // Readonly variabelen
+            _frameCount = _sprites.Length;
+            _frameTime = frameTime;
+            _loop = loop;
+
+            // Transformgroups aanmaken (voor rechtzetten en spiegelen van de sprites)
+            _transformRegular = new TransformGroup();
+            _transformRegular.Children.Add(new ScaleTransform(1, 1));
+            _transformRegular.Children.Add(new RotateTransform(angle));
+
+            _transformFlipped = new TransformGroup();
+            _transformFlipped.Children.Add(new ScaleTransform(-1, 1));
+            _transformFlipped.Children.Add(new RotateTransform(-angle));
+
+            // Graphics object aanmaken
+            _gfx = new Image();
+            _gfx.Source = _sprites[0];
             _gfx.RenderTransformOrigin = new Point(0.5, 0.5);
             _gfx.RenderTransform = _transformRegular;
         }
@@ -111,7 +96,7 @@ namespace DuckHunt.Behaviors.Draw
                 // Update sprites when needed. Even for low framerates
                 while (_timePassed > _frameTime)
                 {
-                    _gfx.Source = Sprites[_currentFrame++];
+                    _gfx.Source = _sprites[_currentFrame++];
                     _timePassed -= _frameTime;
 
                     if (_currentFrame == _frameCount)
@@ -137,8 +122,9 @@ namespace DuckHunt.Behaviors.Draw
 
         public void Reset()
         {
-            _currentFrame = 0;
             _animationCompleted = false;
+            _currentFrame = 0;
+            _timePassed = 0;
         }
     }
 }

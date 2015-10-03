@@ -1,0 +1,5 @@
+﻿BunnyDead.png;5;1
+BunnyJump.png;6;1
+BunnyRun.png;4;1
+ChickenFly.png;4;2
+ChickenDead.png;4;2

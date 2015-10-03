@@ -67,8 +67,11 @@
     <Compile Include="Behaviors\Move\Running\RunningFleeMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Factories\BehaviorFactory.cs" />
+    <Compile Include="Factories\LevelFactory.cs" />
+    <Compile Include="Factories\SpriteSheetFactory.cs" />
     <Compile Include="Factories\StateFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
+    <Compile Include="Levels\BaseLevel.cs" />
     <Compile Include="Units\BaseUnitState.cs" />
     <Compile Include="Units\Bunny\Bunny.cs" />
     <Compile Include="Units\Bunny\AliveBunnyState.cs" />
@@ -135,19 +138,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\ChickenFly.png" />
+    <EmbeddedResource Include="SpriteSheets\ChickenFly.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\BunnyRun.png" />
+    <EmbeddedResource Include="SpriteSheets\BunnyRun.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\ChickenDead.png" />
+    <EmbeddedResource Include="SpriteSheets\ChickenDead.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\BunnyDead.png" />
+    <EmbeddedResource Include="SpriteSheets\BunnyDead.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\BunnyJump.png" />
+    <EmbeddedResource Include="SpriteSheets\BunnyJump.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SpriteSheets\SpriteSheetsInfo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
