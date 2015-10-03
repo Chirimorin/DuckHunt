@@ -36,7 +36,7 @@ namespace DuckHunt.Containers
         }
 
         private int _numHits;
-        public int NumHits
+        public int EarnedScore
         {
             get { return _numHits; }
             private set { _numHits = value; }
@@ -62,14 +62,15 @@ namespace DuckHunt.Containers
             lock (clickedPointsLock)
             {
                 NumClicks = ClickedPoints.Count;
-                NumHits = 0;
+                EarnedScore = 0;
                 NumMisses = 0;
 
                 foreach (Point point in ClickedPoints)
                 {
-                    if (game.UnitContainer.HandleClick(point))
-                        NumHits++;
-                    else
+                    int score = game.UnitContainer.HandleClick(point);
+                    EarnedScore += score;
+
+                    if (score == 0)
                         NumMisses++;
                 }
                 ClickedPoints.Clear();

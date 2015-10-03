@@ -81,10 +81,20 @@ namespace DuckHunt.Controllers
 
         public void UpdateScreen(IGame game)
         {
+            string fps = "FPS: " + game.FPS;
+            string currentlevel = LevelFactory.Instance.CurrentLevel.Name;
+            int shotsLeft = LevelFactory.Instance.CurrentLevel.ShotsLeft;
+            string score = "Score: " + game.CurrentScore + "\nSchoten over: ";
+            if (shotsLeft == -1)
+                score += "eindeloos";
+            else
+                score += shotsLeft;
+
             BeginInvoke(() => 
             {
-                _mainWindow.FPS.Content = "FPS: " + game.FPS;
-                _mainWindow.CurrentLevel.Content = LevelFactory.Instance.CurrentLevel.Name;
+                _mainWindow.FPS.Content = fps;
+                _mainWindow.CurrentLevel.Content = currentlevel;
+                _mainWindow.CurrentScore.Content = score;
                 game.UnitContainer.DrawAllUnits(game);
             });
         }

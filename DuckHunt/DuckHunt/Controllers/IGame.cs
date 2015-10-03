@@ -16,5 +16,7 @@ namespace DuckHunt.Controllers
         double Time { get; }
         double DT { get; }
         double FPS { get; }
+
+        int CurrentScore { get; }
     }
 }

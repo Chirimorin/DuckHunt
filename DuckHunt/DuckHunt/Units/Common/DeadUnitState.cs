@@ -35,9 +35,10 @@ namespace DuckHunt.Units.Common
             FadeTime = fadeTime;
         }
 
-        public override void onClick(Unit unit, Point point)
+        public override int onClick(Unit unit, Point point)
         {
-            // Doe niks
+            // Dode units kunnen geen punten opleveren.
+            return 0;
         }
 
         public override void Update(Unit unit, IGame game)

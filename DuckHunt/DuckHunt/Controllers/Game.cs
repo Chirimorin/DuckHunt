@@ -89,6 +89,8 @@ namespace DuckHunt.Controllers
         private readonly long minTicksPerFrame = 1;
         #endregion
 
+        public int CurrentScore { get; private set; }
+
         // --------------------------------------------------------- CTOR --------------------------------------------------------- //
 
         public Game(UI ui)
@@ -144,6 +146,7 @@ namespace DuckHunt.Controllers
             InputContainer = new InputContainer();
             UnitContainer = new UnitContainer();
 
+            CurrentScore = 0;
             LevelFactory.Instance.NewGame(this);
 
             // Begintijd vaststellen
@@ -204,6 +207,8 @@ namespace DuckHunt.Controllers
         /// </summary>
         private void UpdateGame()
         {
+            CurrentScore += InputContainer.EarnedScore;
+
             LevelFactory.Instance.CurrentLevel.Update(this);
 
             UnitContainer.UpdateAllUnits(this);

@@ -18,7 +18,7 @@ namespace DuckHunt.Factories
 
             // Despawn de unit meteen
             if (state == "endlevel")
-                return new DeadUnitState(unit, state, 0.5, 0.5);
+                return new DeadUnitState(unit, state, 0.3, 0.3);
 
             switch (unit)
             {

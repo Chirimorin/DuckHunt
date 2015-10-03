@@ -48,7 +48,13 @@ namespace DuckHunt.Units
         #endregion
 
         #region Functions
-        public abstract void onClick(Unit unit, Point point);
+        /// <summary>
+        /// Click event
+        /// </summary>
+        /// <param name="unit">De unit om te controleren</param>
+        /// <param name="point">Het punt waar geklikt is</param>
+        /// <returns>Het aantal punten opgeleverd door de unit</returns>
+        public abstract int onClick(Unit unit, Point point);
 
         public virtual void Update(Unit unit, IGame game)
         {

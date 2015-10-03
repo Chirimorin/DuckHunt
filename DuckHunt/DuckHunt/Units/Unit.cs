@@ -178,9 +178,9 @@ namespace DuckHunt.Units
         /// Wordt aangeroepen bij elke muisklik
         /// </summary>
         /// <param name="point">Het punt waar geklikt is</param>
-        public void onClick(Point point)
+        public int onClick(Point point)
         {
-            State.onClick(this, point);
+            return State.onClick(this, point);
         }
         #endregion
 

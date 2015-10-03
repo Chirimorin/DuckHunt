@@ -11,6 +11,7 @@ namespace DuckHunt.Levels
     public class GameOver : ILevel
     {
         public string Name { get { return "Game Over"; } }
+        public int ShotsLeft { get { return 0; } }
 
         public Unit TryCreateUnit(IGame game)
         {

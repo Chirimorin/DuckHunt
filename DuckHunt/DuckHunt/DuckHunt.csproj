@@ -72,11 +72,10 @@
     <Compile Include="Factories\StateFactory.cs" />
     <Compile Include="Factories\UnitFactory.cs" />
     <Compile Include="Levels\GameOver.cs" />
+    <Compile Include="Levels\GeneratedBonusLevel.cs" />
+    <Compile Include="Levels\GeneratedLevel.cs" />
     <Compile Include="Levels\ILevel.cs" />
     <Compile Include="Levels\BaseLevel.cs" />
-    <Compile Include="Levels\Level1.cs" />
-    <Compile Include="Levels\Level1Bonus.cs" />
-    <Compile Include="Levels\Level2.cs" />
     <Compile Include="Units\BaseUnitState.cs" />
     <Compile Include="Units\Bunny\Bunny.cs" />
     <Compile Include="Units\Bunny\AliveBunnyState.cs" />

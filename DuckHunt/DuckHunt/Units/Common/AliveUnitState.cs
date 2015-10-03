@@ -18,12 +18,14 @@ namespace DuckHunt.Units.Common
             FleeTime = fleeTime;
         }
 
-        public override void onClick(Unit unit, Point point)
+        public override int onClick(Unit unit, Point point)
         {
             if (unit.isHit(point))
             {
                 unit.State = StateFactory.createState(unit.Name, "dead");
+                return 1;
             }
+            return 0;
         }
 
         public override void Update(Unit unit, IGame game)

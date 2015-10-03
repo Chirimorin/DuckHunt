@@ -11,6 +11,7 @@ namespace DuckHunt.Levels
     public interface ILevel
     {
         string Name { get; }
+        int ShotsLeft { get; }
 
         Unit TryCreateUnit(IGame game);
         void Update(IGame game);

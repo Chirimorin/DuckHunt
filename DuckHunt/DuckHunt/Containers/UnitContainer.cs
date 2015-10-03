@@ -64,17 +64,16 @@ namespace DuckHunt.Containers
             }
         }
 
-        public bool HandleClick(Point point)
+        public int HandleClick(Point point)
         {
-            bool hit = false;
+            int score = 0;
 
             foreach (Unit unit in Units)
             {
-                hit = hit || unit.isHit(point);
-                unit.onClick(point);
+                score += unit.onClick(point);
             }
 
-            return hit;
+            return score;
         }
 
         public void UpdateAllUnits(IGame game)
