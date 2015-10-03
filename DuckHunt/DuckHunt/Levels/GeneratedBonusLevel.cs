@@ -22,7 +22,7 @@ namespace DuckHunt.Levels
         {
             base.Update(game);
 
-            if (!IsPerfect)
+            if (_totalMisses > 0)
             {
                 EndLevel(game);
             }

@@ -42,7 +42,7 @@ namespace DuckHunt.Levels
         {
             base.Update(game);
 
-            if (_totalClicks > _maxShots)
+            if (_totalClicks >= _maxShots)
             {
                 EndLevel(game);
             }
@@ -50,15 +50,27 @@ namespace DuckHunt.Levels
 
         protected override void StartNextLevel(IGame game)
         {
-            // Te veel clicks, game over
-            if (_totalClicks > _maxShots)
-                LevelFactory.Instance.GameOver(game);
             // Perfecte game, bonus level
-            else if (IsPerfect)
+            if (IsPerfect)
                 LevelFactory.Instance.BonusLevel(game, _level);
-            // Level gehaald, volgende level
-            else
+            // Minimaal 75% van de Units dood, level gehaald
+            else if (GotMinKills())
                 LevelFactory.Instance.NextLevel(game, _level);
+            else
+                LevelFactory.Instance.GameOver(game);
+        }
+
+        /// <summary>
+        /// Controleert of het minimale aantal Units is geraakt dit level. 
+        /// Regels: 1 unit weg laten komen mag altijd. Bij meer mag dit maximaal 25% van de units in het level zijn. 
+        /// </summary>
+        /// <returns>true als het level gehaald is</returns>
+        protected bool GotMinKills()
+        {
+            int misses = _maxSpawns - Kills;
+
+            return (misses <= 1) || 
+                (misses <= _maxSpawns * 0.25);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace DuckHunt.Levels
     {
         public abstract string Name { get; }
         public abstract int ShotsLeft { get; }
+        public int Kills { get; set; }
 
         protected abstract string[] AllowedUnits { get; }
         protected abstract int MaxUnits { get; }
@@ -27,10 +28,19 @@ namespace DuckHunt.Levels
 
         protected bool _isGoing;
 
-        protected bool IsPerfect { get { return _totalMisses == 0; } }
+        protected virtual bool IsPerfect
+        {
+            get
+            {
+                return (_totalMisses == 0 &&
+                    Kills == _totalSpawns);
+            }
+        }
 
         public BaseLevel()
         {
+            Kills = 0;
+
             _lastSpawn = 0;
             _totalSpawns = 0;
             _totalClicks = 0;
