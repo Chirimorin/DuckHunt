@@ -8,25 +8,32 @@ using DuckHunt.Units;
 
 namespace DuckHunt.Behaviors.Move.Running
 {
-    class RunningFleeMoveBehavior : GravityMoveBehavior
+    class RunningFleeMoveBehavior : JumpOverMouseMoveBehavior
     {
-        public RunningFleeMoveBehavior(double dVX, double dVY, double maxVX, double maxVY, double jumpPower, double bouncyness, int jumpChance) : base(dVX, dVY, maxVX, maxVY, jumpPower, bouncyness, jumpChance)
+        public RunningFleeMoveBehavior(double dVX, double dVY, double maxVX, double maxVY, double jumpPower, double bouncyness) : base(dVX, dVY, maxVX, maxVY, jumpPower, bouncyness)
         {
         }
 
         public override void Move(Unit unit, IGame game)
         {
-            BaseMove(unit, game);
+            base.Move(unit, game);
+        }
 
-            if (bounceBottom(unit))
-            {
-                unit.VY = unit.VY * Bouncyness;
-
-                if (unit.VY >= GetTimeBased(-DVY, game))
-                {
-                    unit.VY = 0;
-                }
-            }
+        protected override bool bounceTop(Unit unit)
+        {
+            return false;
+        }
+        protected override bool bounceLeft(Unit unit)
+        {
+            return false;
+        }
+        protected override bool bounceRight(Unit unit)
+        {
+            return false;
+        }
+        protected override void MoveIntoScreen(Unit unit)
+        {
+            // Doe niks (unit probeert juist uit het scherm te komen)
         }
     }
 }

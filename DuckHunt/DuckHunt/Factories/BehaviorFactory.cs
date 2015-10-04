@@ -50,11 +50,11 @@ namespace DuckHunt.Factories
                     switch (state)
                     {
                         case "alive":
-                            if (Random.Next(2) == 0)
+                            if (Random.Next(2) == 0) // 50% kans op jump over mouse behavior
                                 return new JumpOverMouseMoveBehavior(0, 900, 1000, 500, 400, 0);
                             return new GravityMoveBehavior(0, 900, 1000, 500, 400, 0, 100);
                         case "fleeing":
-                            return new RunningFleeMoveBehavior(0, 900, 500, 500, 400, 0, 150);
+                            return new RunningFleeMoveBehavior(0, 900, 500, 500, 400, 0);
                         case "dead":
                             return new DeadUnitMoveBehavior(900, 500);
                         default:
