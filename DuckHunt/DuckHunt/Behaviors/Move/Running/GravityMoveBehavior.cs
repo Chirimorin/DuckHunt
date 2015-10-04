@@ -8,7 +8,7 @@ using DuckHunt.Units;
 
 namespace DuckHunt.Behaviors.Move.Running
 {
-    class GravityMoveBehavior : BaseMoveBehavior
+    public class GravityMoveBehavior : BaseMoveBehavior
     {
         protected double Bouncyness { get; set; }
         protected double JumpPower { get; set; }

@@ -64,6 +64,7 @@
     <Compile Include="Behaviors\Move\Flying\RandomFlightMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\Flying\FlyingFleeMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\Common\DeadUnitMoveBehavior.cs" />
+    <Compile Include="Behaviors\Move\Running\JumpOverMouseMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\Running\RunningFleeMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Factories\BehaviorFactory.cs" />

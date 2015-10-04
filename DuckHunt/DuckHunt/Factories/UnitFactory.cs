@@ -38,10 +38,10 @@ namespace DuckHunt.Factories
             {
                 case "chicken":
                     startLocation = GetRandomAirStartingPoint(95, 70);
-                    return new Chicken(type, 95, 70, startLocation.X, startLocation.Y, 1000, 500);
+                    return new Chicken(type, 95, 70, startLocation.X, startLocation.Y, GetRandomAirSpeed(), GetRandomAirSpeed());
                 case "bunny":
                     startLocation = GetRandomGroundStartingPoint(80, 80);
-                    return new Bunny(type, 80, 80, startLocation.X, startLocation.Y, 500, 0);
+                    return new Bunny(type, 80, 80, startLocation.X, startLocation.Y, GetRandomGroundSpeed(), 0);
                 default:
                     throw new ArgumentException("Onbekende unit: " + type, "type");
             }
@@ -88,6 +88,22 @@ namespace DuckHunt.Factories
             {
                 return new Point(CONSTANTS.CANVAS_WIDTH, CONSTANTS.CANVAS_HEIGHT - height);
             }
+        }
+
+        private static int GetRandomAirSpeed()
+        {
+            int minSpeed = 750;
+            int maxSpeed = 1000;
+
+            return Random.Next(minSpeed, maxSpeed);
+        }
+
+        private static int GetRandomGroundSpeed()
+        {
+            int minSpeed = 400;
+            int maxSpeed = 600;
+
+            return Random.Next(minSpeed, maxSpeed);
         }
     }
 }

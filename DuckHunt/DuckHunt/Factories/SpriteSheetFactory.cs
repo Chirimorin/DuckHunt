@@ -14,8 +14,7 @@ namespace DuckHunt.Factories
         #region Lazy singleton & constructor
         private static readonly Lazy<SpriteSheetFactory> _instance
             = new Lazy<SpriteSheetFactory>(() => new SpriteSheetFactory());
-
-        // private to prevent direct instantiation.
+        
         private SpriteSheetFactory()
         {
             _assembly = typeof(SpriteSheetFactory).Assembly;
@@ -38,8 +37,7 @@ namespace DuckHunt.Factories
                 }
             }
         }
-
-        // accessor for instance
+        
         public static SpriteSheetFactory Instance
         {
             get { return _instance.Value; }

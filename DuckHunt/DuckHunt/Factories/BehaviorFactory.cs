@@ -14,6 +14,16 @@ namespace DuckHunt.Factories
 {
     public static class BehaviorFactory
     {
+        private static Random _random;
+        private static Random Random
+        {
+            get
+            {
+                if (_random == null)
+                    _random = new Random();
+                return _random;
+            }
+        }
         public static BaseMoveBehavior createMoveBehavior(string unit, string state)
         {
             Console.WriteLine("Creating move behavior for " + unit + " in state " + state);
@@ -40,7 +50,9 @@ namespace DuckHunt.Factories
                     switch (state)
                     {
                         case "alive":
-                            return new GravityMoveBehavior(0, 900, 500, 500, 400, 0, 100);
+                            if (Random.Next(2) == 0)
+                                return new JumpOverMouseMoveBehavior(0, 900, 1000, 500, 400, 0);
+                            return new GravityMoveBehavior(0, 900, 1000, 500, 400, 0, 100);
                         case "fleeing":
                             return new RunningFleeMoveBehavior(0, 900, 500, 500, 400, 0, 150);
                         case "dead":
