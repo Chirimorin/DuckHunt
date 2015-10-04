@@ -43,6 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="action_nodes\AbstractFunctionCall.cs" />
+    <Compile Include="action_nodes\ConditionalJump.cs" />
+    <Compile Include="action_nodes\DirectFunctionCall.cs" />
+    <Compile Include="action_nodes\DoNothing.cs" />
+    <Compile Include="action_nodes\FunctionCall.cs" />
+    <Compile Include="action_nodes\Jump.cs" />
+    <Compile Include="action_nodes\Node.cs" />
+    <Compile Include="compiler\CompileFunction.cs" />
+    <Compile Include="compiler\CompileIf.cs" />
+    <Compile Include="compiler\CompileIfElse.cs" />
+    <Compile Include="compiler\CompileIfGeneral.cs" />
+    <Compile Include="compiler\CompileMinus.cs" />
+    <Compile Include="compiler\CompileOperator.cs" />
+    <Compile Include="compiler\CompilePlus.cs" />
+    <Compile Include="compiler\Compiler.cs" />
+    <Compile Include="compiler\CompileValue.cs" />
+    <Compile Include="compiler\CompileWhile.cs" />
     <Compile Include="exceptions\InvalidVariableNameException.cs" />
     <Compile Include="exceptions\BracketsNotMatchingException.cs" />
     <Compile Include="exceptions\MissingPartnerTokenException.cs" />

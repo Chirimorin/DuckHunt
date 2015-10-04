@@ -27,6 +27,19 @@ namespace Compiler
             }
             
             Console.WriteLine("Done!");
+
+            Token token = tokenizer.StartToken;
+            while (token != null )
+            {
+                Console.Write(token.TokenType);
+                if (token.Partner != null)
+                {
+                    Console.Write(" - " + token.Partner.TokenType);
+                }
+                Console.WriteLine();
+                token = token.Next;
+            }
+
             Console.ReadKey();
         }
     }

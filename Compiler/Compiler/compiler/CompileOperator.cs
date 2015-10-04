@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileOperator : Compiler
+    public abstract class CompileOperator : Compiler
     {
     }
 }

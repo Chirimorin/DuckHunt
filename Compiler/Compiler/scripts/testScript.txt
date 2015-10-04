@@ -1,7 +1,21 @@
-﻿¤x - 3 ~
+﻿¤result - 0 ~
+¤i - 1 ~
+¤n - 10 ~
 
-else ¡ ¤x +> 0 !
+else ¡ ¤i = ¤n !
 »
-    if ¤x ~
-    ¤x - ¤x < 1 ~
+    while ¡ ¤i > 5 !
+    »
+        ¤result - ¤result < ¤i ~
+    «
+    print
+    »
+        ¤result - ¤result == ¤i ~
+    «
+
+    ¤i - ¤i == 1 ~
+
+    if ¤result ~
 «
+
+

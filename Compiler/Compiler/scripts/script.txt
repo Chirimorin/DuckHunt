@@ -4,16 +4,16 @@
 
 else ¡ ¤i = ¤n !
 »
-	while ¡ ¤i > 5 !
-	»
-		¤result - ¤result < ¤i ~
-	«
-	print
-	»
-		¤result - ¤result == ¤i ~
-	«
+    while ¡ ¤i > 5 !
+    »
+        ¤result - ¤result < ¤i ~
+    «
+    print
+    »
+        ¤result - ¤result == ¤i ~
+    «
 
-	¤i - ¤i == 1 ~
+    ¤i - ¤i == 1 ~
 
-	if ¤result ~
+    if ¤result ~
 «
