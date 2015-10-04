@@ -18,7 +18,7 @@ namespace DuckHunt.Units.Bunny
             double vY)
             : base(name, width, height, posX, posY, vX, vY)
         {
-            State = StateFactory.createState(Name, "alive");
+            
         }
     }
 }

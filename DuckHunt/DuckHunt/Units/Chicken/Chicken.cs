@@ -19,7 +19,7 @@ namespace DuckHunt.Units.Chicken
             double vY)
             : base(name, width, height, posX, posY, vX, vY)
         {
-            State = StateFactory.createState(Name, "alive");
+            
         }
         
     }

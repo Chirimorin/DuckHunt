@@ -1,4 +1,5 @@
 ﻿using DuckHunt.Controllers;
+using DuckHunt.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -169,6 +170,8 @@ namespace DuckHunt.Units
             PosY = posY;
             VX = vX;
             VY = vY;
+
+            State = StateFactory.createState(Name, "alive");
         }
         #endregion
 
