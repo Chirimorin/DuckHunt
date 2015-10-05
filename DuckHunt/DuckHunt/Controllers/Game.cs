@@ -85,6 +85,7 @@ namespace DuckHunt.Controllers
         #region Game loop info
         private Thread _gameLoopThread;
         private bool _isRunning = false;
+        public bool IsRunning { get { return _isRunning; } }
 
         private readonly long minTicksPerFrame = 1;
         #endregion

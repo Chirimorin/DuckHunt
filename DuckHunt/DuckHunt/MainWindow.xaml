@@ -32,9 +32,19 @@
                    IsHitTestVisible="False"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
+                   HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center"
                    FontSize="50"
                    FontWeight="Bold">
             </Label>
+            <Button Name="NewGame"
+                    Content="Nieuw Spel"
+                    Width="150"
+                    Height="75"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="100,100,100,100">
+            </Button>
         </Grid>
     </Viewbox>
 </Window>

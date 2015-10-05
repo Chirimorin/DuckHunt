@@ -37,12 +37,23 @@ namespace DuckHunt.Controllers
             // Registreer events
             _mainWindow.Closing += Window_Closing;
             _mainWindow.MainCanvas.MouseDown += MainCanvas_MouseDown;
+            _mainWindow.NewGame.Click += NewGame_Click;
 
             // Maak de gameController aan
             _game = new Game(this);
-            _game.StartGame();
 
             _instance = this;
+        }
+
+        /// <summary>
+        /// Start een nieuw spel met de new game knop
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (_game != null)
+                _game.StartGame();
         }
 
         /// <summary>
@@ -53,9 +64,7 @@ namespace DuckHunt.Controllers
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_game != null)
-            {
                 _game.StopGame();
-            }
         }
 
         /// <summary>
@@ -65,7 +74,8 @@ namespace DuckHunt.Controllers
         /// <param name="e"></param>
         public void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            _game.InputContainer.AddClick(e.GetPosition(_mainWindow.MainCanvas));
+            if (_game.IsRunning)
+                _game.InputContainer.AddClick(e.GetPosition(_mainWindow.MainCanvas));
         }
 
         /// <summary>
@@ -81,7 +91,7 @@ namespace DuckHunt.Controllers
 
         public void UpdateScreen(IGame game)
         {
-            string fps = "FPS: " + game.FPS;
+            string fps = (game.IsRunning ? "FPS: " + game.FPS : "");
             string currentlevel = LevelFactory.Instance.CurrentLevel.Name;
             int shotsLeft = LevelFactory.Instance.CurrentLevel.ShotsLeft;
             string score = "Score: " + game.CurrentScore + "\nSchoten over: ";
@@ -90,7 +100,7 @@ namespace DuckHunt.Controllers
             else
                 score += shotsLeft;
 
-            string bigText = (LevelFactory.Instance.CurrentLevel.ShowText ? LevelFactory.Instance.CurrentLevel.Name : "");
+            string bigText = LevelFactory.Instance.CurrentLevel.BigText;
 
             BeginInvoke(() => 
             {
@@ -98,6 +108,7 @@ namespace DuckHunt.Controllers
                 _mainWindow.CurrentLevel.Content = currentlevel;
                 _mainWindow.CurrentScore.Content = score;
                 _mainWindow.BigText.Content = bigText;
+                _mainWindow.NewGame.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
                 game.UnitContainer.DrawAllUnits(game);
             });
         }

@@ -11,7 +11,7 @@ namespace DuckHunt.Levels
     public interface ILevel
     {
         string Name { get; }
-        bool ShowText { get; }
+        string BigText { get; }
         int Kills { get; set; }
         int ShotsLeft { get; }
 

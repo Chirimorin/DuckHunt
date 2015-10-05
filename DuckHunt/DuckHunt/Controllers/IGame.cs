@@ -18,5 +18,9 @@ namespace DuckHunt.Controllers
         double FPS { get; }
 
         int CurrentScore { get; }
+
+        bool IsRunning { get; }
+
+        void StopGame();
     }
 }

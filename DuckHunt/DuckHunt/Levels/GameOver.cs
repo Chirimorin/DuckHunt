@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DuckHunt.Controllers;
 using DuckHunt.Units;
+using DuckHunt.Factories;
 
 namespace DuckHunt.Levels
 {
@@ -13,7 +14,9 @@ namespace DuckHunt.Levels
         public string Name { get { return "Game Over"; } }
         public int ShotsLeft { get { return 0; } }
         public int Kills { get { return 0; } set { } }
-        public bool ShowText { get { return true; } }
+        public string BigText { get { return Name + "\nScore: " + _finalScore; } }
+
+        private int _finalScore = 0;
 
         public Unit TryCreateUnit(IGame game)
         {
@@ -23,7 +26,8 @@ namespace DuckHunt.Levels
 
         public void Update(IGame game)
         {
-            // Geen acties tijdens game over (voor nu, new game knop?)
+            game.StopGame();
+            _finalScore = game.CurrentScore;
         }
     }
 }
