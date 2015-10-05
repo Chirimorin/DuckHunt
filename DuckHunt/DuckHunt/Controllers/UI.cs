@@ -90,11 +90,14 @@ namespace DuckHunt.Controllers
             else
                 score += shotsLeft;
 
+            string bigText = (LevelFactory.Instance.CurrentLevel.ShowText ? LevelFactory.Instance.CurrentLevel.Name : "");
+
             BeginInvoke(() => 
             {
                 _mainWindow.FPS.Content = fps;
                 _mainWindow.CurrentLevel.Content = currentlevel;
                 _mainWindow.CurrentScore.Content = score;
+                _mainWindow.BigText.Content = bigText;
                 game.UnitContainer.DrawAllUnits(game);
             });
         }

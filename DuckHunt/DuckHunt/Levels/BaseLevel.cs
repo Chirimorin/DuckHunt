@@ -14,11 +14,15 @@ namespace DuckHunt.Levels
         public abstract string Name { get; }
         public abstract int ShotsLeft { get; }
         public int Kills { get; set; }
+        public bool ShowText { get { return !_hasStarted; } }
 
         protected abstract string[] AllowedUnits { get; }
         protected abstract int MaxUnits { get; }
         protected abstract int MaxSpawns { get; }
         protected abstract double SpawnDelay { get; }
+        protected abstract double TimeBeforeStart { get; }
+
+        protected double _startTime = double.NaN;
 
         protected double _lastSpawn;
         protected int _totalSpawns;
@@ -26,7 +30,8 @@ namespace DuckHunt.Levels
         protected int _totalHits;
         protected int _totalMisses;
 
-        protected bool _isGoing;
+        protected bool _hasEnded;
+        protected bool _hasStarted;
 
         protected virtual bool IsPerfect
         {
@@ -47,14 +52,15 @@ namespace DuckHunt.Levels
             _totalHits = 0;
             _totalMisses = 0;
 
-            _isGoing = true;
+            _hasStarted = false;
+            _hasEnded = false;
         }
 
 
         public Unit TryCreateUnit(IGame game)
         {
-            // Maximum spawns gehaald, spawn niks nieuws.
-            if (_totalSpawns >= MaxSpawns)
+            // Spawn niks als het level nog niet begonnen is of als het maximale aantal units gespawned is. 
+            if (!_hasStarted || _totalSpawns >= MaxSpawns)
                 return null;
 
             // Geen units op het veld, negeer delay
@@ -75,6 +81,15 @@ namespace DuckHunt.Levels
 
         public virtual void Update(IGame game)
         {
+            if (!_hasStarted)
+            {
+                if (double.IsNaN(_startTime))
+                    _startTime = game.Time;
+
+                if (game.Time - _startTime > TimeBeforeStart)
+                    _hasStarted = true;
+            }
+
             if (LevelIsOngoing())
             {
                 _totalClicks += game.InputContainer.NumClicks;
@@ -108,12 +123,12 @@ namespace DuckHunt.Levels
         /// <returns>true als het level nog bezig is.</returns>
         protected virtual bool LevelIsOngoing()
         {
-            return _isGoing;
+            return _hasStarted && !_hasEnded;
         }
 
         protected virtual void EndLevel(IGame game)
         {
-            _isGoing = false;
+            _hasEnded = true;
             _totalSpawns = MaxSpawns;
             LevelFactory.Instance.EndLevel(game);
         }

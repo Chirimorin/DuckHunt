@@ -13,6 +13,7 @@ namespace DuckHunt.Levels
         public string Name { get { return "Game Over"; } }
         public int ShotsLeft { get { return 0; } }
         public int Kills { get { return 0; } set { } }
+        public bool ShowText { get { return true; } }
 
         public Unit TryCreateUnit(IGame game)
         {

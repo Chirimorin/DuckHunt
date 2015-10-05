@@ -11,8 +11,13 @@
 
     <Viewbox Stretch="Uniform">
         <Grid>
-            <Canvas Name="MainCanvas" Background="White"></Canvas>
-            <Label Name="FPS" IsHitTestVisible="False"></Label>
+            <Canvas Name="MainCanvas" 
+                    Background="White"
+                    ClipToBounds="True">
+            </Canvas>
+            <Label Name="FPS" 
+                   IsHitTestVisible="False">
+            </Label>
             <Label Name="CurrentLevel" 
                    IsHitTestVisible="False" 
                    HorizontalAlignment="Center"
@@ -22,6 +27,13 @@
             <Label Name="CurrentScore" 
                    IsHitTestVisible="False"
                    HorizontalAlignment="Right">
+            </Label>
+            <Label Name="BigText"
+                   IsHitTestVisible="False"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="50"
+                   FontWeight="Bold">
             </Label>
         </Grid>
     </Viewbox>
