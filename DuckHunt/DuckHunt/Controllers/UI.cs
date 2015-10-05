@@ -53,9 +53,6 @@ namespace DuckHunt.Controllers
             _mainWindow.MainCanvas.Height = CONSTANTS.CANVAS_HEIGHT;
             _mainWindow.Show();
 
-            // Crosshair cursor
-            //_mainWindow.MainCanvas.Cursor = new Cursor(new System.IO.MemoryStream(DuckHunt.Properties.Resources.Crosshairs));
-
             // Registreer events
             _mainWindow.Closing += Window_Closing;
             _mainWindow.MainCanvas.MouseDown += MainCanvas_MouseDown;
