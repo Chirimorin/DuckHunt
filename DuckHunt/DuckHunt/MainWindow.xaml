@@ -5,14 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DuckHunt"
         mc:Ignorable="d"
-        Title="Chicken Hunt" Height="757" Width="1296"
+        Title="Chicken Hunt" Height="757" Width="1294"
         MinWidth="640" MinHeight="360"
         Background="Black">
 
     <Viewbox Stretch="Uniform">
         <Grid>
             <Canvas Name="MainCanvas" 
-                    Background="White"
                     ClipToBounds="True">
             </Canvas>
             <Label Name="FPS" 

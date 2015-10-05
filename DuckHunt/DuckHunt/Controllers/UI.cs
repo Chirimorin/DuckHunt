@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace DuckHunt.Controllers
@@ -23,10 +26,26 @@ namespace DuckHunt.Controllers
 
         private static UI _instance;
 
+        private readonly ImageBrush[] _gameoverBackgrounds;
+        private readonly ImageBrush[] _backgrounds;
+        private int _currentBackground;
+
         public UI()
         {
             // Sla de UI thread dispatcher op
             _dispatcher = Dispatcher.CurrentDispatcher;
+
+            // Laad alle achtergronden in
+            List<ImageBrush> backgrounds = new List<ImageBrush>();
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/bg1.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/bg2.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/bg3.png"))));
+            _backgrounds = backgrounds.ToArray();
+
+            backgrounds.Clear();
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/gameover1.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/gameover2.png"))));
+            _gameoverBackgrounds = backgrounds.ToArray();
 
             // Maak de main window aan
             _mainWindow = new MainWindow();
@@ -43,6 +62,30 @@ namespace DuckHunt.Controllers
             _game = new Game(this);
 
             _instance = this;
+            setBackground(-1);
+        }
+
+        private void setBackground(int level)
+        {
+            if (level != _currentBackground)
+            {
+                _currentBackground = level;
+                ImageBrush img;
+
+                if (level < 0)
+                {
+                    img = _gameoverBackgrounds[_game.Random.Next(_gameoverBackgrounds.Length)];
+                }
+                else
+                {
+                    img = _backgrounds[level % _backgrounds.Length];
+                }
+
+                BeginInvoke(() =>
+                {
+                    _mainWindow.MainCanvas.Background = img;
+                });
+            }
         }
 
         /// <summary>
@@ -101,6 +144,8 @@ namespace DuckHunt.Controllers
                 score += shotsLeft;
 
             string bigText = LevelFactory.Instance.CurrentLevel.BigText;
+
+            setBackground(LevelFactory.Instance.CurrentLevel.Level);
 
             BeginInvoke(() => 
             {

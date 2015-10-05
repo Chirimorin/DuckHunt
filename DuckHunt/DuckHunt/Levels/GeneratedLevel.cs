@@ -11,6 +11,8 @@ namespace DuckHunt.Levels
     public class GeneratedLevel : BaseLevel
     {
         public override string Name { get { return "Level " + _level; } }
+        public override int Level { get { return _level; } }
+
         protected override string[] AllowedUnits { get { return _allowedUnits; } }
         protected override int MaxUnits { get { return _maxLivingUnits; } }
         protected override int MaxSpawns { get { return _maxSpawns; } }

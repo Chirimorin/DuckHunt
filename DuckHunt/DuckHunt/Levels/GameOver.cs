@@ -12,6 +12,7 @@ namespace DuckHunt.Levels
     public class GameOver : ILevel
     {
         public string Name { get { return "Game Over"; } }
+        public int Level { get { return -1; } }
         public int ShotsLeft { get { return 0; } }
         public int Kills { get { return 0; } set { } }
         public string BigText { get { return Name + "\nScore: " + _finalScore; } }

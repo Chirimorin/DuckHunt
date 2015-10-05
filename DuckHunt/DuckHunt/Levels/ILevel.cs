@@ -12,6 +12,7 @@ namespace DuckHunt.Levels
     {
         string Name { get; }
         string BigText { get; }
+        int Level { get; }
         int Kills { get; set; }
         int ShotsLeft { get; }
 
