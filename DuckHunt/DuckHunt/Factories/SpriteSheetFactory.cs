@@ -21,7 +21,7 @@ namespace DuckHunt.Factories
             _spriteSheets = new Dictionary<string, BitmapSource[]>();
             _spriteSheetInfos = new Dictionary<string, SpriteSheetInfo>();
 
-            using (Stream stream = _assembly.GetManifestResourceStream("DuckHunt.SpriteSheets.SpriteSheetsInfo.txt"))
+            using (Stream stream = _assembly.GetManifestResourceStream("DuckHunt.Resources.SpriteSheets.SpriteSheetsInfo.txt"))
             using (StreamReader reader = new StreamReader(stream))
             {
                 while (!reader.EndOfStream)
@@ -105,7 +105,7 @@ namespace DuckHunt.Factories
             
 
             // Spritesheet inladen vanuit embedded resources
-            System.Drawing.Bitmap src = new System.Drawing.Bitmap(_assembly.GetManifestResourceStream("DuckHunt.SpriteSheets." + imageFile));
+            System.Drawing.Bitmap src = new System.Drawing.Bitmap(_assembly.GetManifestResourceStream("DuckHunt.Resources.SpriteSheets." + imageFile));
 
             // Rechthoek aanmaken ter grootte van de sprites
             int spriteWidth = src.Width / xImages;

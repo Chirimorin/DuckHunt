@@ -12,7 +12,8 @@
     <Viewbox Stretch="Uniform">
         <Grid>
             <Canvas Name="MainCanvas" 
-                    ClipToBounds="True">
+                    ClipToBounds="True"
+                    Cursor="Resources/Cursors/Crosshairs.cur">
             </Canvas>
             <Label Name="FPS" 
                    IsHitTestVisible="False">
@@ -42,7 +43,8 @@
                     Height="75"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
-                    Margin="100,100,100,100">
+                    Margin="100,100,100,100"
+                    Cursor="Resources/Cursors/Crosshairs.cur">
             </Button>
         </Grid>
     </Viewbox>

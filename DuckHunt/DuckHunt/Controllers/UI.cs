@@ -37,14 +37,14 @@ namespace DuckHunt.Controllers
 
             // Laad alle achtergronden in
             List<ImageBrush> backgrounds = new List<ImageBrush>();
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/bg1.png"))));
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/bg2.png"))));
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/bg3.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/bg1.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/bg2.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/bg3.png"))));
             _backgrounds = backgrounds.ToArray();
 
             backgrounds.Clear();
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/gameover1.png"))));
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Backgrounds/gameover2.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/gameover1.png"))));
+            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/gameover2.png"))));
             _gameoverBackgrounds = backgrounds.ToArray();
 
             // Maak de main window aan
@@ -52,6 +52,9 @@ namespace DuckHunt.Controllers
             _mainWindow.MainCanvas.Width = CONSTANTS.CANVAS_WIDTH;
             _mainWindow.MainCanvas.Height = CONSTANTS.CANVAS_HEIGHT;
             _mainWindow.Show();
+
+            // Crosshair cursor
+            //_mainWindow.MainCanvas.Cursor = new Cursor(new System.IO.MemoryStream(DuckHunt.Properties.Resources.Crosshairs));
 
             // Registreer events
             _mainWindow.Closing += Window_Closing;

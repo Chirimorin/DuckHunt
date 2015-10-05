@@ -133,33 +133,36 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SpriteSheets\ChickenFly.png" />
+    <EmbeddedResource Include="Resources\SpriteSheets\ChickenFly.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SpriteSheets\BunnyRun.png" />
+    <EmbeddedResource Include="Resources\SpriteSheets\BunnyRun.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SpriteSheets\ChickenDead.png" />
+    <EmbeddedResource Include="Resources\SpriteSheets\ChickenDead.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SpriteSheets\BunnyDead.png" />
+    <EmbeddedResource Include="Resources\SpriteSheets\BunnyDead.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SpriteSheets\BunnyJump.png" />
+    <EmbeddedResource Include="Resources\SpriteSheets\BunnyJump.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SpriteSheets\SpriteSheetsInfo.txt" />
+    <EmbeddedResource Include="Resources\SpriteSheets\SpriteSheetsInfo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Backgrounds\bg1.png" />
+    <Resource Include="Resources\Backgrounds\bg1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Backgrounds\bg2.png" />
-    <Resource Include="Backgrounds\bg3.png" />
+    <Resource Include="Resources\Backgrounds\bg2.png" />
+    <Resource Include="Resources\Backgrounds\bg3.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Backgrounds\gameover1.png" />
-    <Resource Include="Backgrounds\gameover2.png" />
+    <Resource Include="Resources\Backgrounds\gameover1.png" />
+    <Resource Include="Resources\Backgrounds\gameover2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\Crosshairs.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
