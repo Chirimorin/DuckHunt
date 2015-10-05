@@ -11,6 +11,7 @@ namespace DuckHunt.Levels
     public class GeneratedBonusLevel : GeneratedLevel
     {
         public override string Name { get { return "Bonus level!"; } }
+        public override string BigText { get { return (_hasStarted ? "" : "Perfecte score!\nBonus level!"); } }
 
         public override int ShotsLeft { get { return -1; } }
 

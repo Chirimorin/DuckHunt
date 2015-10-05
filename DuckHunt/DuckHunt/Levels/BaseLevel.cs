@@ -15,7 +15,7 @@ namespace DuckHunt.Levels
         public abstract int ShotsLeft { get; }
         public int Kills { get; set; }
         public abstract int Level { get; }
-        public string BigText { get { return (_hasStarted ? "" : Name); } }
+        public virtual string BigText { get { return (_hasStarted ? "" : Name); } }
 
         protected abstract string[] AllowedUnits { get; }
         protected abstract int MaxUnits { get; }

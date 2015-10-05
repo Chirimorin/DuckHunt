@@ -26,7 +26,6 @@ namespace DuckHunt.Controllers
 
         private static UI _instance;
 
-        private readonly ImageBrush[] _gameoverBackgrounds;
         private readonly ImageBrush[] _backgrounds;
         private int _currentBackground;
 
@@ -159,7 +158,7 @@ namespace DuckHunt.Controllers
                 _mainWindow.FPS.Content = fps;
                 _mainWindow.CurrentLevel.Content = currentlevel;
                 _mainWindow.CurrentScore.Content = score;
-                _mainWindow.BigText.Content = bigText;
+                _mainWindow.BigText.Text = bigText;
                 _mainWindow.NewGame.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
                 _mainWindow.Exit.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
                 game.UnitContainer.DrawAllUnits(game);

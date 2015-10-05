@@ -30,15 +30,14 @@
                    IsHitTestVisible="False"
                    HorizontalAlignment="Right">
             </Label>
-            <Label Name="BigText"
+            <TextBlock Name="BigText"
                    IsHitTestVisible="False"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   HorizontalContentAlignment="Center"
-                   VerticalContentAlignment="Center"
+                   TextAlignment="Center"
                    FontSize="50"
                    FontWeight="Bold">
-            </Label>
+            </TextBlock>
             <Button Name="NewGame"
                     Content="Nieuw Spel"
                     Width="150"
