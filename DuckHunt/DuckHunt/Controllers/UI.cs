@@ -37,15 +37,11 @@ namespace DuckHunt.Controllers
 
             // Laad alle achtergronden in
             List<ImageBrush> backgrounds = new List<ImageBrush>();
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/bg1.png"))));
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/bg2.png"))));
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/bg3.png"))));
+            for (int i = 1; i <= 7; i++)
+            {
+                backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/" + i + ".png"))));
+            }
             _backgrounds = backgrounds.ToArray();
-
-            backgrounds.Clear();
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/gameover1.png"))));
-            backgrounds.Add(new ImageBrush(new BitmapImage(new Uri(@"pack://application:,,,/Resources/Backgrounds/gameover2.png"))));
-            _gameoverBackgrounds = backgrounds.ToArray();
 
             // Maak de main window aan
             _mainWindow = new MainWindow();
@@ -73,11 +69,11 @@ namespace DuckHunt.Controllers
                 ImageBrush img;
 
                 if (level < 0)
-                {
-                    img = _gameoverBackgrounds[_game.Random.Next(_gameoverBackgrounds.Length)];
+                {   // Geen level (voor begin, na game over), random achtergrond.
+                    img = _backgrounds[_game.Random.Next(_backgrounds.Length)];
                 }
                 else
-                {
+                {   // Loop door de achtergronden heen
                     img = _backgrounds[level % _backgrounds.Length];
                 }
 

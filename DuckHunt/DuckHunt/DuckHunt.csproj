@@ -151,18 +151,16 @@
     <EmbeddedResource Include="Resources\SpriteSheets\SpriteSheetsInfo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Backgrounds\bg1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Backgrounds\bg2.png" />
-    <Resource Include="Resources\Backgrounds\bg3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Backgrounds\gameover1.png" />
-    <Resource Include="Resources\Backgrounds\gameover2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Cursors\Crosshairs.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Backgrounds\1.png" />
+    <Resource Include="Resources\Backgrounds\2.png" />
+    <Resource Include="Resources\Backgrounds\3.png" />
+    <Resource Include="Resources\Backgrounds\4.png" />
+    <Resource Include="Resources\Backgrounds\5.png" />
+    <Resource Include="Resources\Backgrounds\6.png" />
+    <Resource Include="Resources\Backgrounds\7.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
