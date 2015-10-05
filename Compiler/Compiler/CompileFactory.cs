@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Compiler_dp2
+namespace Compiler
 {
     public static class CompileFactory
     {

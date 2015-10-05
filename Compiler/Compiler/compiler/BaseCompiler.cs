@@ -9,9 +9,9 @@ namespace Compiler.compiler
 {
     public abstract class BaseCompiler
     {
-        private LinkedList<Node> Actions { get; set; }
+        //private LinkedList<Node> Actions { get; set; }
 
-        public void compile()
+        public virtual void compile(Token currentToken)
         {
 
         }
