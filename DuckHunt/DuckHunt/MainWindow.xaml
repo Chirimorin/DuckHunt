@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="Chicken Hunt" Height="757" Width="1294"
         MinWidth="640" MinHeight="360"
-        Background="Black">
+        Background="Black"
+        WindowStyle="None"
+        WindowState="Maximized">
 
     <Viewbox Stretch="Uniform">
         <Grid>
@@ -43,7 +45,16 @@
                     Height="75"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
-                    Margin="100,100,100,100"
+                    Margin="-100,100,100,100"
+                    Cursor="Resources/Cursors/Crosshairs.cur">
+            </Button>
+            <Button Name="Exit"
+                    Content="Afsluiten"
+                    Width="150"
+                    Height="75"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="300,100,100,100"
                     Cursor="Resources/Cursors/Crosshairs.cur">
             </Button>
         </Grid>

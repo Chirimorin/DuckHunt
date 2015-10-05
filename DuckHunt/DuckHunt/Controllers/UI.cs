@@ -53,6 +53,7 @@ namespace DuckHunt.Controllers
             _mainWindow.Closing += Window_Closing;
             _mainWindow.MainCanvas.MouseDown += MainCanvas_MouseDown;
             _mainWindow.NewGame.Click += NewGame_Click;
+            _mainWindow.Exit.Click += Exit_Click;
 
             // Maak de gameController aan
             _game = new Game(this);
@@ -93,6 +94,16 @@ namespace DuckHunt.Controllers
         {
             if (_game != null)
                 _game.StartGame();
+        }
+
+        /// <summary>
+        /// Sluit het spel af
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.Close();
         }
 
         /// <summary>
@@ -150,6 +161,7 @@ namespace DuckHunt.Controllers
                 _mainWindow.CurrentScore.Content = score;
                 _mainWindow.BigText.Content = bigText;
                 _mainWindow.NewGame.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
+                _mainWindow.Exit.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
                 game.UnitContainer.DrawAllUnits(game);
             });
         }
