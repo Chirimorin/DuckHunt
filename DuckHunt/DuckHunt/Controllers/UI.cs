@@ -203,10 +203,18 @@ namespace DuckHunt.Controllers
         /// <returns>De waarde die de actie returned</returns>
         public static T Invoke<T>(Func<T> action)
         {
-            if (_dispatcher.CheckAccess())
-                return action.Invoke();
-            else
-                return _dispatcher.Invoke<T>(action);
+            try
+            {
+                if (_dispatcher.CheckAccess())
+                    return action.Invoke();
+                else
+                    return _dispatcher.Invoke<T>(action);
+            }
+            catch (TaskCanceledException)
+            {
+                // Doe niks, waarschijnlijk word het programma afgesloten.
+                return default(T);
+            }
         }
     }
 }

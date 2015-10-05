@@ -162,9 +162,13 @@ namespace DuckHunt.Controllers
                 UpdateGame();
                 UpdateScreen();
 
-                // Thread.Sleep en Thread.Yield zorgen voor haperen
-                // Wacht met een busy loop.
-                while (!TimePassed()) ;
+                // Thread.Sleep zorgt voor haperen
+                // Yield tot de minimale tijd voorbij is
+                Thread.Yield();
+                while (!TimePassed())
+                {
+                    Thread.Yield();
+                };
             }
         }
 
