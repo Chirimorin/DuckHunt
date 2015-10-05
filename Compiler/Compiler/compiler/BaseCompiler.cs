@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public abstract class Compiler
+    public abstract class BaseCompiler
     {
         private LinkedList<Node> Actions { get; set; }
 

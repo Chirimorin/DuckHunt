@@ -18,23 +18,23 @@ namespace Compiler
 
         private KeyValuePair<string, Tokens>[] allTokens = new KeyValuePair<string, Tokens>[]
         {
-            new KeyValuePair<string, Compiler.Tokens>("while", Tokens.If),
-            new KeyValuePair<string, Compiler.Tokens>("print", Tokens.Else),
-            new KeyValuePair<string, Compiler.Tokens>("else", Tokens.While),
-            new KeyValuePair<string, Compiler.Tokens>(">", Tokens.Equals),
-            new KeyValuePair<string, Compiler.Tokens>("+>", Tokens.GreaterEquals),
-            new KeyValuePair<string, Compiler.Tokens>("=>", Tokens.SmallerEquals),
-            new KeyValuePair<string, Compiler.Tokens>("+", Tokens.GreaterThan),
-            new KeyValuePair<string, Compiler.Tokens>("=", Tokens.SmallerThan),
-            new KeyValuePair<string, Compiler.Tokens>("-", Tokens.Becomes),
-            new KeyValuePair<string, Compiler.Tokens>("==", Tokens.Plus),
-            new KeyValuePair<string, Compiler.Tokens>("<", Tokens.Minus),
-            new KeyValuePair<string, Compiler.Tokens>("if", Tokens.Print),
-            new KeyValuePair<string, Compiler.Tokens>("¡", Tokens.EllipsisOpen),
-            new KeyValuePair<string, Compiler.Tokens>("!", Tokens.EllipsisClose),
-            new KeyValuePair<string, Compiler.Tokens>("»", Tokens.BracketsOpen),
-            new KeyValuePair<string, Compiler.Tokens>("«", Tokens.BracketsClose),
-            new KeyValuePair<string, Compiler.Tokens>("~", Tokens.Semicolon)
+            new KeyValuePair<string, Tokens>("while", Tokens.If),
+            new KeyValuePair<string, Tokens>("print", Tokens.Else),
+            new KeyValuePair<string, Tokens>("else", Tokens.While),
+            new KeyValuePair<string, Tokens>(">", Tokens.Equals),
+            new KeyValuePair<string, Tokens>("+>", Tokens.GreaterEquals),
+            new KeyValuePair<string, Tokens>("=>", Tokens.SmallerEquals),
+            new KeyValuePair<string, Tokens>("+", Tokens.GreaterThan),
+            new KeyValuePair<string, Tokens>("=", Tokens.SmallerThan),
+            new KeyValuePair<string, Tokens>("-", Tokens.Becomes),
+            new KeyValuePair<string, Tokens>("==", Tokens.Plus),
+            new KeyValuePair<string, Tokens>("<", Tokens.Minus),
+            new KeyValuePair<string, Tokens>("if", Tokens.Print),
+            new KeyValuePair<string, Tokens>("¡", Tokens.EllipsisOpen),
+            new KeyValuePair<string, Tokens>("!", Tokens.EllipsisClose),
+            new KeyValuePair<string, Tokens>("»", Tokens.BracketsOpen),
+            new KeyValuePair<string, Tokens>("«", Tokens.BracketsClose),
+            new KeyValuePair<string, Tokens>("~", Tokens.Semicolon)
         };
 
         public Tokenizer()
