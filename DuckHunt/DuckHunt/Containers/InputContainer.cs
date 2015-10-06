@@ -13,6 +13,7 @@ namespace DuckHunt.Containers
     /// </summary>
     public class InputContainer
     {
+        // ClickedPoints lijst kan door UI en Game threads worden aangepast, lock voor thread safety.
         private object clickedPointsLock = new object();
 
         private List<Point> _clickedPoints;
@@ -58,7 +59,6 @@ namespace DuckHunt.Containers
 
         public void HandleInputs(IGame game)
         {
-            // foreach kan het aanpassen van collections tijdens loopen niet aan. Dit willen we dus niet. 
             lock (clickedPointsLock)
             {
                 NumClicks = ClickedPoints.Count;

@@ -15,6 +15,9 @@ namespace DuckHunt.Containers
     /// </summary>
     public class UnitContainer
     {
+        // UnitList kan worden uitgelezen door UI, lock voor thread safety (zodat de game thread niet aanpast terwijl UI thread loopt)
+        private object unitListLock = new object();
+
         private List<Unit> _units;
         private List<Unit> Units
         {
@@ -32,12 +35,20 @@ namespace DuckHunt.Containers
 
         public void AddUnit(Unit unit)
         {
-            Units.Add(unit);
+            // Aanpassing in de list, lock nodig.
+            lock (unitListLock)
+            {
+                Units.Add(unit);
+            }
         }
 
         public void ClearDestroyedUnits()
         {
-            Units.RemoveAll(u => u.IsDestroyed);
+            // Aanpassing in de list, lock nodig.
+            lock (unitListLock)
+            {
+                Units.RemoveAll(u => u.IsDestroyed);
+            }
         }
 
         /// <summary>
@@ -45,6 +56,7 @@ namespace DuckHunt.Containers
         /// </summary>
         public void ClearAllUnits()
         {
+            // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
                 unit.destroy();
@@ -57,6 +69,7 @@ namespace DuckHunt.Containers
         /// </summary>
         public void CleanupUnits()
         {
+            // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
                 if (unit.State.Name != "endlevel")
@@ -68,6 +81,7 @@ namespace DuckHunt.Containers
         {
             int score = 0;
 
+            // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
                 score += unit.onClick(point);
@@ -78,6 +92,7 @@ namespace DuckHunt.Containers
 
         public void UpdateAllUnits(IGame game)
         {
+            // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
                 unit.Update(game);
@@ -86,14 +101,19 @@ namespace DuckHunt.Containers
 
         public void DrawAllUnits(IGame game)
         {
-            foreach (Unit unit in Units)
+            // UI thread, dus lock
+            lock (unitListLock)
             {
-                unit.Draw(game);
+                foreach (Unit unit in Units)
+                {
+                    unit.Draw(game);
+                }
             }
         }
 
         public void FixedTimePassed(IGame game)
         {
+            // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
                 unit.FixedTimePassed(game);
