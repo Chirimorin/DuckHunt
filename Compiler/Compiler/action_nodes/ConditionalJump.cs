@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Compiler.action_nodes
 {
-    public class ConditionalJump : Node
-    {
+    public class ConditionalJump : ActionNode
+    { 
+        public override void Accept(NodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

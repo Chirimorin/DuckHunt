@@ -8,5 +8,9 @@ namespace Compiler.action_nodes
 {
     public class DirectFunctionCall : AbstractFunctionCall
     {
+        public override void Accept(NodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

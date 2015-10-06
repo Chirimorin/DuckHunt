@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Compiler.action_nodes
 {
-    public class Node
+    public abstract class ActionNode
     {
+        public abstract void Accept(NodeVisitor visitor);
     }
 }

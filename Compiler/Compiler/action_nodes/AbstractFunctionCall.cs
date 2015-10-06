@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Compiler.action_nodes
 {
-    public class AbstractFunctionCall : Node
+    public abstract class AbstractFunctionCall : ActionNode
     {
+        public override void Accept(NodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }
