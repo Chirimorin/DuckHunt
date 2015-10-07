@@ -274,18 +274,13 @@ namespace DuckHunt.Controllers
         /// </summary>
         private void UpdateGame()
         {
+            UnitContainer.ClearDestroyedUnits();
+
             CurrentScore += InputContainer.EarnedScore;
 
             LevelFactory.Instance.CurrentLevel.Update(this);
 
             UnitContainer.UpdateAllUnits(this);
-
-            Unit newUnit = LevelFactory.Instance.CurrentLevel.TryCreateUnit(this);
-            if (newUnit != null)
-            {
-                newUnit.BirthTime = Time;
-                UnitContainer.AddUnit(newUnit);
-            }
 
             while(_accumulator > CONSTANTS.fixedTimeCalls)
             {
@@ -293,7 +288,12 @@ namespace DuckHunt.Controllers
                 _accumulator -= CONSTANTS.fixedTimeCalls;
             }
 
-            UnitContainer.ClearDestroyedUnits();
+            Unit newUnit = LevelFactory.Instance.CurrentLevel.TryCreateUnit(this);
+            if (newUnit != null)
+            {
+                newUnit.BirthTime = Time;
+                UnitContainer.AddUnit(newUnit);
+            }
         }
 
         /// <summary>

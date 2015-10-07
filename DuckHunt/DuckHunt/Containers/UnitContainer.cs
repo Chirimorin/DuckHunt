@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DuckHunt.Containers
 {
@@ -99,14 +100,14 @@ namespace DuckHunt.Containers
             }
         }
 
-        public void DrawAllUnits(IGame game)
+        public void DrawAllUnits(IGame game, Canvas canvas)
         {
             // UI thread, dus lock
             lock (unitListLock)
             {
                 foreach (Unit unit in Units)
                 {
-                    unit.Draw(game);
+                    unit.Draw(game, canvas);
                 }
             }
         }

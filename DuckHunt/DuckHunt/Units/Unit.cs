@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DuckHunt.Units
 {
@@ -135,6 +136,7 @@ namespace DuckHunt.Units
 
         #region State
         private BaseUnitState _state;
+        private BaseUnitState _pendingState;
         /// <summary>
         /// De huidige state van de unit
         /// </summary>
@@ -143,17 +145,7 @@ namespace DuckHunt.Units
             get { return _state; }
             set
             {
-                if (_state != null)
-                {
-                    _state.CleanUp();
-                }
-
-                _state = value;
-
-                if (_state != null)
-                {
-                    _state.CreateBehaviors(Name);
-                }
+                _pendingState = value;
             }
         }
         #endregion
@@ -193,9 +185,19 @@ namespace DuckHunt.Units
         #endregion
 
         #region Draw
-        public void Draw(IGame game)
+        public void Draw(IGame game, Canvas canvas)
         {
-            State.Draw(this, game);
+            if ((IsDestroyed || _pendingState != null) && State != null)
+                State.CleanUp(canvas);
+
+            if (_pendingState != null)
+            {
+                _state = _pendingState;
+                _pendingState = null;
+                State.CreateBehaviors(Name);
+            }
+
+            State.Draw(this, game, canvas);
         }
         #endregion
 
@@ -205,7 +207,6 @@ namespace DuckHunt.Units
         public virtual void destroy()
         {
             IsDestroyed = true;
-            State.CleanUp();
         }
 
         public virtual bool isHit(Point point)

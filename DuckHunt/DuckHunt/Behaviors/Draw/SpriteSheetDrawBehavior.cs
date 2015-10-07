@@ -18,10 +18,6 @@ namespace DuckHunt.Behaviors.Draw
     public class SpriteSheetDrawBehavior : IDrawBehavior
     {
         private Image _gfx;
-        public UIElement Gfx
-        {
-            get { return _gfx; }
-        }
 
         private readonly int _frameCount;
         private readonly double _frameTime;
@@ -101,6 +97,16 @@ namespace DuckHunt.Behaviors.Draw
             _animationCompleted = false;
             _currentFrame = 0;
             _timePassed = 0;
+        }
+
+        public void AddToCanvas(Canvas canvas)
+        {
+            canvas.Children.Add(_gfx);
+        }
+
+        public void RemoveFromCanvas(Canvas canvas)
+        {
+            canvas.Children.Remove(_gfx);
         }
     }
 }

@@ -44,10 +44,8 @@ namespace DuckHunt.Units.Bunny
             if (newBehavior != null)
             {
                 _isJumping = !_isJumping;
-                UI.TryRemoveGraphics(DrawBehavior.Gfx);
                 DrawBehavior = newBehavior;
-                UI.TryAddGraphics(DrawBehavior.Gfx);
-                DrawBehavior.Reset();
+                newBehavior.Reset();
             }
 
             base.Update(unit, game);
@@ -58,7 +56,7 @@ namespace DuckHunt.Units.Bunny
             // Base stelt de standaard behavior in: running
             base.CreateBehaviors(unitName);
 
-            _runningDrawBehavior = DrawBehavior;
+            _runningDrawBehavior = _pendingDrawBehavior;
             _jumpingDrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, "jumping");
         }
     }

@@ -161,19 +161,7 @@ namespace DuckHunt.Controllers
                 _mainWindow.BigText.Text = bigText;
                 _mainWindow.NewGame.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
                 _mainWindow.Exit.Visibility = (game.IsRunning ? Visibility.Collapsed : Visibility.Visible);
-                game.UnitContainer.DrawAllUnits(game);
-            });
-        }
-
-        public static void TryAddGraphics(UIElement element)
-        {
-            _instance.AddGraphics(element);
-        }
-        private void AddGraphics(UIElement element)
-        {
-            BeginInvoke(() =>
-            {
-                _mainWindow.MainCanvas.Children.Add(element);
+                game.UnitContainer.DrawAllUnits(game, _mainWindow.MainCanvas);
             });
         }
 

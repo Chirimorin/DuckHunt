@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DuckHunt.Units
 {
@@ -28,11 +29,12 @@ namespace DuckHunt.Units
         }
 
 
-        private IDrawBehavior _drawBehavior;
+        protected IDrawBehavior _drawBehavior;
+        protected IDrawBehavior _pendingDrawBehavior;
         protected virtual IDrawBehavior DrawBehavior
         {
             get { return _drawBehavior; }
-            set { _drawBehavior = value; }
+            set { _pendingDrawBehavior = value; }
         }
 
         private BaseMoveBehavior _moveBehavior;
@@ -47,8 +49,6 @@ namespace DuckHunt.Units
         public BaseUnitState(string name)
         {
             _name = name;
-
-            
         }
         #endregion
 
@@ -70,22 +70,29 @@ namespace DuckHunt.Units
             MoveBehavior.FixedTimePassed(unit, game);
         }
 
-        public virtual void Draw(Unit unit, IGame game)
+        public virtual void Draw(Unit unit, IGame game, Canvas canvas)
         {
+            if (_pendingDrawBehavior != null)
+            {
+                if (DrawBehavior != null)
+                    DrawBehavior.RemoveFromCanvas(canvas);
+                _drawBehavior = _pendingDrawBehavior;
+                _pendingDrawBehavior = null;
+                DrawBehavior.AddToCanvas(canvas);
+            }
+
             DrawBehavior.Draw(unit, game);
         }
 
-        public virtual void CleanUp()
+        public virtual void CleanUp(Canvas canvas)
         {
-            UI.TryRemoveGraphics(DrawBehavior.Gfx);
+            DrawBehavior.RemoveFromCanvas(canvas);
         }
 
         public virtual void CreateBehaviors(string unitName)
         {
             MoveBehavior = UnitFactories.MoveBehaviors.Create(unitName, Name); //BehaviorFactory.createMoveBehavior(unit, Name);
             DrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, Name); //BehaviorFactory.createDrawBehavior(unit, Name);
-
-            UI.TryAddGraphics(DrawBehavior.Gfx);
         }
         #endregion
     }

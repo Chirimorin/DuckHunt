@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DuckHunt.Behaviors.Draw
 {
     public interface IDrawBehavior
     {
-        UIElement Gfx { get; }
-
         void Draw(Unit unit, IGame game);
+        void AddToCanvas(Canvas canvas);
+        void RemoveFromCanvas(Canvas canvas);
         void Reset();
     }
 }
