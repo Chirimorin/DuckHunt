@@ -194,7 +194,7 @@ namespace DuckHunt.Units
             {
                 _state = _pendingState;
                 _pendingState = null;
-                State.CreateBehaviors(Name);
+                State.CreateDrawBehavior(Name);
             }
 
             State.Draw(this, game, canvas);

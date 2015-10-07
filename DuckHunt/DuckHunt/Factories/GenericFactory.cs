@@ -19,7 +19,7 @@ namespace DuckHunt.Factories
             if (_dict.TryGetValue(id, out constructor))
                 return constructor();
 
-            throw new ArgumentException("No type registered for this id");
+            return default(TClass);
         }
 
         public virtual void Register(TKey id, Func<TClass> ctor)
@@ -39,30 +39,15 @@ namespace DuckHunt.Factories
 
         public virtual TClass Create(Tkey1 k1, Tkey2 k2)
         {
-            try
-            {
-                return _factory.Create(new Tuple<Tkey1, Tkey2>(k1, k2));
-            }
-            catch (ArgumentException) // Key combinatie niet bekend, probeer met default Key1
-            {
+            TClass result = _factory.Create(new Tuple<Tkey1, Tkey2>(k1, k2));
+            if (result == null || result.Equals(default(TClass)))
                 return _factory.Create(new Tuple<Tkey1, Tkey2>(default(Tkey1), k2));
-            }
+            return result;
         }
 
         public virtual void Register(Tkey1 k1, Tkey2 k2, Func<TClass> ctor)
         {
             _factory.Register(new Tuple<Tkey1, Tkey2>(k1, k2), ctor);
-        }
-    }
-
-    public class GenericUIFactory<Tkey1, Tkey2, TClass> : GenericFactory<Tkey1, Tkey2, TClass>
-    {
-        public override TClass Create(Tkey1 k1, Tkey2 k2)
-        {
-            return UI.Invoke<TClass>(() =>
-            {
-                return base.Create(k1, k2);
-            });
         }
     }
 }

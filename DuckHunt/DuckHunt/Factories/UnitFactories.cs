@@ -43,9 +43,9 @@ namespace DuckHunt.Factories
         #endregion
 
         #region DrawBehaviors
-        private static readonly Lazy<GenericUIFactory<string, string, IDrawBehavior>> _drawBehaviors
-            = new Lazy<GenericUIFactory<string, string, IDrawBehavior>>(() => new GenericUIFactory<string, string, IDrawBehavior>());
-        public static GenericUIFactory<string, string, IDrawBehavior> DrawBehaviors
+        private static readonly Lazy<GenericFactory<string, string, IDrawBehavior>> _drawBehaviors
+            = new Lazy<GenericFactory<string, string, IDrawBehavior>>(() => new GenericFactory<string, string, IDrawBehavior>());
+        public static GenericFactory<string, string, IDrawBehavior> DrawBehaviors
         {
             get { return _drawBehaviors.Value; }
         }

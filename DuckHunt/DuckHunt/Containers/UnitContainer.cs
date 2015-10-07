@@ -62,7 +62,6 @@ namespace DuckHunt.Containers
             {
                 unit.destroy();
             }
-            ClearDestroyedUnits();
         }
 
         /// <summary>

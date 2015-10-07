@@ -63,6 +63,8 @@ namespace DuckHunt.Units
 
         public virtual void Update(Unit unit, IGame game)
         {
+            if (MoveBehavior == null)
+                CreateMoveBehavior(unit.Name);
             MoveBehavior.Move(unit, game);
         }
         public virtual void FixedTimePassed(Unit unit, IGame game)
@@ -89,10 +91,14 @@ namespace DuckHunt.Units
             DrawBehavior.RemoveFromCanvas(canvas);
         }
 
-        public virtual void CreateBehaviors(string unitName)
+        protected virtual void CreateMoveBehavior(string unitName)
         {
-            MoveBehavior = UnitFactories.MoveBehaviors.Create(unitName, Name); //BehaviorFactory.createMoveBehavior(unit, Name);
-            DrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, Name); //BehaviorFactory.createDrawBehavior(unit, Name);
+            MoveBehavior = UnitFactories.MoveBehaviors.Create(unitName, Name);
+        }
+
+        public virtual void CreateDrawBehavior(string unitName)
+        {
+            DrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, Name);
         }
         #endregion
     }
