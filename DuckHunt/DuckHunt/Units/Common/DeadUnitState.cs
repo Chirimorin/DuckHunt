@@ -35,6 +35,13 @@ namespace DuckHunt.Units.Common
             FadeTime = fadeTime;
         }
 
+        public DeadUnitState(string unit, string name) : base(unit, name)
+        {
+            Timer = 0;
+            DespawnTime = 1.50;
+            FadeTime = 0.75;
+        }
+
         public override int onClick(Unit unit, Point point)
         {
             // Dode units kunnen geen punten opleveren.

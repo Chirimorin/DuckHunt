@@ -40,7 +40,7 @@ namespace DuckHunt.Units
         {
             _name = name;
 
-            MoveBehavior = BehaviorFactory.createMoveBehavior(unit, Name);
+            MoveBehavior = Factory<BaseMoveBehavior>.Create(unit + name); //BehaviorFactory.createMoveBehavior(unit, Name);
             DrawBehavior = BehaviorFactory.createDrawBehavior(unit, Name);
 
             UI.TryAddGraphics(DrawBehavior.Gfx);

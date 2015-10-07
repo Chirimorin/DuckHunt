@@ -73,7 +73,8 @@ namespace DuckHunt.Containers
             foreach (Unit unit in Units)
             {
                 if (unit.State.Name != "endlevel")
-                    unit.State = StateFactory.createState(unit.Name, "endlevel");
+                    unit.State = Factory<BaseUnitState>.Create(unit.Name + "endlevel");
+                    //unit.State = StateFactory.createState(unit.Name, "endlevel");
             }
         }
 

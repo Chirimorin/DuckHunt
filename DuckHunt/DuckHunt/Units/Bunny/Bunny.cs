@@ -20,5 +20,10 @@ namespace DuckHunt.Units.Bunny
         {
             
         }
+
+        public Bunny(string name) : base(name, 80,80,-80,640, 500, 0)
+        {
+            State = Factory<BaseUnitState>.Create("bunnyalive");
+        }
     }
 }

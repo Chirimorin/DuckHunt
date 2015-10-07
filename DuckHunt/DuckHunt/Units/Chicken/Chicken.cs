@@ -21,6 +21,11 @@ namespace DuckHunt.Units.Chicken
         {
             
         }
+
+        public Chicken(string name) : base (name, 95, 70, -95, 0, 500, 500)
+        {
+            State = Factory<BaseUnitState>.Create("chickenalive");
+        }
         
     }
 }

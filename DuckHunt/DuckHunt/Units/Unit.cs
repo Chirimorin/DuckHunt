@@ -171,7 +171,7 @@ namespace DuckHunt.Units
             VX = vX;
             VY = vY;
 
-            State = StateFactory.createState(Name, "alive");
+            //State = StateFactory.createState(Name, "alive");
         }
         #endregion
 

@@ -68,6 +68,7 @@
     <Compile Include="Behaviors\Move\Running\RunningFleeMoveBehavior.cs" />
     <Compile Include="Behaviors\Move\SimpleMoveBehavior.cs" />
     <Compile Include="Factories\BehaviorFactory.cs" />
+    <Compile Include="Factories\Factory.cs" />
     <Compile Include="Factories\LevelFactory.cs" />
     <Compile Include="Factories\SpriteSheetFactory.cs" />
     <Compile Include="Factories\StateFactory.cs" />

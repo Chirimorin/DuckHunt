@@ -30,7 +30,7 @@ namespace DuckHunt.Factories
 
             // Despawn de unit meteen
             if (state == "endlevel")
-                return new DeadUnitMoveBehavior(100, 100);
+                return new DeadUnitMoveBehavior(900, 500);
 
             switch (unit)
             {

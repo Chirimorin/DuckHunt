@@ -26,6 +26,15 @@ namespace DuckHunt.Units.Bunny
             _isJumping = false;
         }
 
+        public AliveBunnyState(string unit, string name) : base(unit, name)
+        {
+            // Base stelt de standaard behavior in: running
+            _runningDrawBehavior = DrawBehavior;
+            _jumpingDrawBehavior = BehaviorFactory.createDrawBehavior(unit, "jumping");
+
+            _isJumping = false;
+        }
+
         public override void Update(Unit unit, IGame game)
         {
             IDrawBehavior newBehavior = null;
