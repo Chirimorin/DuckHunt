@@ -11,7 +11,7 @@ namespace DuckHunt.Units.Common
 {
     public class FleeingUnitState : AliveUnitState
     {
-        public FleeingUnitState(string unit, string name) : base(unit, name, double.PositiveInfinity)
+        public FleeingUnitState(string name) : base(name, double.PositiveInfinity)
         {
         }
 

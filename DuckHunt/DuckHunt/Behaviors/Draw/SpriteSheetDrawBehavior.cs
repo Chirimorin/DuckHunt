@@ -34,30 +34,6 @@ namespace DuckHunt.Behaviors.Draw
         private int _currentFrame;
         private double _timePassed;
 
-        public SpriteSheetDrawBehavior(string filename, int xImages, int yImages, int spriteWidth, int spriteHeight, double frameTime, double angle, bool loop)
-        {
-            // Voorbereiding
-            _loop = loop;
-            _frameTime = frameTime;
-            _frameCount = xImages * yImages;
-            _currentFrame = 0;
-            _timePassed = 0;
-            _transformRegular = new TransformGroup();
-            _transformRegular.Children.Add(new ScaleTransform(1, 1));
-            _transformRegular.Children.Add(new RotateTransform(angle));
-
-            _transformFlipped = new TransformGroup();
-            _transformFlipped.Children.Add(new ScaleTransform(-1, 1));
-            _transformFlipped.Children.Add(new RotateTransform(-angle));
-
-            _sprites = SpriteSheetFactory.Instance.ProcessSpriteSheet(filename, xImages, yImages);
-
-            _gfx = new Image();
-            _gfx.Source = _sprites[0];
-            _gfx.RenderTransformOrigin = new Point(0.5, 0.5);
-            _gfx.RenderTransform = _transformRegular;
-        }
-
         public SpriteSheetDrawBehavior(string fileName, double frameTime, double angle, bool loop)
         {
             // Beginstate voor non-readonly variabelen

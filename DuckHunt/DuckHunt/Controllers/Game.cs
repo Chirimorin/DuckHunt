@@ -16,6 +16,7 @@ using DuckHunt.Behaviors.Move;
 using DuckHunt.Behaviors.Move.Flying;
 using DuckHunt.Behaviors.Move.Common;
 using DuckHunt.Behaviors.Move.Running;
+using DuckHunt.Behaviors.Draw;
 
 namespace DuckHunt.Controllers
 {
@@ -113,33 +114,58 @@ namespace DuckHunt.Controllers
                 minTicksPerFrame = Stopwatch.Frequency / CONSTANTS.FPS_LIMIT;
 
             // Factory registraties
-            Factory<Unit>.Register("chicken", () => new Chicken("chicken"));
-            Factory<Unit>.Register("bunny", () => new Bunny("bunny"));
+            #region Units
+            UnitFactories.Units.Register("chicken", () => new Chicken("chicken"));
+            UnitFactories.Units.Register("bunny", () => new Bunny("bunny"));
+            #endregion
 
-            Factory<BaseUnitState>.Register("chickenalive", () => new AliveUnitState("chicken", "alive"));
-            Factory<BaseUnitState>.Register("chickenfleeing", () => new FleeingUnitState("chicken", "fleeing"));
-            Factory<BaseUnitState>.Register("chickendead", () => new DeadUnitState("chicken", "dead"));
-            Factory<BaseUnitState>.Register("chickenendlevel", () => new DeadUnitState("chicken", "endlevel"));
+            #region UnitStates
+            // Shared states
+            UnitFactories.States.Register(default(string), "dead", () => new DeadUnitState("dead"));
+            UnitFactories.States.Register(default(string), "endlevel", () => new DeadUnitState("endlevel", 0.5, 0.5));
 
-            Factory<BaseUnitState>.Register("bunnyalive", () => new AliveBunnyState("bunny", "alive"));
-            Factory<BaseUnitState>.Register("bunnyfleeing", () => new FleeingBunnyState("bunny", "fleeing"));
-            Factory<BaseUnitState>.Register("bunnydead", () => new DeadUnitState("bunny", "dead"));
-            Factory<BaseUnitState>.Register("bunnyendlevel", () => new DeadUnitState("bunny", "endlevel"));
+            // Chicken states
+            UnitFactories.States.Register("chicken", "alive", () => new AliveUnitState("alive"));
+            UnitFactories.States.Register("chicken", "fleeing", () => new FleeingUnitState("fleeing"));
 
-            Factory<BaseMoveBehavior>.Register("chickenalive", () => new RandomFlightMoveBehavior(900, 900, 750, 750));
-            Factory<BaseMoveBehavior>.Register("chickenfleeing", () => new FlyingFleeMoveBehavior(1000, -100, 750, 500));
-            Factory<BaseMoveBehavior>.Register("chickendead", () => new DeadUnitMoveBehavior(900, 500));
-            Factory<BaseMoveBehavior>.Register("chickenendlevel", () => new DeadUnitMoveBehavior(900, 500));
+            // Bunny states
+            UnitFactories.States.Register("bunny", "alive", () => new AliveBunnyState("alive"));
+            UnitFactories.States.Register("bunny", "fleeing", () => new FleeingBunnyState("fleeing"));
+            #endregion
 
-            Factory<BaseMoveBehavior>.Register("bunnyalive", () =>
+            #region Unit Move Behaviors
+            // Shared move behaviors
+            UnitFactories.MoveBehaviors.Register(default(string), "dead", () => new DeadUnitMoveBehavior(900, 500));
+            UnitFactories.MoveBehaviors.Register(default(string), "endlevel", () => new DeadUnitMoveBehavior(900, 500));
+
+            // Chicken move behaviors
+            UnitFactories.MoveBehaviors.Register("chicken","alive", () => new RandomFlightMoveBehavior(900, 900, 750, 750));
+            UnitFactories.MoveBehaviors.Register("chicken","fleeing", () => new FlyingFleeMoveBehavior(1000, -100, 750, 500));
+
+            // Bunny move behaviors
+            UnitFactories.MoveBehaviors.Register("bunny", "alive", () =>
             {
                 if (Random.Next(2) == 0) // 50% kans op jump over mouse behavior
                     return new JumpOverMouseMoveBehavior(0, 900, 1000, 500, 400, 0);
                 return new GravityMoveBehavior(0, 900, 1000, 500, 400, 0, 100);
             });
-            Factory<BaseMoveBehavior>.Register("bunnyfleeing", () => new RunningFleeMoveBehavior(0, 900, 500, 500, 400, 0));
-            Factory<BaseMoveBehavior>.Register("bunnydead", () => new DeadUnitMoveBehavior(900, 500));
-            Factory<BaseMoveBehavior>.Register("bunnyendlevel", () => new DeadUnitMoveBehavior(900, 500));
+            UnitFactories.MoveBehaviors.Register("bunny", "fleeing", () => new RunningFleeMoveBehavior(0, 900, 500, 500, 400, 0));
+            #endregion
+
+            #region Unit Draw Behaviors
+            // Chicken draw behaviors
+            UnitFactories.DrawBehaviors.Register("chicken", "alive", () => new SpriteSheetDrawBehavior("ChickenFly.png", 0.07, 0, true));
+            UnitFactories.DrawBehaviors.Register("chicken", "fleeing", () => new SpriteSheetDrawBehavior("ChickenFly.png", 0.07, 0, true));
+            UnitFactories.DrawBehaviors.Register("chicken", "dead", () => new SpriteSheetDrawBehavior("ChickenDead.png", 0.07, 12.5, true));
+            UnitFactories.DrawBehaviors.Register("chicken", "endlevel", () => new SpriteSheetDrawBehavior("ChickenDead.png", 0.07, 12.5, true));
+
+            // Bunny draw behaviors
+            UnitFactories.DrawBehaviors.Register("bunny", "alive", () => new SpriteSheetDrawBehavior("BunnyRun.png", 0.075, 0, true));
+            UnitFactories.DrawBehaviors.Register("bunny", "fleeing", () => new SpriteSheetDrawBehavior("BunnyRun.png", 0.075, 0, true));
+            UnitFactories.DrawBehaviors.Register("bunny", "jumping", () => new SpriteSheetDrawBehavior("BunnyJump.png", 0.15, 0, false));
+            UnitFactories.DrawBehaviors.Register("bunny", "dead", () => new SpriteSheetDrawBehavior("BunnyDead.png", 0.1, 0, false));
+            UnitFactories.DrawBehaviors.Register("bunny", "endlevel", () => new SpriteSheetDrawBehavior("BunnyDead.png", 0.1, 0, false));
+            #endregion
         }
 
         // ------------------------------------------------------- Functies ------------------------------------------------------- //

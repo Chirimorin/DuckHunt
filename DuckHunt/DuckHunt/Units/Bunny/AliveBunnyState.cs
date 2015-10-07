@@ -17,21 +17,13 @@ namespace DuckHunt.Units.Bunny
         
         private bool _isJumping;
 
-        public AliveBunnyState(string unit, string name, double fleeTime) : base(unit, name, fleeTime)
+        public AliveBunnyState(string name, double fleeTime) : base(name, fleeTime)
         {
-            // Base stelt de standaard behavior in: running
-            _runningDrawBehavior = DrawBehavior;
-            _jumpingDrawBehavior = BehaviorFactory.createDrawBehavior(unit, "jumping");
-            
             _isJumping = false;
         }
 
-        public AliveBunnyState(string unit, string name) : base(unit, name)
+        public AliveBunnyState(string name) : base(name)
         {
-            // Base stelt de standaard behavior in: running
-            _runningDrawBehavior = DrawBehavior;
-            _jumpingDrawBehavior = BehaviorFactory.createDrawBehavior(unit, "jumping");
-
             _isJumping = false;
         }
 
@@ -59,6 +51,15 @@ namespace DuckHunt.Units.Bunny
             }
 
             base.Update(unit, game);
+        }
+
+        public override void CreateBehaviors(string unitName)
+        {
+            // Base stelt de standaard behavior in: running
+            base.CreateBehaviors(unitName);
+
+            _runningDrawBehavior = DrawBehavior;
+            _jumpingDrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, "jumping");
         }
     }
 }

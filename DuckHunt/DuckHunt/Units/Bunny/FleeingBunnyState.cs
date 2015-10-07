@@ -9,7 +9,7 @@ namespace DuckHunt.Units.Bunny
 {
     public class FleeingBunnyState : AliveBunnyState
     {
-        public FleeingBunnyState(string unit, string name) : base(unit, name, double.PositiveInfinity)
+        public FleeingBunnyState(string name) : base(name, double.PositiveInfinity)
         {
         }
 

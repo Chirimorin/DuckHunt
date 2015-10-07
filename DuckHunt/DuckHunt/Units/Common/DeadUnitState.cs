@@ -28,14 +28,14 @@ namespace DuckHunt.Units.Common
             set { _originalHeight = value; }
         }
 
-        public DeadUnitState(string unit, string name, double despawnTime, double fadeTime) : base(unit, name)
+        public DeadUnitState(string name, double despawnTime, double fadeTime) : base(name)
         {
             Timer = 0;
             DespawnTime = despawnTime;
             FadeTime = fadeTime;
         }
 
-        public DeadUnitState(string unit, string name) : base(unit, name)
+        public DeadUnitState(string name) : base(name)
         {
             Timer = 0;
             DespawnTime = 1.50;

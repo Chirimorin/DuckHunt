@@ -147,31 +147,24 @@ namespace DuckHunt.Units
                 {
                     _state.CleanUp();
                 }
+
                 _state = value;
+
+                if (_state != null)
+                {
+                    _state.CreateBehaviors(Name);
+                }
             }
         }
         #endregion
         #endregion
 
         #region CTOR
-        public Unit(string name, 
-            double width, 
-            double height, 
-            double posX, 
-            double posY, 
-            double vX, 
-            double vY)
+        public Unit(string name, double width, double height)
         {
             _name = name;
-
             Width = width;
             Height = height;
-            PosX = posX;
-            PosY = posY;
-            VX = vX;
-            VY = vY;
-
-            //State = StateFactory.createState(Name, "alive");
         }
         #endregion
 
@@ -207,6 +200,8 @@ namespace DuckHunt.Units
         #endregion
 
         #region Algemeen
+        public abstract void init(IGame game);
+
         public virtual void destroy()
         {
             IsDestroyed = true;

@@ -10,22 +10,40 @@ namespace DuckHunt.Units.Chicken
 {
     public class Chicken : Unit
     {
-        public Chicken(string name, 
-            double width,
-            double height,
-            double posX,
-            double posY,
-            double vX,
-            double vY)
-            : base(name, width, height, posX, posY, vX, vY)
+        public Chicken(string name) : base (name, 95, 70)
         {
             
         }
 
-        public Chicken(string name) : base (name, 95, 70, -95, 0, 500, 500)
+        public override void init(IGame game)
         {
-            State = Factory<BaseUnitState>.Create("chickenalive");
+            #region Random beginpositie
+            // Kies eerst een beginplek: links, boven of rechts van het scherm
+            int location = game.Random.Next(3);
+
+            if (location == 0 || // Links van het scherm
+                location == 2) // Rechts van het scherm
+            {
+                if (location == 0)
+                    PosX = -Width;
+                else
+                    PosX = CONSTANTS.CANVAS_WIDTH;
+
+                PosY = game.Random.Next(CONSTANTS.CANVAS_HEIGHT) - Height;
+            }
+            else // Boven het scherm
+            {
+                PosX = game.Random.Next((int)-Width, CONSTANTS.CANVAS_WIDTH);
+                PosY = -Height;
+            }
+            #endregion
+
+            #region Random snelheid
+            VX = game.Random.Next(750, 1000);
+            VY = game.Random.Next(750, 1000);
+            #endregion
+
+            State = UnitFactories.States.Create(Name, "alive");
         }
-        
     }
 }

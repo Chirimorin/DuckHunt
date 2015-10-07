@@ -13,12 +13,12 @@ namespace DuckHunt.Units.Common
     {
         protected double FleeTime { get; set; }
 
-        public AliveUnitState(string unit, string name, double fleeTime) : base(unit, name)
+        public AliveUnitState(string name, double fleeTime) : base(name)
         {
             FleeTime = fleeTime;
         }
 
-        public AliveUnitState(string unit, string name) : base(unit, name)
+        public AliveUnitState(string name) : base(name)
         {
             FleeTime = 10.0;
         }
@@ -28,7 +28,7 @@ namespace DuckHunt.Units.Common
             if (unit.isHit(point))
             {
                 LevelFactory.Instance.CurrentLevel.Kills++;
-                unit.State = Factory<BaseUnitState>.Create(unit.Name + "dead"); //StateFactory.createState(unit.Name, "dead");
+                unit.State = UnitFactories.States.Create(unit.Name, "dead");
                 return 1;
             }
             return 0;
@@ -39,7 +39,7 @@ namespace DuckHunt.Units.Common
             base.Update(unit, game);
             
             if ((game.Time - unit.BirthTime) > FleeTime)
-                unit.State = Factory<BaseUnitState>.Create(unit.Name + "fleeing"); //StateFactory.createState(unit.Name, "fleeing");
+                unit.State = UnitFactories.States.Create(unit.Name, "fleeing");
         }
     }
 }

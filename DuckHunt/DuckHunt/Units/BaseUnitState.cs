@@ -20,6 +20,14 @@ namespace DuckHunt.Units
             get { return _name; }
         }
 
+        private Unit _parent;
+        public Unit Parent
+        {
+            get { return _parent; }
+            set { _parent = value; }
+        }
+
+
         private IDrawBehavior _drawBehavior;
         protected virtual IDrawBehavior DrawBehavior
         {
@@ -36,14 +44,11 @@ namespace DuckHunt.Units
         #endregion
 
         #region CTOR
-        public BaseUnitState(string unit, string name)
+        public BaseUnitState(string name)
         {
             _name = name;
 
-            MoveBehavior = Factory<BaseMoveBehavior>.Create(unit + name); //BehaviorFactory.createMoveBehavior(unit, Name);
-            DrawBehavior = BehaviorFactory.createDrawBehavior(unit, Name);
-
-            UI.TryAddGraphics(DrawBehavior.Gfx);
+            
         }
         #endregion
 
@@ -73,6 +78,14 @@ namespace DuckHunt.Units
         public virtual void CleanUp()
         {
             UI.TryRemoveGraphics(DrawBehavior.Gfx);
+        }
+
+        public virtual void CreateBehaviors(string unitName)
+        {
+            MoveBehavior = UnitFactories.MoveBehaviors.Create(unitName, Name); //BehaviorFactory.createMoveBehavior(unit, Name);
+            DrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, Name); //BehaviorFactory.createDrawBehavior(unit, Name);
+
+            UI.TryAddGraphics(DrawBehavior.Gfx);
         }
         #endregion
     }
