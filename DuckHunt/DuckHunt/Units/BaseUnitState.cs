@@ -70,6 +70,12 @@ namespace DuckHunt.Units
             MoveBehavior.FixedTimePassed(unit, game);
         }
 
+        public virtual void Animate(Unit unit, IGame game)
+        {
+            if (DrawBehavior != null)
+                DrawBehavior.Animate(unit, game);
+        }
+
         public virtual void Draw(Unit unit, IGame game)
         {
             if (DrawBehavior == null)

@@ -12,6 +12,7 @@ namespace DuckHunt.Behaviors.Draw
 {
     public interface IDrawBehavior
     {
+        void Animate(Unit unit, IGame game);
         void Draw(Unit unit, IGame game);
         void AddGfx(IGame game);
         void RemoveGfx(IGame game);

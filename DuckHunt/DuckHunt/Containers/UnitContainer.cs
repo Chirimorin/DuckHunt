@@ -99,6 +99,14 @@ namespace DuckHunt.Containers
             }
         }
 
+        public void AnimateAllUnits(IGame game)
+        {
+            foreach (Unit unit in Units)
+            {
+                unit.Animate(game);
+            }
+        }
+
         public void DrawAllUnits(IGame game)
         {
             // UI thread, dus lock

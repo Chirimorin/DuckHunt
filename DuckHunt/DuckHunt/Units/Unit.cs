@@ -190,6 +190,11 @@ namespace DuckHunt.Units
         #endregion
 
         #region Draw
+        public void Animate(IGame game)
+        {
+            State.Animate(this, game);
+        }
+
         public void Draw(IGame game)
         {
             State.Draw(this, game);

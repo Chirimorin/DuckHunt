@@ -84,17 +84,6 @@ namespace DuckHunt.Controllers
             private set { _dt = value; }
         }
 
-        private double _drawDT;
-        /// <summary>
-        /// Tijd sinds laatste draw frame
-        /// </summary>
-        public double DrawDT
-        {
-            get { return _drawDT; }
-            private set { _drawDT = value; }
-        }
-
-
         private double _fps;
         /// <summary>
         /// Frames per seconde
@@ -265,11 +254,10 @@ namespace DuckHunt.Controllers
 
                 if (_ticksSinceDraw > minTicksPerDraw)
                 {
-                    Console.WriteLine("Ticks since draw: " + _ticksSinceDraw + "; DrawDT: " + DrawDT);
-                    UpdateScreen();
+                    UpdateScreen(1.0/(_ticksSinceDraw * _tickTime));
                     _ticksSinceDraw = 0;
                 }
-
+                
                 // Thread.Sleep zorgt voor haperen
                 // Yield tot de minimale tijd voorbij is
                 Thread.Yield();
@@ -278,6 +266,9 @@ namespace DuckHunt.Controllers
                     Thread.Yield();
                 };
             }
+
+            // Update het scherm nog 1 keer na einde game (voor gameover scherm)
+            UpdateScreen(0);
         }
 
         /// <summary>
@@ -301,7 +292,6 @@ namespace DuckHunt.Controllers
             FPS = Math.Round(1.0 / DT, 0);
 
             _ticksSinceDraw += (ticks - _totalTicks);
-            DrawDT = _ticksSinceDraw * _tickTime;
 
             _accumulator += DT;
 
@@ -347,14 +337,16 @@ namespace DuckHunt.Controllers
                     .Create(allowedUnits[Random.Next(allowedUnits.Length)])
                     .init(this);
             }
+
+            UnitContainer.AnimateAllUnits(this);
         }
 
         /// <summary>
         /// Update de elementen op het scherm
         /// </summary>
-        private void UpdateScreen()
+        private void UpdateScreen(double fps)
         {
-            _ui.UpdateScreen(this); // Dispatcht zichzelf naar de UI thread.
+            _ui.UpdateScreen(this, fps); // Dispatcht zichzelf naar de UI thread.
         }
     }
 }

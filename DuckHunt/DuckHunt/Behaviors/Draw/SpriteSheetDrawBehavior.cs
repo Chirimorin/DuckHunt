@@ -59,20 +59,19 @@ namespace DuckHunt.Behaviors.Draw
             _gfx.RenderTransformOrigin = new Point(0.5, 0.5);
             _gfx.RenderTransform = _transformRegular;
         }
-
-        public void Draw(Unit unit, IGame game)
+        
+        public void Animate(Unit unit, IGame game)
         {
             if (_loop || !_animationCompleted)
             {
-                _timePassed += game.DrawDT;
-
-                // Update sprites when needed. Even for low framerates
+                _timePassed += game.DT;
+                
                 if (_timePassed > _frameTime)
                 {
                     int frames = (int)Math.Floor(_timePassed / _frameTime);
                     _timePassed -= (frames * _frameTime);
                     _currentFrame += frames;
-                    
+
                     while (_loop && _currentFrame >= _frameCount)
                     {
                         _currentFrame -= _frameCount;
@@ -83,10 +82,14 @@ namespace DuckHunt.Behaviors.Draw
                         _currentFrame = _frameCount - 1;
                         _animationCompleted = true;
                     }
-
-                    _gfx.Source = _sprites[_currentFrame];
                 }
             }
+        }
+
+        public void Draw(Unit unit, IGame game)
+        {
+            // Animate rekent currentFrame uit
+            _gfx.Source = _sprites[_currentFrame];
 
             if (unit.VX < 0)
                 _gfx.RenderTransform = _transformFlipped;

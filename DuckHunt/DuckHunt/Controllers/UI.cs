@@ -138,9 +138,9 @@ namespace DuckHunt.Controllers
             });
         }
 
-        public void UpdateScreen(IGame game)
+        public void UpdateScreen(IGame game, double fps)
         {
-            string fps = (game.IsRunning ? "FPS: " + game.FPS : "");
+            string fpsString = (game.IsRunning ? "FPS: " + Math.Round(fps) + "\nUpdates/s: " + game.FPS : "");
             string currentlevel = game.CurrentLevel.Name;
             int shotsLeft = game.CurrentLevel.ShotsLeft;
             string score = "Score: " + game.CurrentScore + "\nSchoten over: ";
@@ -155,7 +155,7 @@ namespace DuckHunt.Controllers
 
             BeginInvoke(() => 
             {
-                _mainWindow.FPS.Content = fps;
+                _mainWindow.FPS.Content = fpsString;
                 _mainWindow.CurrentLevel.Content = currentlevel;
                 _mainWindow.CurrentScore.Content = score;
                 _mainWindow.BigText.Text = bigText;
