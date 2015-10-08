@@ -17,6 +17,8 @@ namespace DuckHunt.Units.Chicken
 
         public override void init(IGame game)
         {
+            base.init(game);
+
             #region Random beginpositie
             // Kies eerst een beginplek: links, boven of rechts van het scherm
             int location = game.Random.Next(3);
@@ -42,8 +44,6 @@ namespace DuckHunt.Units.Chicken
             VX = game.Random.Next(750, 1000);
             VY = game.Random.Next(750, 1000);
             #endregion
-
-            State = UnitFactories.States.Create(Name, "alive");
         }
     }
 }

@@ -18,6 +18,7 @@ namespace DuckHunt.Behaviors.Draw
     public class SpriteSheetDrawBehavior : IDrawBehavior
     {
         private Image _gfx;
+        protected bool _addedToCanvas = false;
 
         private readonly int _frameCount;
         private readonly double _frameTime;
@@ -101,12 +102,20 @@ namespace DuckHunt.Behaviors.Draw
 
         public void AddToCanvas(Canvas canvas)
         {
-            canvas.Children.Add(_gfx);
+            if (!_addedToCanvas)
+            {
+                canvas.Children.Add(_gfx);
+                _addedToCanvas = true;
+            }
         }
 
         public void RemoveFromCanvas(Canvas canvas)
         {
-            canvas.Children.Remove(_gfx);
+            if (_addedToCanvas)
+            {
+                canvas.Children.Remove(_gfx);
+                _addedToCanvas = false;
+            }
         }
     }
 }

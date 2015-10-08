@@ -76,8 +76,6 @@ namespace DuckHunt.Levels
                 _totalSpawns++;
 
                 Unit newUnit = UnitFactories.Units.Create(AllowedUnits[game.Random.Next(AllowedUnits.Length)]);
-                if (newUnit != null)
-                    newUnit.init(game);
 
                 return newUnit;
                 //return UnitFactory.createRandomUnit(game, AllowedUnits);

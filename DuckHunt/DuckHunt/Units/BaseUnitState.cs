@@ -21,20 +21,16 @@ namespace DuckHunt.Units
             get { return _name; }
         }
 
-        private Unit _parent;
-        public Unit Parent
-        {
-            get { return _parent; }
-            set { _parent = value; }
-        }
-
-
         protected IDrawBehavior _drawBehavior;
-        protected IDrawBehavior _pendingDrawBehavior;
+        protected IDrawBehavior _oldDrawBehavior;
         protected virtual IDrawBehavior DrawBehavior
         {
             get { return _drawBehavior; }
-            set { _pendingDrawBehavior = value; }
+            set
+            {
+                _oldDrawBehavior = _drawBehavior;
+                _drawBehavior = value;
+            }
         }
 
         private BaseMoveBehavior _moveBehavior;
@@ -63,8 +59,6 @@ namespace DuckHunt.Units
 
         public virtual void Update(Unit unit, IGame game)
         {
-            if (MoveBehavior == null)
-                CreateMoveBehavior(unit.Name);
             MoveBehavior.Move(unit, game);
         }
         public virtual void FixedTimePassed(Unit unit, IGame game)
@@ -74,14 +68,19 @@ namespace DuckHunt.Units
 
         public virtual void Draw(Unit unit, IGame game, Canvas canvas)
         {
-            if (_pendingDrawBehavior != null)
+            if (DrawBehavior == null)
+                CreateDrawBehavior(unit.Name);
+
+            if (_oldDrawBehavior != null)
             {
-                if (DrawBehavior != null)
-                    DrawBehavior.RemoveFromCanvas(canvas);
-                _drawBehavior = _pendingDrawBehavior;
-                _pendingDrawBehavior = null;
-                DrawBehavior.AddToCanvas(canvas);
+                _oldDrawBehavior.RemoveFromCanvas(canvas);
+                _oldDrawBehavior = null;
             }
+
+            if (!unit.IsDestroyed)
+                DrawBehavior.AddToCanvas(canvas);
+            else
+                DrawBehavior.RemoveFromCanvas(canvas);
 
             DrawBehavior.Draw(unit, game);
         }
@@ -91,7 +90,7 @@ namespace DuckHunt.Units
             DrawBehavior.RemoveFromCanvas(canvas);
         }
 
-        protected virtual void CreateMoveBehavior(string unitName)
+        public virtual void CreateMoveBehavior(string unitName)
         {
             MoveBehavior = UnitFactories.MoveBehaviors.Create(unitName, Name);
         }

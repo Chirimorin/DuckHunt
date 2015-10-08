@@ -56,7 +56,7 @@ namespace DuckHunt.Units.Bunny
             // Base stelt de standaard behavior in: running
             base.CreateDrawBehavior(unitName);
 
-            _runningDrawBehavior = _pendingDrawBehavior;
+            _runningDrawBehavior = DrawBehavior;
             _jumpingDrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, "jumping");
         }
     }

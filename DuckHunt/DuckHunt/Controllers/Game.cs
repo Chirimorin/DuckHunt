@@ -291,7 +291,7 @@ namespace DuckHunt.Controllers
             Unit newUnit = LevelFactory.Instance.CurrentLevel.TryCreateUnit(this);
             if (newUnit != null)
             {
-                newUnit.BirthTime = Time;
+                newUnit.init(this);
                 UnitContainer.AddUnit(newUnit);
             }
         }

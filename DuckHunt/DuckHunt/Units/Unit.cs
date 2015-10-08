@@ -136,7 +136,7 @@ namespace DuckHunt.Units
 
         #region State
         private BaseUnitState _state;
-        private BaseUnitState _pendingState;
+        private BaseUnitState _oldState;
         /// <summary>
         /// De huidige state van de unit
         /// </summary>
@@ -145,7 +145,9 @@ namespace DuckHunt.Units
             get { return _state; }
             set
             {
-                _pendingState = value;
+                _oldState = _state;
+                _state = value;
+                _state.CreateMoveBehavior(Name);
             }
         }
         #endregion
@@ -187,14 +189,13 @@ namespace DuckHunt.Units
         #region Draw
         public void Draw(IGame game, Canvas canvas)
         {
-            if ((IsDestroyed || _pendingState != null) && State != null)
+            if (IsDestroyed && State != null)
                 State.CleanUp(canvas);
 
-            if (_pendingState != null)
+            if (_oldState != null)
             {
-                _state = _pendingState;
-                _pendingState = null;
-                State.CreateDrawBehavior(Name);
+                _oldState.CleanUp(canvas);
+                _oldState = null;
             }
 
             State.Draw(this, game, canvas);
@@ -202,7 +203,11 @@ namespace DuckHunt.Units
         #endregion
 
         #region Algemeen
-        public abstract void init(IGame game);
+        public virtual void init(IGame game)
+        {
+            BirthTime = game.Time;
+            State = UnitFactories.States.Create(Name, "alive");
+        }
 
         public virtual void destroy()
         {

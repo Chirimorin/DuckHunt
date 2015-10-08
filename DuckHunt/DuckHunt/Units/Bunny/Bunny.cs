@@ -17,6 +17,8 @@ namespace DuckHunt.Units.Bunny
 
         public override void init(IGame game)
         {
+            base.init(game);
+
             #region Random beginpositie
             // Willekeurig links of rechts, niet veel te randomizen hier. 
             if (game.Random.Next(2) == 0)
@@ -32,8 +34,6 @@ namespace DuckHunt.Units.Bunny
             VX = game.Random.Next(400, 600);
             VY = 0;
             #endregion
-
-            State = UnitFactories.States.Create(Name, "alive");
         }
     }
 }
