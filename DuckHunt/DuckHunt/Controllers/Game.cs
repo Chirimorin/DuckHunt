@@ -17,6 +17,7 @@ using DuckHunt.Behaviors.Move.Flying;
 using DuckHunt.Behaviors.Move.Common;
 using DuckHunt.Behaviors.Move.Running;
 using DuckHunt.Behaviors.Draw;
+using DuckHunt.Levels;
 
 namespace DuckHunt.Controllers
 {
@@ -42,13 +43,23 @@ namespace DuckHunt.Controllers
         }
 
         private GraphicsContainer _graphicsContainer;
-
         public GraphicsContainer GraphicsContainer
         {
             get { return _graphicsContainer; }
             private set { _graphicsContainer = value; }
         }
+        #endregion
 
+        #region Level
+        private ILevel _currentLevel;
+        /// <summary>
+        /// The current level
+        /// </summary>
+        public ILevel CurrentLevel
+        {
+            get { return _currentLevel; }
+            set { _currentLevel = value; }
+        }
         #endregion
 
         private Random _random;
@@ -288,7 +299,7 @@ namespace DuckHunt.Controllers
 
             CurrentScore += InputContainer.EarnedScore;
 
-            LevelFactory.Instance.CurrentLevel.Update(this);
+            CurrentLevel.Update(this);
 
             UnitContainer.UpdateAllUnits(this);
 
@@ -298,11 +309,12 @@ namespace DuckHunt.Controllers
                 _accumulator -= CONSTANTS.fixedTimeCalls;
             }
 
-            Unit newUnit = LevelFactory.Instance.CurrentLevel.TryCreateUnit(this);
-            if (newUnit != null)
+            string[] allowedUnits = CurrentLevel.GetAllowedUnits(this);
+            if (allowedUnits.Length > 0)
             {
-                newUnit.init(this);
-                UnitContainer.AddUnit(newUnit);
+                UnitFactories.Units
+                    .Create(allowedUnits[Random.Next(allowedUnits.Length)])
+                    .init(this);
             }
         }
 

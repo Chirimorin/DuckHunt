@@ -58,11 +58,11 @@ namespace DuckHunt.Levels
         }
 
 
-        public Unit TryCreateUnit(IGame game)
+        public string[] GetAllowedUnits(IGame game)
         {
             // Spawn niks als het level nog niet begonnen is of als het maximale aantal units gespawned is. 
             if (!_hasStarted || _totalSpawns >= MaxSpawns)
-                return null;
+                return new string[0];
 
             // Geen units op het veld, negeer delay
             if (game.UnitContainer.NumUnits == 0)
@@ -74,14 +74,11 @@ namespace DuckHunt.Levels
             {
                 _lastSpawn = game.Time;
                 _totalSpawns++;
-
-                Unit newUnit = UnitFactories.Units.Create(AllowedUnits[game.Random.Next(AllowedUnits.Length)]);
-
-                return newUnit;
-                //return UnitFactory.createRandomUnit(game, AllowedUnits);
+                
+                return AllowedUnits;
             }
 
-            return null;
+            return new string[0];
         }
 
         public virtual void Update(IGame game)

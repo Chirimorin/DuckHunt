@@ -19,10 +19,10 @@ namespace DuckHunt.Levels
 
         private int _finalScore = 0;
 
-        public Unit TryCreateUnit(IGame game)
+        public string[] GetAllowedUnits(IGame game)
         {
             // Geen units tijdens game over
-            return null;
+            return new string[0];
         }
 
         public void Update(IGame game)

@@ -16,7 +16,7 @@ namespace DuckHunt.Levels
         int Kills { get; set; }
         int ShotsLeft { get; }
 
-        Unit TryCreateUnit(IGame game);
+        string[] GetAllowedUnits(IGame game);
         void Update(IGame game);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DuckHunt.Containers;
+using DuckHunt.Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace DuckHunt.Controllers
         InputContainer InputContainer { get; }
         UnitContainer UnitContainer { get; }
         GraphicsContainer GraphicsContainer { get; }
+        ILevel CurrentLevel { get; set; }
         Random Random { get; }
 
         double Time { get; }

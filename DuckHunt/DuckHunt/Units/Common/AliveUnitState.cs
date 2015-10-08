@@ -27,7 +27,7 @@ namespace DuckHunt.Units.Common
         {
             if (unit.isHit(point))
             {
-                LevelFactory.Instance.CurrentLevel.Kills++;
+                game.CurrentLevel.Kills++;
                 unit.setState(UnitFactories.States.Create(unit.Name, "dead"), game);
                 return 1;
             }

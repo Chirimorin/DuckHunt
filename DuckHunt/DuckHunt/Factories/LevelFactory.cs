@@ -26,18 +26,6 @@ namespace DuckHunt.Factories
         }
         #endregion
 
-        #region Current level
-        private ILevel _currentLevel;
-        /// <summary>
-        /// The current level
-        /// </summary>
-        public ILevel CurrentLevel
-        {
-            get { return _currentLevel; }
-            private set { _currentLevel = value; }
-        }
-        #endregion
-
         #region Level management
         /// <summary>
         /// Start een nieuw spel bij level 1.
@@ -56,7 +44,7 @@ namespace DuckHunt.Factories
         public void NextLevel(IGame game, int currentLevel)
         {
             game.UnitContainer.ClearAllUnits(game);
-            CurrentLevel = CreateLevel(currentLevel + 1);
+            game.CurrentLevel = CreateLevel(currentLevel + 1);
         }
 
         /// <summary>
@@ -67,7 +55,7 @@ namespace DuckHunt.Factories
         public void BonusLevel(IGame game, int currentLevel)
         {
             game.UnitContainer.ClearAllUnits(game);
-            CurrentLevel = CreateBonusLevel(currentLevel);
+            game.CurrentLevel = CreateBonusLevel(currentLevel);
         }
 
         /// <summary>
@@ -85,7 +73,7 @@ namespace DuckHunt.Factories
         public void GameOver(IGame game)
         {
             game.UnitContainer.ClearAllUnits(game);
-            CurrentLevel = new GameOver();
+            game.CurrentLevel = new GameOver();
         }
         #endregion
 

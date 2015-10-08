@@ -201,6 +201,7 @@ namespace DuckHunt.Units
         {
             BirthTime = game.Time;
             setState(UnitFactories.States.Create(Name, "alive"), game);
+            game.UnitContainer.AddUnit(this);
         }
 
         public virtual void destroy(IGame game)

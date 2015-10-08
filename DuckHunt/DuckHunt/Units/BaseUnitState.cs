@@ -80,7 +80,8 @@ namespace DuckHunt.Units
 
         public virtual void CleanUp(IGame game)
         {
-            DrawBehavior.RemoveGfx(game);
+            if (DrawBehavior != null)
+                DrawBehavior.RemoveGfx(game);
         }
 
         public virtual void CreateMoveBehavior(string unitName)
