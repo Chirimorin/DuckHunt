@@ -252,7 +252,7 @@ namespace DuckHunt.Controllers
 
             DT = (ticks - _totalTicks) * (_tickTime);
             Time = ticks * _tickTime;
-            FPS = Math.Round(1d / DT, 1);
+            FPS = Math.Round(1.0 / DT, 0);
 
             _accumulator += DT;
 

@@ -189,9 +189,6 @@ namespace DuckHunt.Units
         #region Draw
         public void Draw(IGame game, Canvas canvas)
         {
-            if (IsDestroyed && State != null)
-                State.CleanUp(canvas);
-
             if (_oldState != null)
             {
                 _oldState.CleanUp(canvas);
