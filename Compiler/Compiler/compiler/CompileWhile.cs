@@ -20,13 +20,13 @@ namespace Compiler.compiler
             Nodes.AddLast(jump);
             Nodes.AddLast(new DoNothing());
 
-            conditionalJump.OnTrueJumpTo = Nodes.ElementAt(2);
-            conditionalJump.OnFalseJumpTo = Nodes.ElementAt(4);
+            conditionalJump.OnTrueJumpToNode = Nodes.ElementAt(2);
+            conditionalJump.OnFalseJumpToNode = Nodes.ElementAt(4);
 
-            jump.JumpTo = Nodes.ElementAt(0);
+            jump.JumpToNode = Nodes.ElementAt(0);
         }
 
-        public override void compile()
+        public override void compile(LinkedList<Token> currentToken)
         {
 
         }

@@ -22,7 +22,7 @@ namespace Compiler.compiler
             }
         }
 
-        public abstract void compile();
+        public abstract void compile(LinkedList<Token> currentToken);
 
         /*public ActionNode getLastToken()
         {

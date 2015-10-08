@@ -8,18 +8,18 @@ namespace Compiler.action_nodes
 {
     public class ConditionalJump : ActionNode
     {
-        private ActionNode _onTrueJumpTo;
-        public ActionNode OnTrueJumpTo
+        private ActionNode _onTrueJumpToNode;
+        public ActionNode OnTrueJumpToNode
         {
-            get { return _onTrueJumpTo; }
-            set { _onTrueJumpTo = value; }
+            get { return _onTrueJumpToNode; }
+            set { _onTrueJumpToNode = value; }
         }
 
-        private ActionNode _onFalseJumpTo;
-        public ActionNode OnFalseJumpTo
+        private ActionNode _onFalseJumpToNode;
+        public ActionNode OnFalseJumpToNode
         {
-            get { return _onFalseJumpTo; }
-            set { _onFalseJumpTo = value; }
+            get { return _onFalseJumpToNode; }
+            set { _onFalseJumpToNode = value; }
         }
         
         public override void Accept(NodeVisitor visitor)

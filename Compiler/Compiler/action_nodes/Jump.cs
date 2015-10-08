@@ -8,11 +8,11 @@ namespace Compiler.action_nodes
 {
     public class Jump : ActionNode
     {
-        private ActionNode _jumpTo;
-        public ActionNode JumpTo
+        private ActionNode _jumpToNode;
+        public ActionNode JumpToNode
         {
-            get { return _jumpTo; }
-            set { _jumpTo = value; }
+            get { return _jumpToNode; }
+            set { _jumpToNode = value; }
         }
 
         public override void Accept(NodeVisitor visitor)
