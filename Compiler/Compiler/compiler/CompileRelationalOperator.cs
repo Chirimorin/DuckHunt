@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileRelationalOperator : CompileOperator
+    /*public class CompileRelationalOperator : CompileOperator
     {
         public CompileRelationalOperator()
         {
@@ -16,5 +16,5 @@ namespace Compiler.compiler
             tokenDictionary.Add(Tokens.GreaterThan, "$>");
             tokenDictionary.Add(Tokens.SmallerThan, "$<");
         }
-    }
+    }*/
 }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileEqualityOperator : CompileOperator
+    /*public class CompileEqualityOperator : CompileOperator
     {
         public CompileEqualityOperator()
         {
             Dictionary<Tokens, string> tokenDictionary = TokenDictionary;
             tokenDictionary.Add(Tokens.Equals, "$==");
         }
-    }
+    }*/
 }

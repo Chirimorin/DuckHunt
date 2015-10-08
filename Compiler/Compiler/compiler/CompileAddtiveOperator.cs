@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileAddtiveOperator : CompileOperator
+    /*public class CompileAddtiveOperator : CompileOperator
     {
         public CompileAddtiveOperator()
         {
@@ -14,5 +14,5 @@ namespace Compiler.compiler
             tokenDictionary.Add(Tokens.Plus, "$+");
             tokenDictionary.Add(Tokens.Minus, "$-");
         }
-    }
+    }*/
 }

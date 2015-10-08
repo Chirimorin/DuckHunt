@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileIf : CompileIfGeneral
+    /*public class CompileIf : CompileIfGeneral
     {
-    }
+    }*/
 }

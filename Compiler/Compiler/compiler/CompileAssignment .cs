@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileAssignment : BaseCompiler
+    /*public class CompileAssignment : BaseCompiler
     {
-    }
+    }*/
 }

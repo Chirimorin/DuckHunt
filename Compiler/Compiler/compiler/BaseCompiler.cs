@@ -9,16 +9,24 @@ namespace Compiler.compiler
 {
     public abstract class BaseCompiler
     {
-        //private LinkedList<Node> Actions { get; set; }
-
-        public virtual void compile(Token currentToken)
+        private LinkedList<ActionNode> _nodes;
+        public LinkedList<ActionNode> Nodes
         {
-
+            get
+            { 
+                if (_nodes == null)
+                {
+                    _nodes = new LinkedList<ActionNode>();
+                }
+                return _nodes; 
+            }
         }
 
-        public void getLastToken()
+        public abstract void compile();
+
+        /*public ActionNode getLastToken()
         {
 
-        }
+        }*/
     }
 }

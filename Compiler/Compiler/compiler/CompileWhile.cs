@@ -9,36 +9,32 @@ namespace Compiler.compiler
 {
     public class CompileWhile : BaseCompiler
     {
-        private LinkedList<object> compileStatement;
-        private LinkedList<object> condition;
-        private LinkedList<object> body;
-
         public CompileWhile()
         {
-            compileStatement = new LinkedList<object>();
-            condition = new LinkedList<object>();
-            body = new LinkedList<object>();
+            ConditionalJump conditionalJump = new ConditionalJump();
+            Jump jump = new Jump();
 
-            var conditionalJump = new ConditionalJump();
-            var jump = new Jump();
+            Nodes.AddLast(new DoNothing());
+            Nodes.AddLast(conditionalJump);
+            Nodes.AddLast(new DoNothing());
+            Nodes.AddLast(jump);
+            Nodes.AddLast(new DoNothing());
 
-            compileStatement.AddLast(new DoNothing());
-            compileStatement.AddLast(condition);
-            compileStatement.AddLast(conditionalJump);
-            compileStatement.AddLast(body);
-            compileStatement.AddLast(jump);
-            compileStatement.AddLast(new DoNothing());
+            conditionalJump.OnTrueJumpTo = Nodes.ElementAt(2);
+            conditionalJump.OnFalseJumpTo = Nodes.ElementAt(4);
 
-
-            /*jumpBackNode.JumpToNode = _compiledStatement.First; // JumpToNode is een extra property ten opzichte van andere nodes.
-            conditionalJumpNode.NextOnTrue = _body.First; // NextOnTrue en NextOnFalse zijn extra properties ten opzichte van andere nodes.
-            conditionalJumpNode.NextOnFalse = _compiledStatement.Last;*/
+            jump.JumpTo = Nodes.ElementAt(0);
         }
 
-        public override void compile(Token currentToken)
+        public override void compile()
         {
 
         }
+
+        /*public ActionNode getLastToken()
+        {
+
+        }*/
 
     }
 }
