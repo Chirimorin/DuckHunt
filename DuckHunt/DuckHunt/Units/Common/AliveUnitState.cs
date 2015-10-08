@@ -23,12 +23,12 @@ namespace DuckHunt.Units.Common
             FleeTime = 10.0;
         }
 
-        public override int onClick(Unit unit, Point point)
+        public override int onClick(Unit unit, Point point, IGame game)
         {
             if (unit.isHit(point))
             {
                 LevelFactory.Instance.CurrentLevel.Kills++;
-                unit.State = UnitFactories.States.Create(unit.Name, "dead");
+                unit.setState(UnitFactories.States.Create(unit.Name, "dead"), game);
                 return 1;
             }
             return 0;
@@ -39,7 +39,7 @@ namespace DuckHunt.Units.Common
             base.Update(unit, game);
             
             if ((game.Time - unit.BirthTime) > FleeTime)
-                unit.State = UnitFactories.States.Create(unit.Name, "fleeing");
+                unit.setState(UnitFactories.States.Create(unit.Name, "fleeing"), game);
         }
     }
 }

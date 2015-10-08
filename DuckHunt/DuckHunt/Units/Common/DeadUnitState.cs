@@ -42,7 +42,7 @@ namespace DuckHunt.Units.Common
             FadeTime = 0.75;
         }
 
-        public override int onClick(Unit unit, Point point)
+        public override int onClick(Unit unit, Point point, IGame game)
         {
             // Dode units kunnen geen punten opleveren.
             return 0;
@@ -61,7 +61,7 @@ namespace DuckHunt.Units.Common
             Timer += game.DT;
 
             if (Timer > DespawnTime)
-                unit.destroy();
+                unit.destroy(game);
             else if (Timer > (DespawnTime - FadeTime))
             {
                 // Tijd dat de unit al aan het faden is

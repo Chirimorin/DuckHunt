@@ -100,22 +100,14 @@ namespace DuckHunt.Behaviors.Draw
             _timePassed = 0;
         }
 
-        public void AddToCanvas(Canvas canvas)
+        public void AddGfx(IGame game)
         {
-            if (!_addedToCanvas)
-            {
-                canvas.Children.Add(_gfx);
-                _addedToCanvas = true;
-            }
+            game.GraphicsContainer.AddGraphic(_gfx);
         }
 
-        public void RemoveFromCanvas(Canvas canvas)
+        public void RemoveGfx(IGame game)
         {
-            if (_addedToCanvas)
-            {
-                canvas.Children.Remove(_gfx);
-                _addedToCanvas = false;
-            }
+            game.GraphicsContainer.RemoveGraphic(_gfx);
         }
     }
 }

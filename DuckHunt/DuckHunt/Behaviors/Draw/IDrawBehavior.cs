@@ -13,8 +13,8 @@ namespace DuckHunt.Behaviors.Draw
     public interface IDrawBehavior
     {
         void Draw(Unit unit, IGame game);
-        void AddToCanvas(Canvas canvas);
-        void RemoveFromCanvas(Canvas canvas);
+        void AddGfx(IGame game);
+        void RemoveGfx(IGame game);
         void Reset();
     }
 }

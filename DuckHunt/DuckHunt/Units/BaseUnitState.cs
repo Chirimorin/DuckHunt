@@ -22,14 +22,18 @@ namespace DuckHunt.Units
         }
 
         protected IDrawBehavior _drawBehavior;
-        protected IDrawBehavior _oldDrawBehavior;
         protected virtual IDrawBehavior DrawBehavior
         {
             get { return _drawBehavior; }
-            set
+        }
+        protected virtual void setDrawBehavior(IDrawBehavior behavior, IGame game)
+        {
+            if (behavior != null)
             {
-                _oldDrawBehavior = _drawBehavior;
-                _drawBehavior = value;
+                if (_drawBehavior != null)
+                    _drawBehavior.RemoveGfx(game);
+                _drawBehavior = behavior;
+                _drawBehavior.AddGfx(game);
             }
         }
 
@@ -55,7 +59,7 @@ namespace DuckHunt.Units
         /// <param name="unit">De unit om te controleren</param>
         /// <param name="point">Het punt waar geklikt is</param>
         /// <returns>Het aantal punten opgeleverd door de unit</returns>
-        public abstract int onClick(Unit unit, Point point);
+        public abstract int onClick(Unit unit, Point point, IGame game);
 
         public virtual void Update(Unit unit, IGame game)
         {
@@ -66,28 +70,17 @@ namespace DuckHunt.Units
             MoveBehavior.FixedTimePassed(unit, game);
         }
 
-        public virtual void Draw(Unit unit, IGame game, Canvas canvas)
+        public virtual void Draw(Unit unit, IGame game)
         {
             if (DrawBehavior == null)
-                CreateDrawBehavior(unit.Name);
-
-            if (_oldDrawBehavior != null)
-            {
-                _oldDrawBehavior.RemoveFromCanvas(canvas);
-                _oldDrawBehavior = null;
-            }
-
-            if (!unit.IsDestroyed)
-                DrawBehavior.AddToCanvas(canvas);
-            else
-                DrawBehavior.RemoveFromCanvas(canvas);
+                CreateDrawBehavior(unit.Name, game);
 
             DrawBehavior.Draw(unit, game);
         }
 
-        public virtual void CleanUp(Canvas canvas)
+        public virtual void CleanUp(IGame game)
         {
-            DrawBehavior.RemoveFromCanvas(canvas);
+            DrawBehavior.RemoveGfx(game);
         }
 
         public virtual void CreateMoveBehavior(string unitName)
@@ -95,9 +88,9 @@ namespace DuckHunt.Units
             MoveBehavior = UnitFactories.MoveBehaviors.Create(unitName, Name);
         }
 
-        public virtual void CreateDrawBehavior(string unitName)
+        public virtual void CreateDrawBehavior(string unitName, IGame game)
         {
-            DrawBehavior = UnitFactories.DrawBehaviors.Create(unitName, Name);
+            setDrawBehavior(UnitFactories.DrawBehaviors.Create(unitName, Name), game);
         }
         #endregion
     }

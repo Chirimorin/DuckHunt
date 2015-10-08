@@ -11,6 +11,7 @@ namespace DuckHunt.Controllers
     {
         InputContainer InputContainer { get; }
         UnitContainer UnitContainer { get; }
+        GraphicsContainer GraphicsContainer { get; }
         Random Random { get; }
 
         double Time { get; }

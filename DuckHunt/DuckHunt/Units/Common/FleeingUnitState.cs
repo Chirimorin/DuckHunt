@@ -24,7 +24,7 @@ namespace DuckHunt.Units.Common
                 unit.PosX > CONSTANTS.CANVAS_WIDTH ||
                 unit.PosYBottom < 0 ||
                 unit.PosY > CONSTANTS.CANVAS_HEIGHT)
-                unit.destroy();
+                unit.destroy(game);
         }
     }
 }

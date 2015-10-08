@@ -67,7 +67,7 @@ namespace DuckHunt.Containers
 
                 foreach (Point point in ClickedPoints)
                 {
-                    int score = game.UnitContainer.HandleClick(point);
+                    int score = game.UnitContainer.HandleClick(point, game);
                     EarnedScore += score;
 
                     if (score == 0)

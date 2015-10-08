@@ -38,8 +38,17 @@ namespace DuckHunt.Controllers
         public UnitContainer UnitContainer
         {
             get { return _unitContainer; }
-            set { _unitContainer = value; }
+            private set { _unitContainer = value; }
         }
+
+        private GraphicsContainer _graphicsContainer;
+
+        public GraphicsContainer GraphicsContainer
+        {
+            get { return _graphicsContainer; }
+            private set { _graphicsContainer = value; }
+        }
+
         #endregion
 
         private Random _random;
@@ -208,6 +217,7 @@ namespace DuckHunt.Controllers
             // Nieuwe containers aanmaken aan het begin van het spel. 
             InputContainer = new InputContainer();
             UnitContainer = new UnitContainer();
+            GraphicsContainer = new GraphicsContainer();
 
             CurrentScore = 0;
             LevelFactory.Instance.NewGame(this);

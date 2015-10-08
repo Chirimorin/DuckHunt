@@ -55,36 +55,36 @@ namespace DuckHunt.Containers
         /// <summary>
         /// Verwijderd alle units direct
         /// </summary>
-        public void ClearAllUnits()
+        public void ClearAllUnits(IGame game)
         {
             // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
-                unit.destroy();
+                unit.destroy(game);
             }
         }
 
         /// <summary>
         /// Haalt alle units netjes weg
         /// </summary>
-        public void CleanupUnits()
+        public void CleanupUnits(IGame game)
         {
             // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
                 if (unit.State.Name != "endlevel")
-                    unit.State = UnitFactories.States.Create(unit.Name, "endlevel");
+                    unit.setState(UnitFactories.States.Create(unit.Name, "endlevel"), game);
             }
         }
 
-        public int HandleClick(Point point)
+        public int HandleClick(Point point, IGame game)
         {
             int score = 0;
 
             // Lock niet nodig, dit draait op de game thread.
             foreach (Unit unit in Units)
             {
-                score += unit.onClick(point);
+                score += unit.onClick(point, game);
             }
 
             return score;
@@ -99,14 +99,14 @@ namespace DuckHunt.Containers
             }
         }
 
-        public void DrawAllUnits(IGame game, Canvas canvas)
+        public void DrawAllUnits(IGame game)
         {
             // UI thread, dus lock
             lock (unitListLock)
             {
                 foreach (Unit unit in Units)
                 {
-                    unit.Draw(game, canvas);
+                    unit.Draw(game);
                 }
             }
         }

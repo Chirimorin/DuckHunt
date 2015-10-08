@@ -136,18 +136,21 @@ namespace DuckHunt.Units
 
         #region State
         private BaseUnitState _state;
-        private BaseUnitState _oldState;
         /// <summary>
         /// De huidige state van de unit
         /// </summary>
         public BaseUnitState State
         {
             get { return _state; }
-            set
+        }
+        public void setState(BaseUnitState state, IGame game)
+        {
+            if (state != null)
             {
-                _oldState = _state;
-                _state = value;
-                _state.CreateMoveBehavior(Name);
+                if (_state != null)
+                    _state.CleanUp(game);
+                _state = state;
+                state.CreateMoveBehavior(Name);
             }
         }
         #endregion
@@ -168,9 +171,9 @@ namespace DuckHunt.Units
         /// Wordt aangeroepen bij elke muisklik
         /// </summary>
         /// <param name="point">Het punt waar geklikt is</param>
-        public int onClick(Point point)
+        public int onClick(Point point, IGame game)
         {
-            return State.onClick(this, point);
+            return State.onClick(this, point, game);
         }
         #endregion
 
@@ -187,15 +190,9 @@ namespace DuckHunt.Units
         #endregion
 
         #region Draw
-        public void Draw(IGame game, Canvas canvas)
+        public void Draw(IGame game)
         {
-            if (_oldState != null)
-            {
-                _oldState.CleanUp(canvas);
-                _oldState = null;
-            }
-
-            State.Draw(this, game, canvas);
+            State.Draw(this, game);
         }
         #endregion
 
@@ -203,12 +200,13 @@ namespace DuckHunt.Units
         public virtual void init(IGame game)
         {
             BirthTime = game.Time;
-            State = UnitFactories.States.Create(Name, "alive");
+            setState(UnitFactories.States.Create(Name, "alive"), game);
         }
 
-        public virtual void destroy()
+        public virtual void destroy(IGame game)
         {
             IsDestroyed = true;
+            State.CleanUp(game);
         }
 
         public virtual bool isHit(Point point)

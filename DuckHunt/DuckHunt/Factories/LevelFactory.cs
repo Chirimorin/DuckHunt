@@ -55,7 +55,7 @@ namespace DuckHunt.Factories
         /// <param name="currentLevel">Het huidige level</param>
         public void NextLevel(IGame game, int currentLevel)
         {
-            game.UnitContainer.ClearAllUnits();
+            game.UnitContainer.ClearAllUnits(game);
             CurrentLevel = CreateLevel(currentLevel + 1);
         }
 
@@ -66,7 +66,7 @@ namespace DuckHunt.Factories
         /// <param name="currentLevel">Het huidige level</param>
         public void BonusLevel(IGame game, int currentLevel)
         {
-            game.UnitContainer.ClearAllUnits();
+            game.UnitContainer.ClearAllUnits(game);
             CurrentLevel = CreateBonusLevel(currentLevel);
         }
 
@@ -76,7 +76,7 @@ namespace DuckHunt.Factories
         /// <param name="game">instantie van Game</param>
         public void EndLevel(IGame game)
         {
-            game.UnitContainer.CleanupUnits();
+            game.UnitContainer.CleanupUnits(game);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace DuckHunt.Factories
         /// </summary>
         public void GameOver(IGame game)
         {
-            game.UnitContainer.ClearAllUnits();
+            game.UnitContainer.ClearAllUnits(game);
             CurrentLevel = new GameOver();
         }
         #endregion
