@@ -64,21 +64,27 @@ namespace DuckHunt.Behaviors.Draw
         {
             if (_loop || !_animationCompleted)
             {
-                _timePassed += game.DT;
+                _timePassed += game.DrawDT;
 
                 // Update sprites when needed. Even for low framerates
-                while (_timePassed > _frameTime)
+                if (_timePassed > _frameTime)
                 {
-                    _gfx.Source = _sprites[_currentFrame++];
-                    _timePassed -= _frameTime;
-
-                    if (_currentFrame == _frameCount)
+                    int frames = (int)Math.Floor(_timePassed / _frameTime);
+                    _timePassed -= (frames * _frameTime);
+                    _currentFrame += frames;
+                    
+                    while (_loop && _currentFrame >= _frameCount)
                     {
-                        if (_loop)
-                            _currentFrame = 0;
-                        else
-                            _animationCompleted = true;
+                        _currentFrame -= _frameCount;
                     }
+
+                    if (!_loop && _currentFrame >= _frameCount)
+                    {
+                        _currentFrame = _frameCount - 1;
+                        _animationCompleted = true;
+                    }
+
+                    _gfx.Source = _sprites[_currentFrame];
                 }
             }
 

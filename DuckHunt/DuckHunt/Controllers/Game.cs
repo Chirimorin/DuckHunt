@@ -76,13 +76,24 @@ namespace DuckHunt.Controllers
         #region Time
         private double _dt;
         /// <summary>
-        /// Frame tijd (in seconden)
+        /// Update tijd (in seconden)
         /// </summary>
         public double DT
         {
             get { return _dt; }
             private set { _dt = value; }
         }
+
+        private double _drawDT;
+        /// <summary>
+        /// Tijd sinds laatste draw frame
+        /// </summary>
+        public double DrawDT
+        {
+            get { return _drawDT; }
+            private set { _drawDT = value; }
+        }
+
 
         private double _fps;
         /// <summary>
@@ -106,6 +117,7 @@ namespace DuckHunt.Controllers
 
         private readonly double _tickTime;
         private long _totalTicks;
+        private long _ticksSinceDraw;
 
         private double _accumulator;
         #endregion
@@ -115,7 +127,8 @@ namespace DuckHunt.Controllers
         private bool _isRunning = false;
         public bool IsRunning { get { return _isRunning; } }
 
-        private readonly long minTicksPerFrame = 1;
+        private readonly long minTicksPerUpdate = 1;
+        private readonly long minTicksPerDraw = 1;
         #endregion
 
         public int CurrentScore { get; private set; }
@@ -130,8 +143,13 @@ namespace DuckHunt.Controllers
             _tickTime = 1.0 / Stopwatch.Frequency;
 
             // Bereken de minimale frame tijd
-            if (CONSTANTS.FPS_LIMIT > 0)
-                minTicksPerFrame = Stopwatch.Frequency / CONSTANTS.FPS_LIMIT;
+            if (CONSTANTS.UPDATES_PER_SECOND > 0)
+                minTicksPerUpdate = Stopwatch.Frequency / CONSTANTS.UPDATES_PER_SECOND;
+
+            if (CONSTANTS.DISPLAY_FPS > 0)
+                minTicksPerDraw = Stopwatch.Frequency / CONSTANTS.DISPLAY_FPS;
+
+
 
             // Factory registraties
             #region Units
@@ -237,13 +255,20 @@ namespace DuckHunt.Controllers
             UpdateTime();
             // Accumulator moet 0 zijn hier, andere waarden worden meteen overschreven.
             _accumulator = 0;
+            _ticksSinceDraw = minTicksPerDraw;
 
             while (_isRunning)
             {
                 UpdateTime();
                 HandleInputs();
                 UpdateGame();
-                UpdateScreen();
+
+                if (_ticksSinceDraw > minTicksPerDraw)
+                {
+                    Console.WriteLine("Ticks since draw: " + _ticksSinceDraw + "; DrawDT: " + DrawDT);
+                    UpdateScreen();
+                    _ticksSinceDraw = 0;
+                }
 
                 // Thread.Sleep zorgt voor haperen
                 // Yield tot de minimale tijd voorbij is
@@ -261,7 +286,7 @@ namespace DuckHunt.Controllers
         /// <returns>true als de volgende frame kan starten</returns>
         private bool TimePassed()
         {
-            return ((Stopwatch.GetTimestamp() - _totalTicks) > minTicksPerFrame);
+            return ((Stopwatch.GetTimestamp() - _totalTicks) > minTicksPerUpdate);
         }
 
         /// <summary>
@@ -275,6 +300,9 @@ namespace DuckHunt.Controllers
             Time = ticks * _tickTime;
             FPS = Math.Round(1.0 / DT, 0);
 
+            _ticksSinceDraw += (ticks - _totalTicks);
+            DrawDT = _ticksSinceDraw * _tickTime;
+
             _accumulator += DT;
 
             _totalTicks = ticks;
@@ -285,7 +313,10 @@ namespace DuckHunt.Controllers
         /// </summary>
         private void HandleInputs()
         {
-            _ui.UpdateMousePosition(); // Dispatcht zichzelf naar de UI thread.
+            if (_ticksSinceDraw > minTicksPerDraw)
+            {
+                _ui.UpdateMousePosition(); // Dispatcht zichzelf naar de UI thread.
+            }
 
             InputContainer.HandleInputs(this);
         }

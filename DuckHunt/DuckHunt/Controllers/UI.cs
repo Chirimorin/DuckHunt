@@ -168,51 +168,17 @@ namespace DuckHunt.Controllers
             });
         }
 
-        public static void TryRemoveGraphics(UIElement element)
-        {
-            _instance.RemoveGraphics(element);
-        }
-        private void RemoveGraphics(UIElement element)
-        {
-            BeginInvoke(() =>
-            {
-                _mainWindow.MainCanvas.Children.Remove(element);
-            });
-        }
-
         /// <summary>
         /// Voert een functie uit op de UI thread.
         /// </summary>
         /// <param name="action">De actie die uitgevoerd moet worden.</param>
-        public static void BeginInvoke(Action action)
+        public void BeginInvoke(Action action)
         {
             // Als de huidige thread access heeft, is de dispatcher niet nodig.
             if (_dispatcher.CheckAccess())
                 action.Invoke();
             else
                 _dispatcher.BeginInvoke(action);
-        }
-
-        /// <summary>
-        /// Voert een funcite synchroon uit op de UI thread, met return value.
-        /// </summary>
-        /// <typeparam name="T">Het type van de return value</typeparam>
-        /// <param name="action">De actie die uitgevoerd moet worden</param>
-        /// <returns>De waarde die de actie returned</returns>
-        public static T Invoke<T>(Func<T> action)
-        {
-            try
-            {
-                if (_dispatcher.CheckAccess())
-                    return action.Invoke();
-                else
-                    return _dispatcher.Invoke<T>(action);
-            }
-            catch (TaskCanceledException)
-            {
-                // Doe niks, waarschijnlijk word het programma afgesloten.
-                return default(T);
-            }
         }
     }
 }

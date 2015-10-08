@@ -8,7 +8,8 @@ namespace DuckHunt
 {
     public static class CONSTANTS
     {
-        public static readonly int FPS_LIMIT = 240; // -1 voor geen limiet, niet aan te raden (UI thread freeze, ondanks yield :|)
+        public static readonly int UPDATES_PER_SECOND = -1; // -1 voor geen limiet
+        public static readonly int DISPLAY_FPS = 1000; // Niet te hoog, anders loopt de UI thread vast
         public static readonly double fixedTimeCalls = 0.02; // Tijd tussen elke fixed time call. 
 
         // Grootte voor de canvas. Wordt automatisch geschaald naar scherm grootte. 
