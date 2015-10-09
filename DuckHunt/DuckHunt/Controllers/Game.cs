@@ -245,17 +245,21 @@ namespace DuckHunt.Controllers
             // Accumulator moet 0 zijn hier, andere waarden worden meteen overschreven.
             _accumulator = 0;
             _ticksSinceDraw = minTicksPerDraw;
+            int updatesSinceDraw = 0;
 
             while (_isRunning)
             {
                 UpdateTime();
+                updatesSinceDraw++;
+
                 HandleInputs();
                 UpdateGame();
 
                 if (_ticksSinceDraw > minTicksPerDraw)
                 {
-                    UpdateScreen(1.0/(_ticksSinceDraw * _tickTime));
+                    UpdateScreen(1.0/(_ticksSinceDraw * _tickTime), updatesSinceDraw);
                     _ticksSinceDraw = 0;
+                    updatesSinceDraw = 0;
                 }
                 
                 // Thread.Sleep zorgt voor haperen
@@ -268,7 +272,7 @@ namespace DuckHunt.Controllers
             }
 
             // Update het scherm nog 1 keer na einde game (voor gameover scherm)
-            UpdateScreen(0);
+            UpdateScreen(0, 0);
         }
 
         /// <summary>
@@ -344,9 +348,9 @@ namespace DuckHunt.Controllers
         /// <summary>
         /// Update de elementen op het scherm
         /// </summary>
-        private void UpdateScreen(double fps)
+        private void UpdateScreen(double fps, int updatesSinceDraw)
         {
-            _ui.UpdateScreen(this, fps); // Dispatcht zichzelf naar de UI thread.
+            _ui.UpdateScreen(this, fps, updatesSinceDraw); // Dispatcht zichzelf naar de UI thread.
         }
     }
 }

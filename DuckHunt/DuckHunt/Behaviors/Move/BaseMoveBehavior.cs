@@ -85,7 +85,7 @@ namespace DuckHunt.Behaviors.Move
             else if (unit.VX < -MaxVX)
                 unit.VX = -MaxVX;
 
-            unit.PosX += GetTimeBased(unit.VX, game);
+            unit.PosX += GetTimeBased(unit.VX * game.CurrentLevel.SpeedModifier, game);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace DuckHunt.Behaviors.Move
             else if (unit.VY < -MaxVY)
                 unit.VY = -MaxVY;
 
-            unit.PosY += GetTimeBased(unit.VY, game);
+            unit.PosY += GetTimeBased(unit.VY * game.CurrentLevel.SpeedModifier, game);
         }
 
         /// <summary>

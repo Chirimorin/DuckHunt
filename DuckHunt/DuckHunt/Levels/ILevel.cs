@@ -15,6 +15,7 @@ namespace DuckHunt.Levels
         int Level { get; }
         int Kills { get; set; }
         int ShotsLeft { get; }
+        double SpeedModifier { get; }
 
         string[] GetAllowedUnits(IGame game);
         void Update(IGame game);

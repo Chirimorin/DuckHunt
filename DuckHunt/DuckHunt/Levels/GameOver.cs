@@ -17,6 +17,8 @@ namespace DuckHunt.Levels
         public int Kills { get { return 0; } set { } }
         public string BigText { get { return Name + "\nScore: " + _finalScore; } }
 
+        public double SpeedModifier { get { return 1.0; } }
+
         private int _finalScore = 0;
 
         public string[] GetAllowedUnits(IGame game)

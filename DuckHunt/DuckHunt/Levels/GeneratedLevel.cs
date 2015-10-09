@@ -18,6 +18,13 @@ namespace DuckHunt.Levels
         protected override int MaxSpawns { get { return _maxSpawns; } }
         protected override double SpawnDelay { get { return _spawnDelay; } }
         protected override double TimeBeforeStart { get { return 2.5; } }
+        public override double SpeedModifier
+        {
+            get
+            {
+                return 1 + (Level * 0.025);
+            }
+        }
 
         public override int ShotsLeft
         {
