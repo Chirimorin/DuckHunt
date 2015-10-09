@@ -16,25 +16,31 @@ namespace Compiler
 
         private int Level { get; set; }
 
-        private KeyValuePair<string, Tokens>[] allTokens = new KeyValuePair<string, Tokens>[]
+        private Dictionary<string, Tokens> allTokens = new Dictionary<string, Tokens>()
         {
-            new KeyValuePair<string, Tokens>("while", Tokens.If),
-            new KeyValuePair<string, Tokens>("print", Tokens.Else),
-            new KeyValuePair<string, Tokens>("else", Tokens.While),
-            new KeyValuePair<string, Tokens>(">", Tokens.Equals),
-            new KeyValuePair<string, Tokens>("+>", Tokens.GreaterEquals),
-            new KeyValuePair<string, Tokens>("=>", Tokens.SmallerEquals),
-            new KeyValuePair<string, Tokens>("+", Tokens.GreaterThan),
-            new KeyValuePair<string, Tokens>("=", Tokens.SmallerThan),
-            new KeyValuePair<string, Tokens>("-", Tokens.Becomes),
-            new KeyValuePair<string, Tokens>("==", Tokens.Plus),
-            new KeyValuePair<string, Tokens>("<", Tokens.Minus),
-            new KeyValuePair<string, Tokens>("if", Tokens.Print),
-            new KeyValuePair<string, Tokens>("¡", Tokens.EllipsisOpen),
-            new KeyValuePair<string, Tokens>("!", Tokens.EllipsisClose),
-            new KeyValuePair<string, Tokens>("»", Tokens.BracketsOpen),
-            new KeyValuePair<string, Tokens>("«", Tokens.BracketsClose),
-            new KeyValuePair<string, Tokens>("~", Tokens.Semicolon)
+            {"while", Tokens.If},
+            {"print", Tokens.Else},
+            {"else", Tokens.While},
+            {">", Tokens.Equals},
+            {"+>", Tokens.GreaterEquals},
+            {"=>", Tokens.SmallerEquals},
+            {"+", Tokens.GreaterThan},
+            {"=", Tokens.SmallerThan},
+            {"-", Tokens.Becomes},
+            {"==", Tokens.Plus},
+            {"<", Tokens.Minus},
+            {"if", Tokens.Print},
+            {"¡", Tokens.EllipsisOpen},
+            {"!", Tokens.EllipsisClose},
+            {"»", Tokens.BracketsOpen},
+            {"«", Tokens.BracketsClose},
+            {"~", Tokens.Semicolon}
+        };
+        private Dictionary<Tokens, Tokens> partners = new Dictionary<Tokens, Tokens>()
+        {
+            {Tokens.Else, Tokens.If },
+            {Tokens.EllipsisClose, Tokens.EllipsisOpen },
+            {Tokens.BracketsClose, Tokens.BracketsOpen }
         };
 
         public Tokenizer()
@@ -95,23 +101,47 @@ namespace Compiler
 
                     setPartner(currentToken);
 
-                    // Haalt "if" van de stack af als er geen "else" is
-                    if ((currentToken.TokenType == Tokens.Identifier ||
-                         currentToken.TokenType == Tokens.If ||
-                         currentToken.TokenType == Tokens.While ||
-                         currentToken.TokenType == Tokens.Print) &&
-                         TokenStack.Count > 0 && TokenStack.Peek().TokenType == Tokens.If)
+
+                    Tokens[] ignoreTokens = new Tokens[]
                     {
-                        TokenStack.Pop();
+                        Tokens.Else,
+                        Tokens.BracketsClose,
+                        Tokens.BracketsOpen,
+                        Tokens.EllipsisOpen,
+                        Tokens.EllipsisClose
+                    };
+
+                    // Haalt "if" van de stack af als er geen "else" is
+                    if (TokenStack.Count != 0)
+                    {
+                        Token topToken = TokenStack.Peek();
+                    
+                        if (topToken.TokenType == Tokens.If &&
+                            currentToken.Level <= topToken.Level &&
+                            !ignoreTokens.Contains(currentToken.TokenType))
+                        {
+                            TokenStack.Pop();
+                        }
                     }
+
+                    //if ((currentToken.TokenType == Tokens.Identifier ||
+                    //     currentToken.TokenType == Tokens.If ||
+                    //     currentToken.TokenType == Tokens.While ||
+                    //     currentToken.TokenType == Tokens.Print) &&
+                    //     TokenStack.Count > 0 && TokenStack.Peek().TokenType == Tokens.If)
+                    //{
+                    //    TokenStack.Pop();
+                    //}
 
                     checkCodeIsValid(currentToken);
 
-                    if (currentToken.TokenType == Tokens.EllipsisOpen || currentToken.TokenType == Tokens.BracketsOpen)
+                    if (currentToken.TokenType == Tokens.EllipsisOpen || 
+                        currentToken.TokenType == Tokens.BracketsOpen)
                     {
                         Level++;
                     }
-                    else if (currentToken.TokenType == Tokens.EllipsisClose || currentToken.TokenType == Tokens.BracketsClose)
+                    else if (currentToken.TokenType == Tokens.EllipsisClose || 
+                        currentToken.TokenType == Tokens.BracketsClose)
                     {
                         Level--;
                     }
@@ -126,6 +156,8 @@ namespace Compiler
 
         private Tokens getTokenType(string token)
         {
+            Tokens result;
+
             int number = 0;
             if (token[0] == '¤') // Identifier
             {   
@@ -135,9 +167,9 @@ namespace Compiler
             {   
                 return Tokens.Number;
             }
-            else if (allTokens.Any(t => t.Key == token))
+            else if (allTokens.TryGetValue(token, out result))
             {
-                return allTokens.Where(t => t.Key == token).First().Value;
+                return result;
             }
             else // Token bestaat niet
             {   
@@ -147,13 +179,13 @@ namespace Compiler
 
         private void setPartner(Token token)
         {
-            if (TokenStack.Count > 0 &&
-                ((token.TokenType == Tokens.Else && TokenStack.Peek().TokenType == Tokens.If) ||
-                (token.TokenType == Tokens.EllipsisClose && TokenStack.Peek().TokenType == Tokens.EllipsisOpen) ||
-                (token.TokenType == Tokens.BracketsClose && TokenStack.Peek().TokenType == Tokens.BracketsOpen)))
+            Tokens partner;
+            if (partners.TryGetValue(token.TokenType, out partner) &&
+                TokenStack.Count != 0 &&
+                TokenStack.Peek().TokenType == partner)
             {
                 token.Partner = TokenStack.Peek();
-                TokenStack.Peek().Partner = token;
+                token.Partner.Partner = token;
             }
         }
 
@@ -182,10 +214,10 @@ namespace Compiler
                      token.TokenType == Tokens.GreaterThan ||
                      token.TokenType == Tokens.SmallerThan)
                      
-                     && (token == StartToken || (token.Previous != null &&
-                     token.Previous.TokenType != Tokens.Identifier &&
-                     token.Previous.TokenType != Tokens.Number &&
-                     token.Previous.TokenType != Tokens.EllipsisClose)))
+                     && (token == StartToken || !(token.Previous == null ||
+                     token.Previous.TokenType == Tokens.Identifier ||
+                     token.Previous.TokenType == Tokens.Number ||
+                     token.Previous.TokenType == Tokens.EllipsisClose)))
             {
                 throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
             }
