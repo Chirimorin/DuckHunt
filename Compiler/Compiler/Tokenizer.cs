@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Compiler
 {
@@ -16,6 +14,7 @@ namespace Compiler
 
         private int Level { get; set; }
 
+        #region all tokens
         private Dictionary<string, Tokens> allTokens = new Dictionary<string, Tokens>()
         {
             {"while", Tokens.If},
@@ -36,12 +35,137 @@ namespace Compiler
             {"«", Tokens.BracketsClose},
             {"~", Tokens.Semicolon}
         };
+        #endregion
+
+        #region push to stack tokens
+        Tokens[] pushToStackTokens = new Tokens[]
+        {
+            Tokens.If,
+            Tokens.EllipsisOpen,
+            Tokens.BracketsOpen
+        };
+        #endregion
+
+        #region partners
         private Dictionary<Tokens, Tokens> partners = new Dictionary<Tokens, Tokens>()
         {
             {Tokens.Else, Tokens.If },
             {Tokens.EllipsisClose, Tokens.EllipsisOpen },
             {Tokens.BracketsClose, Tokens.BracketsOpen }
         };
+        #endregion
+
+        #region ignore tokens
+        Tokens[] ignoreTokens = new Tokens[]
+        {
+            Tokens.Else,
+            Tokens.BracketsClose,
+            Tokens.BracketsOpen,
+            Tokens.EllipsisOpen,
+            Tokens.EllipsisClose
+        };
+        #endregion
+
+        #region increase/decrease tokens
+        Tokens[] increaseTokens = new Tokens[]
+        {
+            Tokens.EllipsisOpen,
+            Tokens.BracketsOpen
+        };
+
+        Tokens[] decreaseTokens = new Tokens[]
+        {
+            Tokens.EllipsisClose,
+            Tokens.BracketsClose
+        };
+        #endregion
+
+        #region possible start tokens
+        Tokens[] possibleStartTokens = new Tokens[]
+        {
+            Tokens.Identifier,
+            Tokens.If,
+            Tokens.While,
+            Tokens.Print
+        };
+        #endregion
+
+        #region possible previous tokens
+        private Dictionary<Tokens, Tokens[]> possiblePreviousTokens = new Dictionary<Tokens, Tokens[]>()
+        {
+            {Tokens.If, new Tokens[] {
+                Tokens.BracketsOpen,
+                Tokens.BracketsClose,
+                Tokens.Semicolon } },
+            {Tokens.Else, new Tokens[] {
+                Tokens.BracketsClose } },
+            {Tokens.While, new Tokens[] {
+                Tokens.BracketsOpen,
+                Tokens.BracketsClose,
+                Tokens.Semicolon } },
+            {Tokens.Equals, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.GreaterEquals, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.SmallerEquals, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.GreaterThan, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.SmallerThan, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.Becomes, new Tokens[] {
+                Tokens.Identifier } },
+            {Tokens.Plus, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.Minus, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.Print, new Tokens[] {
+                Tokens.BracketsOpen,
+                Tokens.BracketsClose,
+                Tokens.Semicolon } },
+            {Tokens.EllipsisOpen, new Tokens[] {
+                Tokens.Equals,
+                Tokens.GreaterEquals,
+                Tokens.SmallerEquals,
+                Tokens.GreaterThan,
+                Tokens.SmallerThan,
+                Tokens.If,
+                Tokens.While,
+                Tokens.Plus,
+                Tokens.Minus,
+                Tokens.EllipsisOpen,
+                Tokens.Becomes,
+                Tokens.Print } },
+            {Tokens.EllipsisClose, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.BracketsOpen, new Tokens[] {
+                Tokens.Else,
+                Tokens.EllipsisClose } },
+            {Tokens.BracketsClose, new Tokens[] {
+                Tokens.BracketsClose,
+                Tokens.Semicolon } },
+            {Tokens.Semicolon, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } }
+        };
+        #endregion
 
         public Tokenizer()
         {
@@ -60,7 +184,7 @@ namespace Compiler
 
             if (Level != 0)
             {
-                throw new BracketsNotMatchingException(); // Brackets matchen niet
+                throw new BracketsNotMatchingException(); // Exception: Brackets matchen niet
             }
         }
 
@@ -80,9 +204,7 @@ namespace Compiler
                     currentToken.Level = Level;
 
                     if (StartToken == null)
-                    {
                         StartToken = currentToken;
-                    }
 
                     if (PreviousToken != null)
                     {
@@ -98,24 +220,16 @@ namespace Compiler
                     {
                         throw new TokenNotFoundException(currentToken);
                     }
-
+                    
                     setPartner(currentToken);
 
-
-                    Tokens[] ignoreTokens = new Tokens[]
-                    {
-                        Tokens.Else,
-                        Tokens.BracketsClose,
-                        Tokens.BracketsOpen,
-                        Tokens.EllipsisOpen,
-                        Tokens.EllipsisClose
-                    };
+                    checkCodeIsValid(currentToken);
 
                     // Haalt "if" van de stack af als er geen "else" is
                     if (TokenStack.Count != 0)
                     {
                         Token topToken = TokenStack.Peek();
-                    
+
                         if (topToken.TokenType == Tokens.If &&
                             currentToken.Level <= topToken.Level &&
                             !ignoreTokens.Contains(currentToken.TokenType))
@@ -133,21 +247,25 @@ namespace Compiler
                     //    TokenStack.Pop();
                     //}
 
-                    checkCodeIsValid(currentToken);
+                    // Pusht token naar de stack of haalt partner token eraf als dat nodig is
+                    Tokens partner;
+                    if (pushToStackTokens.Contains(currentToken.TokenType))
+                    {
+                        TokenStack.Push(currentToken);
+                    }
+                    else if (TokenStack.Count != 0 &&
+                            partners.TryGetValue(currentToken.TokenType, out partner) &&
+                            TokenStack.Peek().TokenType == partner)
+                    {
+                        TokenStack.Pop();
+                    }
 
-                    if (currentToken.TokenType == Tokens.EllipsisOpen || 
-                        currentToken.TokenType == Tokens.BracketsOpen)
-                    {
+                    if (increaseTokens.Contains(currentToken.TokenType))
                         Level++;
-                    }
-                    else if (currentToken.TokenType == Tokens.EllipsisClose || 
-                        currentToken.TokenType == Tokens.BracketsClose)
-                    {
+                    else if (decreaseTokens.Contains(currentToken.TokenType))
                         Level--;
-                    }
 
                     character += tokens[i].Length;
-
                     PreviousToken = currentToken;
                 }
                 character++;
@@ -156,25 +274,20 @@ namespace Compiler
 
         private Tokens getTokenType(string token)
         {
+            int number = 0;
             Tokens result;
 
-            int number = 0;
             if (token[0] == '¤') // Identifier
-            {   
                 return Tokens.Identifier;
-            }
+
             else if (int.TryParse(token, out number)) // Number
-            {   
                 return Tokens.Number;
-            }
-            else if (allTokens.TryGetValue(token, out result))
-            {
+
+            else if (allTokens.TryGetValue(token, out result)) // Ander token
                 return result;
-            }
+          
             else // Token bestaat niet
-            {   
                 throw new Exception("Invalid token");
-            }
         }
 
         private void setPartner(Token token)
@@ -191,191 +304,28 @@ namespace Compiler
 
         private void checkCodeIsValid(Token token)
         {
-            if (token.TokenType == Tokens.Identifier)
+            Tokens[] result;
+            if (possiblePreviousTokens.TryGetValue(token.TokenType, out result))
             {
-                if (token.Previous != null &&
-                    (token.Previous.TokenType == Tokens.Identifier ||
-                    token.Previous.TokenType == Tokens.Number ||
-                    token.Previous.TokenType == Tokens.If ||
-                    token.Previous.TokenType == Tokens.Else ||
-                    token.Previous.TokenType == Tokens.While ||
-                    token.Previous.TokenType == Tokens.EllipsisClose))
+                if ((token == StartToken && !possibleStartTokens.Contains(token.TokenType)) ||
+                    (token.Previous != null && !result.Contains(token.Previous.TokenType)))
                 {
                     throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
                 }
-                else if (token.Value.Length < 2)
+            }
+
+            Tokens partner;
+            if (partners.TryGetValue(token.TokenType, out partner))
+            {
+                if (TokenStack.Count == 0 || TokenStack.Peek().TokenType != partner)
                 {
-                    throw new InvalidVariableNameException(token); // Exception: Naam variabele niet goed
+                    throw new MissingPartnerTokenException(token); // Exception: Partner token ontbreekt
                 }
             }
-            else if ((token.TokenType == Tokens.Equals ||
-                     token.TokenType == Tokens.GreaterEquals ||
-                     token.TokenType == Tokens.SmallerEquals ||
-                     token.TokenType == Tokens.GreaterThan ||
-                     token.TokenType == Tokens.SmallerThan)
-                     
-                     && (token == StartToken || !(token.Previous == null ||
-                     token.Previous.TokenType == Tokens.Identifier ||
-                     token.Previous.TokenType == Tokens.Number ||
-                     token.Previous.TokenType == Tokens.EllipsisClose)))
+
+            if (token.TokenType == Tokens.Identifier && token.Value.Length < 2)
             {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-            }
-            else if (token.TokenType == Tokens.Number
-                     && (token == StartToken || (token.Previous != null &&
-                     token.Previous.TokenType != Tokens.Equals &&
-                     token.Previous.TokenType != Tokens.GreaterEquals &&
-                     token.Previous.TokenType != Tokens.SmallerEquals &&
-                     token.Previous.TokenType != Tokens.GreaterThan &&
-                     token.Previous.TokenType != Tokens.SmallerThan &&
-                     token.Previous.TokenType != Tokens.EllipsisOpen &&
-                     token.Previous.TokenType != Tokens.Plus &&
-                     token.Previous.TokenType != Tokens.Minus &&
-                     token.Previous.TokenType != Tokens.Becomes &&
-                     token.Previous.TokenType != Tokens.Print)))
-            {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-            }
-            else if (token.TokenType == Tokens.If)
-            {
-                if (token.Previous != null && 
-                    token.Previous.TokenType != Tokens.EllipsisOpen && 
-                    token.Previous.TokenType != Tokens.BracketsOpen && 
-                    token.Previous.TokenType != Tokens.BracketsClose && 
-                    token.Previous.TokenType != Tokens.Semicolon)
-                {
-                    throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-                }
-                else
-                {
-                    TokenStack.Push(token);
-                }
-            }
-            else if (token.TokenType == Tokens.Else)
-            {
-                if (token == StartToken || (token.Previous != null && token.Previous.TokenType != Tokens.BracketsClose))
-                {
-                    throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-                }
-                else if (TokenStack.Count <= 0 || (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.If))
-                {
-                    throw new MissingPartnerTokenException(token); // Exception If ontbreekt
-                }
-                else
-                {
-                    if (TokenStack.Count > 0)
-                    {
-                        TokenStack.Pop();
-                    }
-                }
-            }
-            else if (token.TokenType == Tokens.While 
-                     && token.Previous != null  && 
-                     token.Previous.TokenType != Tokens.EllipsisOpen &&
-                     token.Previous.TokenType != Tokens.BracketsOpen &&  
-                     token.Previous.TokenType != Tokens.BracketsClose && 
-                     token.Previous.TokenType != Tokens.Semicolon)
-            {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-            }
-            else if ((token.TokenType == Tokens.Plus || token.TokenType == Tokens.Minus)
-                     && (token == StartToken || (token.Previous != null && 
-                     token.Previous.TokenType != Tokens.Identifier &&
-                     token.Previous.TokenType != Tokens.Number)))
-            {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-            }
-            else if (token.TokenType == Tokens.EllipsisOpen)
-            {
-                if (token == StartToken || (token.Previous != null &&
-                    (token.Previous.TokenType == Tokens.Identifier ||
-                    token.Previous.TokenType == Tokens.Number ||
-                    token.Previous.TokenType == Tokens.Else ||
-                    token.Previous.TokenType == Tokens.BracketsOpen ||
-                    token.Previous.TokenType == Tokens.BracketsClose ||
-                    token.Previous.TokenType == Tokens.Semicolon)))
-                {
-                    throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-                }
-                else
-                {
-                    TokenStack.Push(token);
-                }
-            }
-            else if (token.TokenType == Tokens.EllipsisClose)
-            {
-                if (token == StartToken || (token.Previous != null && 
-                    token.Previous.TokenType != Tokens.Identifier &&
-                    token.Previous.TokenType != Tokens.Number))
-                {
-                    throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-                }
-                else if (TokenStack.Count <= 0 || (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.EllipsisOpen))
-                {
-                    throw new MissingPartnerTokenException(token); // Exception: Mist openingshaakje
-                }
-                else
-                {
-                    if (TokenStack.Count > 0) {
-                        TokenStack.Pop();
-                    }
-                }
-            }
-            else if (token.TokenType == Tokens.BracketsOpen)
-            {
-                if (token == StartToken || (token.Previous != null && 
-                    token.Previous.TokenType != Tokens.EllipsisClose && 
-                    token.Previous.TokenType != Tokens.Else))
-                {
-                    throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-                }
-                else
-                {
-                    TokenStack.Push(token);
-                }
-            }
-            else if (token.TokenType == Tokens.BracketsClose)
-            {
-                if (token == StartToken || (token.Previous != null && 
-                    token.Previous.TokenType != Tokens.BracketsOpen &&
-                    token.Previous.TokenType != Tokens.Semicolon))
-                {
-                    throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-                }
-                else if (TokenStack.Count <= 0 || (TokenStack.Count > 0 && TokenStack.Peek().TokenType != Tokens.BracketsOpen))
-                {
-                    throw new MissingPartnerTokenException(token); // Exception: Mist openings accolade
-                }
-                else
-                {
-                    if (TokenStack.Count > 0)
-                    {
-                        TokenStack.Pop();
-                    }
-                }
-            }
-            else if (token.TokenType == Tokens.Semicolon &&
-                     (token == StartToken || (token.Previous != null &&
-                     token.Previous.TokenType != Tokens.Identifier &&
-                     token.Previous.TokenType != Tokens.Number &&
-                     token.Previous.TokenType != Tokens.EllipsisClose)))
-            {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-            }
-            else if (token.TokenType == Tokens.Becomes &&
-                    (token == StartToken || (token.Previous != null &&
-                    token.Previous.TokenType != Tokens.Identifier)))
-            {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
-            }
-            else if (token.TokenType == Tokens.Print && 
-                     token.Previous != null && 
-                     token.Previous.TokenType != Tokens.EllipsisOpen &&
-                     token.Previous.TokenType != Tokens.BracketsOpen && 
-                     token.Previous.TokenType != Tokens.BracketsClose && 
-                     token.Previous.TokenType != Tokens.Semicolon)
-            {
-                throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
+                throw new InvalidVariableNameException(token); // Exception: Naam variabele niet goed
             }
         }
   
