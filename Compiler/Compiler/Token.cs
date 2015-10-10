@@ -41,6 +41,7 @@ namespace Compiler
         BracketsClose,
         Semicolon, 
         Becomes, 
-        Print
+        Print,
+        ANY
     }
 }

@@ -1,9 +1,5 @@
 ﻿using Compiler.action_nodes;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
@@ -22,11 +18,23 @@ namespace Compiler.compiler
             }
         }
 
-        public abstract void compile(LinkedList<Token> currentToken);
+        public abstract LinkedList<ActionNode> compile(Token currentToken);
 
         /*public ActionNode getLastToken()
         {
 
         }*/
+
+        public struct TokenExpectation
+        {
+            public int Level { get; set; }
+            public Tokens TokenType { get; set; }
+
+            public TokenExpectation(int level, Tokens tokenType)
+            {
+                Level = level;
+                TokenType = tokenType;
+            }
+        }
     }
 }
