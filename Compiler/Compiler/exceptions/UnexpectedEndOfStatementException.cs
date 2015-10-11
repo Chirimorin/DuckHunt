@@ -14,4 +14,3 @@ namespace Compiler.exceptions
         }
     }
 }
-}

@@ -67,6 +67,7 @@
     <Compile Include="exceptions\InvalidVariableNameException.cs" />
     <Compile Include="exceptions\BracketsNotMatchingException.cs" />
     <Compile Include="exceptions\MissingPartnerTokenException.cs" />
+    <Compile Include="exceptions\UnexpectedEndOfStatementException.cs" />
     <Compile Include="exceptions\UnexpectedTokenException.cs" />
     <Compile Include="NextNodeVisitor.cs" />
     <Compile Include="NodeVisitor.cs" />

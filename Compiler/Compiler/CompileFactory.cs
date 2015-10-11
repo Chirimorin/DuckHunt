@@ -36,7 +36,7 @@ namespace Compiler
                 case Tokens.Becomes:
                 case Tokens.Print:*/
                 default:
-                    throw new ArgumentException("Onbekend  token type: " + tokenType, "tokenType");
+                    throw new ArgumentException("Unknown token type: " + tokenType, "tokenType");
             }
         }
 
