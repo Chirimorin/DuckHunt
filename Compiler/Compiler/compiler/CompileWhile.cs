@@ -1,5 +1,6 @@
 ﻿using Compiler.action_nodes;
 using Compiler.exceptions;
+using Compiler.factories;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,7 +34,6 @@ namespace Compiler.compiler
             }
         }
 
-
         public CompileWhile()
         {
             ConditionalJump conditionalJump = new ConditionalJump();
@@ -59,10 +59,10 @@ namespace Compiler.compiler
             {
                 new TokenExpectation(whileLevel, Tokens.While),
                 new TokenExpectation(whileLevel, Tokens.EllipsisOpen),
-                new TokenExpectation(whileLevel + 1, Tokens.ANY), // Condition
+                new TokenExpectation(whileLevel + 1, Tokens.ANY),
                 new TokenExpectation(whileLevel, Tokens.EllipsisClose),
                 new TokenExpectation(whileLevel, Tokens.BracketsOpen), 
-                new TokenExpectation(whileLevel + 1, Tokens.ANY), // Body
+                new TokenExpectation(whileLevel + 1, Tokens.ANY),
                 new TokenExpectation(whileLevel, Tokens.BracketsClose)
             };
 
@@ -81,19 +81,19 @@ namespace Compiler.compiler
                 }
                 else if (expectation.Level >= whileLevel)
                 {
-                    if (_condition == null) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
+                    if (Condition.Count <= 0)
                     {
-                        var compiledCondition = new CompileCondition();
+                        CompileCondition compiledCondition = new CompileCondition();
                         compiledCondition.compile(currentToken, compiler);
-                        //_condition.AddLast(compiledCondition.Compiled);
+                        //Condition.AddLast(compiledCondition.Compiled);
                     }
                     else
                     {
-                        while (currentToken.Level > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
+                        while (currentToken.Level > whileLevel)
                         {
                             BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
                             compiledBodyPart.compile(currentToken, compiler);
-                            //_body.Add(compiledBodyPart.Compiled);
+                            //Body.AddLast(compiledBodyPart.Compiled);
                         };
                     }
                 }

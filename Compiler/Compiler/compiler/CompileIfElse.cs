@@ -1,5 +1,6 @@
 ﻿using Compiler.action_nodes;
 using Compiler.exceptions;
+using Compiler.factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,45 @@ namespace Compiler.compiler
 {
     public class CompileIfElse : CompileIfGeneral
     {
+        private LinkedList<ActionNode> _condition;
+        public LinkedList<ActionNode> Condition
+        {
+            get
+            {
+                if (_condition == null)
+                {
+                    _condition = new LinkedList<ActionNode>();
+                }
+                return _condition;
+            }
+        }
+
+        private LinkedList<ActionNode> _body;
+        public LinkedList<ActionNode> Body
+        {
+            get
+            {
+                if (_body == null)
+                {
+                    _body = new LinkedList<ActionNode>();
+                }
+                return _body;
+            }
+        }
+
+        private LinkedList<ActionNode> _bodyElse;
+        public LinkedList<ActionNode> BodyElse
+        {
+            get
+            {
+                if (_bodyElse == null)
+                {
+                    _bodyElse = new LinkedList<ActionNode>();
+                }
+                return _bodyElse;
+            }
+        }
+
         public CompileIfElse()
         {
             ConditionalJump conditionalJump = new ConditionalJump();
@@ -37,14 +77,14 @@ namespace Compiler.compiler
             {
                 new TokenExpectation(ifLevel, Tokens.If),
                 new TokenExpectation(ifLevel, Tokens.EllipsisOpen),
-                new TokenExpectation(ifLevel + 1, Tokens.ANY), // Condition
+                new TokenExpectation(ifLevel + 1, Tokens.ANY),
                 new TokenExpectation(ifLevel, Tokens.EllipsisClose),
                 new TokenExpectation(ifLevel, Tokens.BracketsOpen),
-                new TokenExpectation(ifLevel + 1, Tokens.ANY), // Body
+                new TokenExpectation(ifLevel + 1, Tokens.ANY),
                 new TokenExpectation(ifLevel, Tokens.BracketsClose),
                 new TokenExpectation(ifLevel, Tokens.Else),
                 new TokenExpectation(ifLevel, Tokens.BracketsOpen),
-                new TokenExpectation(ifLevel + 1, Tokens.ANY), // Body
+                new TokenExpectation(ifLevel + 1, Tokens.ANY),
                 new TokenExpectation(ifLevel, Tokens.BracketsClose)
             };
 
@@ -63,21 +103,30 @@ namespace Compiler.compiler
                 }
                 else if (expectation.Level >= ifLevel)
                 {
-                    /*if (_condition == null) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
+                    if (Condition.Count <= 0)
                     {
-                        var compiledCondition = new CompiledCondition();
-                        compiledCondition.Compile(ref currentToken, compiler);
-                        _condition.Add(compiledCondition.Compiled);
+                        CompileCondition compiledCondition = new CompileCondition();
+                        compiledCondition.compile(currentToken, compiler);
+                        //Condition.AddLast(compiledCondition.Compiled);
+                    }
+                    else if (Body.Count <= 0)
+                    {
+                        while (currentToken.Level > ifLevel)
+                        {
+                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
+                            compiledBodyPart.compile(currentToken, compiler);
+                            //Body.AddLast(compiledBodyPart.Compiled);
+                        };
                     }
                     else
                     {
-                        while (currentToken.Value.Level > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
+                        while (currentToken.Level > ifLevel)
                         {
-                            var compiledBodyPart = CompilerFactory.Instance.CreateCompiledStatement(currentToken.Value.Token);
-                            compiledBodyPart.Compile(ref currentToken, compiler);
-                            _body.Add(compiledBodyPart.Compiled);
+                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
+                            compiledBodyPart.compile(currentToken, compiler);
+                            //BodyElse.AddLast(compiledBodyPart.Compiled);
                         };
-                    }*/
+                    }
                 }
             }
 

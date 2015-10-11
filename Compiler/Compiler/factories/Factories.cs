@@ -1,14 +1,14 @@
 ﻿using Compiler;
 using Compiler.action_nodes;
 using Compiler.compiler;
-using DuckHunt.Factories;
+using Compiler.factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Compiler
+namespace Compiler.factories
 {
     public static class Factories
     {

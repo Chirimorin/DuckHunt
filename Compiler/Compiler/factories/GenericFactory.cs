@@ -1,12 +1,10 @@
-﻿using DuckHunt.Behaviors.Draw;
-using DuckHunt.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DuckHunt.Factories
+namespace Compiler.factories
 {
     public class GenericFactory<TKey, TClass>
     {

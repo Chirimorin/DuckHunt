@@ -50,7 +50,7 @@
     <Compile Include="action_nodes\FunctionCall.cs" />
     <Compile Include="action_nodes\Jump.cs" />
     <Compile Include="action_nodes\ActionNode.cs" />
-    <Compile Include="CompileFactory.cs" />
+    <Compile Include="factories\Factories.cs" />
     <Compile Include="compiler\CompileAssignment .cs" />
     <Compile Include="compiler\CompileCondition.cs" />
     <Compile Include="compiler\CompileEqualityOperator.cs" />
@@ -71,12 +71,13 @@
     <Compile Include="exceptions\MissingPartnerTokenException.cs" />
     <Compile Include="exceptions\UnexpectedEndOfStatementException.cs" />
     <Compile Include="exceptions\UnexpectedTokenException.cs" />
+    <Compile Include="factories\GenericFactory.cs" />
     <Compile Include="NextNodeVisitor.cs" />
     <Compile Include="NodeVisitor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="Tokenizer.cs" />
+    <Compile Include="tokenizer\Token.cs" />
+    <Compile Include="tokenizer\Tokenizer.cs" />
     <Compile Include="exceptions\TokenNotFoundException.cs" />
     <Compile Include="VirtualMachine.cs" />
   </ItemGroup>
@@ -97,6 +98,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
