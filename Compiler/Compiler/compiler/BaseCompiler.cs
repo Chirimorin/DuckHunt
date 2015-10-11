@@ -18,7 +18,7 @@ namespace Compiler.compiler
             }
         }
 
-        public abstract LinkedList<ActionNode> compile(Token currentToken);
+        public abstract LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler);
 
         /*public ActionNode getLastToken()
         {

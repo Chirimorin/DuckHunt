@@ -1,4 +1,5 @@
-﻿using Compiler.exceptions;
+﻿using Compiler.compiler;
+using Compiler.exceptions;
 using System;
 
 namespace Compiler
@@ -34,6 +35,8 @@ namespace Compiler
                 Console.WriteLine();
                 token = token.Next;
             }
+
+           // Factories.CompilerFactory.Register(Tokens.While, () => new CompileWhile());
 
             Console.ReadKey();
         }

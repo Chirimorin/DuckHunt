@@ -20,7 +20,7 @@ namespace Compiler.compiler
             conditionalJump.OnFalseJumpToNode = Nodes.ElementAt(5);
         }
 
-        public override LinkedList<ActionNode> compile(Token currentToken)
+        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
         {
             int ifLevel = currentToken.Level;
 

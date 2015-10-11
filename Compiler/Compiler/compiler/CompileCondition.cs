@@ -7,12 +7,11 @@ using Compiler.action_nodes;
 
 namespace Compiler.compiler
 {
-    public class CompileIfGeneral : BaseCompiler
+    public class CompileCondition : BaseCompiler
     {
         public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
         {
-            //throw new NotImplementedException();
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

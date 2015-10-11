@@ -12,7 +12,7 @@ namespace Compiler.compiler
     {
         public CompilePrint(): base() { }
 
-        public override LinkedList<ActionNode> compile(Token currentToken)
+        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
         {
             int printLevel = currentToken.Level;
 

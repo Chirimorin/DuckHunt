@@ -15,6 +15,6 @@ namespace Compiler.compiler
             Nodes.AddLast(new DoNothing());
         }
 
-        public abstract override LinkedList<ActionNode> compile(Token currentToken);
+        public abstract override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler);
     }
 }

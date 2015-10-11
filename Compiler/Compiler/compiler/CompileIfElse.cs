@@ -29,7 +29,7 @@ namespace Compiler.compiler
             jump.JumpToNode = Nodes.ElementAt(8);
         }
 
-        public override LinkedList<ActionNode> compile(Token currentToken)
+        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
         {
             int ifLevel = currentToken.Level;
 

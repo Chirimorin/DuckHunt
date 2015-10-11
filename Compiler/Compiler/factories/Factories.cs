@@ -1,6 +1,7 @@
 ﻿using Compiler;
 using Compiler.action_nodes;
 using Compiler.compiler;
+using DuckHunt.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,19 @@ using System.Threading.Tasks;
 
 namespace Compiler
 {
-    public static class CompileFactory
+    public static class Factories
     {
-        public static BaseCompiler createCompiler(Tokens tokenType)
+        private static readonly GenericFactory<Tokens, BaseCompiler> _compilerFactory = new GenericFactory<Tokens, BaseCompiler>();
+        public static GenericFactory<Tokens, BaseCompiler> CompilerFactory
+        {
+            get { return _compilerFactory; }
+        }
+
+        /*public static BaseCompiler createCompiler(Tokens tokenType)
         {
             switch (tokenType)
             {
-                /*case Tokens.Identifier:
+                case Tokens.Identifier:
                 case Tokens.Equals:
                 case Tokens.GreaterEquals:
                 case Tokens.SmallerEquals:
@@ -23,10 +30,10 @@ namespace Compiler
                 case Tokens.SmallerThan:
                 case Tokens.Number:
                 case Tokens.If:
-                case Tokens.Else:*/
+                case Tokens.Else:
                 case Tokens.While:
                     return new CompileWhile();
-                /*case Tokens.Plus:
+                case Tokens.Plus:
                 case Tokens.Minus:
                 case Tokens.EllipsisOpen:
                 case Tokens.EllipsisClose:
@@ -34,11 +41,11 @@ namespace Compiler
                 case Tokens.BracketsClose:
                 case Tokens.Semicolon:
                 case Tokens.Becomes:
-                case Tokens.Print:*/
+                case Tokens.Print:
                 default:
                     throw new ArgumentException("Unknown token type: " + tokenType, "tokenType");
             }
-        }
+        }*/
 
     }
 }

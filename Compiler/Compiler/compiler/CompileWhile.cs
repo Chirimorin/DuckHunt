@@ -7,6 +7,33 @@ namespace Compiler.compiler
 {
     public class CompileWhile : BaseCompiler
     {
+        private LinkedList<ActionNode> _condition;
+        public LinkedList<ActionNode> Condition
+        {
+            get
+            {
+                if (_condition == null)
+                {
+                    _condition = new LinkedList<ActionNode>();
+                }
+                return _condition;
+            }
+        }
+
+        private LinkedList<ActionNode> _body;
+        public LinkedList<ActionNode> Body
+        {
+            get
+            {
+                if (_body == null)
+                {
+                    _body = new LinkedList<ActionNode>();
+                }
+                return _body;
+            }
+        }
+
+
         public CompileWhile()
         {
             ConditionalJump conditionalJump = new ConditionalJump();
@@ -24,7 +51,7 @@ namespace Compiler.compiler
             jump.JumpToNode = Nodes.ElementAt(0);
         }
 
-        public override LinkedList<ActionNode> compile(Token currentToken)
+        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
         {
             int whileLevel = currentToken.Level;
 
@@ -54,21 +81,21 @@ namespace Compiler.compiler
                 }
                 else if (expectation.Level >= whileLevel)
                 {
-                    /*if (_condition == null) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
+                    if (_condition == null) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
                     {
-                        var compiledCondition = new CompiledCondition();
-                        compiledCondition.Compile(ref currentToken, compiler);
-                        _condition.Add(compiledCondition.Compiled);
+                        var compiledCondition = new CompileCondition();
+                        compiledCondition.compile(currentToken, compiler);
+                        //_condition.AddLast(compiledCondition.Compiled);
                     }
                     else
                     {
-                        while (currentToken.Value.Level > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
+                        while (currentToken.Level > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
                         {
-                            var compiledBodyPart = CompilerFactory.Instance.CreateCompiledStatement(currentToken.Value.Token);
-                            compiledBodyPart.Compile(ref currentToken, compiler);
-                            _body.Add(compiledBodyPart.Compiled);
+                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
+                            compiledBodyPart.compile(currentToken, compiler);
+                            //_body.Add(compiledBodyPart.Compiled);
                         };
-                    }*/
+                    }
                 }
             }
 
