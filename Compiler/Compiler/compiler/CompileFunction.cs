@@ -11,10 +11,10 @@ namespace Compiler.compiler
     {
         public CompileFunction()
         {
-            Nodes.AddLast(new DoNothing());
-            Nodes.AddLast(new DoNothing());
+            //Nodes.AddLast(new DoNothing());
+            //Nodes.AddLast(new DoNothing());
         }
 
-        public abstract override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler);
+        public abstract override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before);
     }
 }

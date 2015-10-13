@@ -55,7 +55,7 @@ namespace Compiler.compiler
             ConditionalJump conditionalJump = new ConditionalJump();
             Jump jump = new Jump();
 
-            Nodes.AddLast(new DoNothing());
+            /*Nodes.AddLast(new DoNothing());
             Nodes.AddLast(conditionalJump);
             Nodes.AddLast(new DoNothing());
 
@@ -66,10 +66,10 @@ namespace Compiler.compiler
             conditionalJump.OnTrueJumpToNode = Nodes.ElementAt(3);
             conditionalJump.OnFalseJumpToNode = Nodes.ElementAt(6);
 
-            jump.JumpToNode = Nodes.ElementAt(8);
+            jump.JumpToNode = Nodes.ElementAt(8);*/
         }
 
-        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
+        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
         {
             int ifLevel = currentToken.Level;
 
@@ -106,7 +106,7 @@ namespace Compiler.compiler
                     if (Condition.Count <= 0)
                     {
                         CompileCondition compiledCondition = new CompileCondition();
-                        compiledCondition.compile(currentToken, compiler);
+                        compiledCondition.compile(ref currentToken, endToken,nodes, before);
                         //Condition.AddLast(compiledCondition.Compiled);
                     }
                     else if (Body.Count <= 0)
@@ -114,7 +114,7 @@ namespace Compiler.compiler
                         while (currentToken.Level > ifLevel)
                         {
                             BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                            compiledBodyPart.compile(currentToken, compiler);
+                            compiledBodyPart.compile(ref currentToken, endToken, nodes, before);
                             //Body.AddLast(compiledBodyPart.Compiled);
                         };
                     }
@@ -123,14 +123,12 @@ namespace Compiler.compiler
                         while (currentToken.Level > ifLevel)
                         {
                             BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                            compiledBodyPart.compile(currentToken, compiler);
+                            compiledBodyPart.compile(ref currentToken, endToken, nodes, before);
                             //BodyElse.AddLast(compiledBodyPart.Compiled);
                         };
                     }
                 }
             }
-
-            return Nodes;
         }
     }
 }

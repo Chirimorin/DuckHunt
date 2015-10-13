@@ -2,58 +2,76 @@
 using Compiler.exceptions;
 using Compiler.factories;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Compiler.compiler
 {
     public class CompileWhile : BaseCompiler
     {
-        private LinkedList<ActionNode> _condition;
-        public LinkedList<ActionNode> Condition
+        private CompileCondition _condition;
+        public CompileCondition Condition
+        {
+            get  { return _condition; }
+            private set { _condition = value; }
+        }
+
+        private DoNothing _firstDoNothing;
+        public DoNothing FirstDoNothing
         {
             get
             {
-                if (_condition == null)
+                if (_firstDoNothing == null)
                 {
-                    _condition = new LinkedList<ActionNode>();
+                    _firstDoNothing = new DoNothing();
                 }
-                return _condition;
+                return _firstDoNothing;
             }
         }
 
-        private LinkedList<ActionNode> _body;
-        public LinkedList<ActionNode> Body
+        private ConditionalJump _conditionalJump;
+        public ConditionalJump ConditionalJump
         {
             get
             {
-                if (_body == null)
+                if (_conditionalJump == null)
                 {
-                    _body = new LinkedList<ActionNode>();
+                    _conditionalJump = new ConditionalJump();
                 }
-                return _body;
+                return _conditionalJump;
+            }
+        }
+
+        private Jump _jump;
+        public Jump Jump
+        {
+            get
+            {
+                if (_jump == null)
+                {
+                    _jump = new Jump();
+                }
+                return _jump;
             }
         }
 
         public CompileWhile()
         {
-            ConditionalJump conditionalJump = new ConditionalJump();
-            Jump jump = new Jump();
+            Nodes.insertLast(FirstDoNothing);
+            Nodes.insertLast(ConditionalJump);
+            Nodes.insertLast(new DoNothing());
+            Nodes.insertLast(Jump);
+            Nodes.insertLast(new DoNothing());
 
-            Nodes.AddLast(new DoNothing());
-            Nodes.AddLast(conditionalJump);
-            Nodes.AddLast(new DoNothing());
-            Nodes.AddLast(jump);
-            Nodes.AddLast(new DoNothing());
+            ConditionalJump.OnTrueJumpToNode = Nodes.get(2);
+            ConditionalJump.OnFalseJumpToNode = Nodes.get(4);
 
-            conditionalJump.OnTrueJumpToNode = Nodes.ElementAt(2);
-            conditionalJump.OnFalseJumpToNode = Nodes.ElementAt(4);
-
-            jump.JumpToNode = Nodes.ElementAt(0);
+            Jump.JumpToNode = Nodes.get(0);
         }
 
-        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
+        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
         {
             int whileLevel = currentToken.Level;
+
+            nodes.insertBefore(before, FirstDoNothing);
 
             List<TokenExpectation> expected = new List<TokenExpectation>()
             {
@@ -66,7 +84,7 @@ namespace Compiler.compiler
                 new TokenExpectation(whileLevel, Tokens.BracketsClose)
             };
 
-            foreach (var expectation in expected)
+            foreach (TokenExpectation expectation in expected)
             {
                 if (expectation.Level == whileLevel)
                 {
@@ -79,27 +97,20 @@ namespace Compiler.compiler
                         currentToken = currentToken.Next;
                     }
                 }
-                else if (expectation.Level >= whileLevel)
+                else if (expectation.Level > whileLevel)
                 {
-                    if (Condition.Count <= 0)
+                    if (Condition == null)
                     {
-                        CompileCondition compiledCondition = new CompileCondition();
-                        compiledCondition.compile(currentToken, compiler);
-                        //Condition.AddLast(compiledCondition.Compiled);
+                        Condition = new CompileCondition();
+                        Condition.compile(ref currentToken, endToken, nodes, ConditionalJump);
                     }
                     else
                     {
-                        while (currentToken.Level > whileLevel)
-                        {
-                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                            compiledBodyPart.compile(currentToken, compiler);
-                            //Body.AddLast(compiledBodyPart.Compiled);
-                        };
+                        BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
+                        compiledBodyPart.compile(ref currentToken, endToken, nodes, Jump);
                     }
                 }
             }
-
-            return Nodes;
         }
 
     }

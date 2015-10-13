@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    /*public class CompileOperator : BaseCompiler
+    public class CompileOperator : BaseCompiler
     {
         private Dictionary<Tokens, string> tokenDictionary = new Dictionary<Tokens, string>();
         public Dictionary<Tokens, string>  TokenDictionary 
@@ -16,5 +16,11 @@ namespace Compiler.compiler
                 return tokenDictionary;
             }
         }
-    }*/
+
+        public CompileOperator(BaseCompiler compiler)
+        {
+            nextCompiler = compiler;
+        }
+        protected BaseCompiler nextCompiler;
+    }
 }

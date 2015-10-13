@@ -21,6 +21,7 @@ namespace Compiler
             {"print", Tokens.Else},
             {"else", Tokens.While},
             {">", Tokens.Equals},
+            {"?>", Tokens.NotEquals},
             {"+>", Tokens.GreaterEquals},
             {"=>", Tokens.SmallerEquals},
             {"+", Tokens.GreaterThan},
@@ -104,6 +105,10 @@ namespace Compiler
                 Tokens.BracketsClose,
                 Tokens.Semicolon } },
             {Tokens.Equals, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.NotEquals, new Tokens[] {
                 Tokens.Identifier,
                 Tokens.Number,
                 Tokens.EllipsisClose } },

@@ -7,11 +7,15 @@ using Compiler.action_nodes;
 
 namespace Compiler.compiler
 {
-    /*public class CompileSingleStatement : BaseCompiler
+    public class CompileSingleStatement : BaseCompiler
     {
-        public override LinkedList<ActionNode> compile(Token currentToken)
+
+
+        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
         {
-            throw new NotImplementedException();
+            int level = currentToken.Level;
+            
+
         }
-    }*/
+    }
 }

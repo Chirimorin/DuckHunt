@@ -1,5 +1,6 @@
 ﻿using Compiler.compiler;
 using Compiler.exceptions;
+using Compiler.factories;
 using System;
 
 namespace Compiler
@@ -27,16 +28,18 @@ namespace Compiler
             Token token = tokenizer.StartToken;
             while (token != null )
             {
+                //Console.Write(token.TokenType + ", Line: " + token.Line + ", Positie: " + token.Character + ", Value: " + token.Value + ", Level: " + token.Level);
                 Console.Write(token.TokenType);
                 if (token.Partner != null)
                 {
+                    //Console.Write(" - " + token.Partner.TokenType + ", Line: " + token.Line + ", Positie: " + token.Character + ", Value: " + token.Value + ", Level: " + token.Level );
                     Console.Write(" - " + token.Partner.TokenType);
                 }
                 Console.WriteLine();
                 token = token.Next;
             }
 
-           // Factories.CompilerFactory.Register(Tokens.While, () => new CompileWhile());
+            Factories.CompilerFactory.Register(Tokens.While, () => new CompileWhile());
 
             Console.ReadKey();
         }

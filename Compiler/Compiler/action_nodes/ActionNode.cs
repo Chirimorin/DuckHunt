@@ -8,6 +8,8 @@ namespace Compiler.action_nodes
 {
     public abstract class ActionNode
     {
+        public ActionNode Next { get; set; }
+
         public abstract void Accept(NodeVisitor visitor);
     }
 }

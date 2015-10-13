@@ -7,11 +7,16 @@ using Compiler.action_nodes;
 
 namespace Compiler.compiler
 {
-    public class CompileCondition : BaseCompiler
+    public class CompileCondition : CompileOperator
     {
-        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
+        public CompileCondition () : base(new CompileSingleStatement())
         {
-            throw new NotImplementedException();
+            Dictionary<Tokens, string> tokenDictionary = TokenDictionary;
+
+            
+            
         }
+        
+
     }
 }

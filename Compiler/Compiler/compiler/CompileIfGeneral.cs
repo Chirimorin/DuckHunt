@@ -9,10 +9,9 @@ namespace Compiler.compiler
 {
     public class CompileIfGeneral : BaseCompiler
     {
-        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
+        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
         {
             //throw new NotImplementedException();
-            return null;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Compiler
     {
         Identifier, 
         Equals,
+        NotEquals,
         GreaterEquals,
         SmallerEquals,
         GreaterThan,

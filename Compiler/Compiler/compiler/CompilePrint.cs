@@ -12,7 +12,7 @@ namespace Compiler.compiler
     {
         public CompilePrint(): base() { }
 
-        public override LinkedList<ActionNode> compile(Token currentToken, BaseCompiler compiler)
+        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
         {
             int printLevel = currentToken.Level;
 
@@ -47,8 +47,6 @@ namespace Compiler.compiler
                     };*/
                 }
             }
-
-            return Nodes;
         }
     }
 }
