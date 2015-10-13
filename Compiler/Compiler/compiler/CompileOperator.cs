@@ -8,19 +8,23 @@ namespace Compiler.compiler
 {
     public class CompileOperator : BaseCompiler
     {
-        private Dictionary<Tokens, string> tokenDictionary = new Dictionary<Tokens, string>();
-        public Dictionary<Tokens, string>  TokenDictionary 
+        private Dictionary<Tokens, string> _tokenDictionary = new Dictionary<Tokens, string>();
+        protected Dictionary<Tokens, string>  TokenDictionary 
         {
-            get
-            {
-                return tokenDictionary;
-            }
+            get { return _tokenDictionary; }
+        }
+
+        private BaseCompiler _nextCompiler;
+        protected BaseCompiler NextCompiler
+        {
+            get { return _nextCompiler; }
+            private set { _nextCompiler = value; }
         }
 
         public CompileOperator(BaseCompiler compiler)
         {
-            nextCompiler = compiler;
+            _nextCompiler = compiler;
         }
-        protected BaseCompiler nextCompiler;
+        
     }
 }

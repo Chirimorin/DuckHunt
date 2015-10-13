@@ -54,7 +54,7 @@
     <Compile Include="factories\Factories.cs" />
     <Compile Include="compiler\CompileAssignment .cs" />
     <Compile Include="compiler\CompileCondition.cs" />
-    <Compile Include="compiler\CompileEquality.cs" />
+    <Compile Include="compiler\CompileEqualityOperator.cs" />
     <Compile Include="compiler\CompileFunction.cs" />
     <Compile Include="compiler\CompileIf.cs" />
     <Compile Include="compiler\CompileIfElse.cs" />
