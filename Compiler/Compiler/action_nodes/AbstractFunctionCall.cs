@@ -12,10 +12,17 @@ namespace Compiler.action_nodes
         
         public void setSize(int size)
         {
-            parameters = new string[size];
+            if (size > 0)
+            {
+                parameters = new string[size];
+            }
+            else
+            {
+                parameters = null;
+            }
         }
 
-        public void setParameter(string parameter, int index)
+        public void addParameter(int index, string parameter)
         {
             parameters[index] = parameter;
         }

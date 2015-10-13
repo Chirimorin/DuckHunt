@@ -8,6 +8,11 @@ namespace Compiler.action_nodes
 {
     public class FunctionCall : AbstractFunctionCall
     {
+        public void action(VirtualMachine virtualMachine)
+        {
+
+        }
+
         public override void Accept(NodeVisitor visitor)
         {
             visitor.Visit(this);
