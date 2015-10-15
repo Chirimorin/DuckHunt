@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileIfElse : CompileIfGeneral
+    /*public class CompileIfElse : CompileIfGeneral
     {
         private LinkedList<ActionNode> _condition;
         public LinkedList<ActionNode> Condition
@@ -55,7 +55,7 @@ namespace Compiler.compiler
             ConditionalJump conditionalJump = new ConditionalJump();
             Jump jump = new Jump();
 
-            /*Nodes.AddLast(new DoNothing());
+            Nodes.AddLast(new DoNothing());
             Nodes.AddLast(conditionalJump);
             Nodes.AddLast(new DoNothing());
 
@@ -66,7 +66,7 @@ namespace Compiler.compiler
             conditionalJump.OnTrueJumpToNode = Nodes.ElementAt(3);
             conditionalJump.OnFalseJumpToNode = Nodes.ElementAt(6);
 
-            jump.JumpToNode = Nodes.ElementAt(8);*/
+            jump.JumpToNode = Nodes.ElementAt(8);
         }
 
         public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
@@ -130,5 +130,5 @@ namespace Compiler.compiler
                 }
             }
         }
-    }
+    }*/
 }

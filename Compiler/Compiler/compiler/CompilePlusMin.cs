@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileEqualityOperator : CompileOperator
+    public class CompilePlusMin : CompileOperator
     {
-        public CompileEqualityOperator() : base(new CompileAddtiveOperator())
+        public CompilePlusMin() : base(new CompileSingleStatement())
         {
             Dictionary<Tokens, string> tokenDictionary = TokenDictionary;
-            tokenDictionary.Add(Tokens.Equals, "$==");
-            tokenDictionary.Add(Tokens.NotEquals, "$!=");
+            tokenDictionary.Add(Tokens.Plus, "$+");
+            tokenDictionary.Add(Tokens.Minus, "$-");
         }
     }
 }

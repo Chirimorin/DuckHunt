@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileRelationalOperator : CompileOperator
+    public class CompileComperison : CompileOperator
     {
-        public CompileRelationalOperator() : base(new CompileAddtiveOperator())
+        public CompileComperison() : base(new CompilePlusMin())
         {
             Dictionary<Tokens, string> tokenDictionary = TokenDictionary;
+            tokenDictionary.Add(Tokens.Equals, "$==");
+            tokenDictionary.Add(Tokens.NotEquals, "$!=");
             tokenDictionary.Add(Tokens.GreaterEquals, "$>=");
             tokenDictionary.Add(Tokens.SmallerEquals, "$<=");
             tokenDictionary.Add(Tokens.GreaterThan, "$>");
