@@ -1,5 +1,6 @@
 ﻿using Compiler.action_nodes;
 using Compiler.exceptions;
+using Compiler.factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +13,26 @@ namespace Compiler.compiler
     {
         public CompilePrint(): base() { }
 
-        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
+        public override CompiledStatement Clone(ref Token currentToken)
+        {
+            CompiledStatement result = new CompilePrint();
+            result.compile(ref currentToken);
+            return result;
+        }
+
+        public override void compile(ref Token currentToken)
         {
             int printLevel = currentToken.Level;
 
             List<TokenExpectation> expected = new List<TokenExpectation>()
             {
-                new TokenExpectation(printLevel, Tokens.While),
+                new TokenExpectation(printLevel, Tokens.Print),
                 new TokenExpectation(printLevel, Tokens.EllipsisOpen),
-                new TokenExpectation(printLevel + 1, Tokens.ANY), // Condition
+                new TokenExpectation(printLevel + 1, Tokens.ANY),
                 new TokenExpectation(printLevel, Tokens.EllipsisClose)
             };
 
-            foreach (var expectation in expected)
+            foreach (TokenExpectation expectation in expected)
             {
                 if (expectation.Level == printLevel)
                 {
@@ -37,16 +45,24 @@ namespace Compiler.compiler
                         currentToken = currentToken.Next;
                     }
                 }
-                else if (expectation.Level >= printLevel)
+                else if (expectation.Level > printLevel)
                 {
-                    /*while (currentToken.Value.Level > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
-                    {
-                        var compiledBodyPart = CompilerFactory.Instance.CreateCompiledStatement(currentToken.Value.Token);
-                        compiledBodyPart.Compile(ref currentToken, compiler);
-                        _body.Add(compiledBodyPart.Compiled);
-                    };*/
+                    var compiledBodyPart = CompilerFactory.Instance.CompileStatement(ref currentToken);
+                    Nodes.add(compiledBodyPart.Nodes);
                 }
             }
+
+            Nodes.add(new DirectFunctionCall("print", "ReturnValue"));
+
+            if (currentToken.TokenType != Tokens.Semicolon)
+                throw new Exception();
+
+            currentToken = currentToken.Next;
+        }
+
+        public override bool IsMatch(Token currentToken)
+        {
+            return currentToken.TokenType == Tokens.Print;
         }
     }
 }

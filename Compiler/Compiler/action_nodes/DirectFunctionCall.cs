@@ -8,6 +8,13 @@ namespace Compiler.action_nodes
 {
     public class DirectFunctionCall : AbstractFunctionCall
     {
+        public DirectFunctionCall(string action, string parameter)
+        {
+            setSize(2);
+            addParameter(0, action);
+            addParameter(1, parameter);
+        }
+
         public void action(VirtualMachine virtualMachine)
         {
 

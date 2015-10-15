@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compiler.action_nodes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,25 +7,61 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    public class CompileOperator : BaseCompiler
+    public class CompileOperator : CompiledStatement
     {
-        private Dictionary<Tokens, string> _tokenDictionary = new Dictionary<Tokens, string>();
-        protected Dictionary<Tokens, string>  TokenDictionary 
+        public CompileOperator()
         {
-            get { return _tokenDictionary; }
         }
 
-        private BaseCompiler _nextCompiler;
-        protected BaseCompiler NextCompiler
+        public override bool IsMatch(Token currentToken)
         {
-            get { return _nextCompiler; }
-            private set { _nextCompiler = value; }
+            return (currentToken.TokenType == Tokens.Number ||
+                    currentToken.TokenType == Tokens.Identifier) &&
+
+                   (currentToken.Next.TokenType == Tokens.Minus ||
+                    currentToken.Next.TokenType == Tokens.Plus) &&
+
+                   (currentToken.Next.Next.TokenType == Tokens.Number ||
+                    currentToken.Next.Next.TokenType == Tokens.Identifier);
         }
 
-        public CompileOperator(BaseCompiler compiler)
+        public override void compile(ref Token currentToken)
         {
-            _nextCompiler = compiler;
+            Token leftToken = currentToken;
+            string leftName = leftToken.Value;
+            currentToken = currentToken.Next;
+            Token operatorToken = currentToken;
+            currentToken = currentToken.Next;
+            Token rightToken = currentToken;
+            string rightName = rightToken.Value;
+            currentToken = currentToken.Next;
+
+            if (leftToken.TokenType != Tokens.Identifier)
+            {
+                leftName = NextUniqueID;
+                Nodes.add(new DirectFunctionCall("ConstantToReturn", leftToken.Value));
+                Nodes.add(new DirectFunctionCall("ReturnToVariable", leftName));
+            }
+            if (rightToken.TokenType != Tokens.Identifier)
+            {
+                rightName = NextUniqueID;
+                Nodes.add(new DirectFunctionCall("ConstantToReturn", rightToken.Value));
+                Nodes.add(new DirectFunctionCall("ReturnToVariable", rightName));
+            }
+
+            switch (operatorToken.TokenType)
+            {
+                case Tokens.Minus: Nodes.add(new FunctionCall("Minus", leftName, rightName)); break;
+                case Tokens.Plus: Nodes.add(new FunctionCall("Plus", leftName, rightName)); break;
+                default: break;
+            }
         }
-        
+
+        public override CompiledStatement Clone(ref Token currentToken)
+        {
+            CompiledStatement result = new CompileOperator();
+            result.compile(ref currentToken);
+            return result;
+        }
     }
 }

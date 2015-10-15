@@ -268,7 +268,10 @@ namespace Compiler
                     if (increaseTokens.Contains(currentToken.TokenType))
                         Level++;
                     else if (decreaseTokens.Contains(currentToken.TokenType))
+                    {
                         Level--;
+                        currentToken.Level--;
+                    }
 
                     character += tokens[i].Length;
                     PreviousToken = currentToken;

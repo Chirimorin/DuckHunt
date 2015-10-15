@@ -7,11 +7,21 @@ using Compiler.action_nodes;
 
 namespace Compiler.compiler
 {
-    public class CompileIfGeneral : BaseCompiler
+    public class CompileIfGeneral : CompiledStatement
     {
-        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
+        public override CompiledStatement Clone(ref Token currentToken)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public override void compile(ref Token currentToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsMatch(Token currentToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

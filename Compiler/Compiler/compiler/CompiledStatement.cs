@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 namespace Compiler.compiler
 {
-    public abstract class BaseCompiler
+    public abstract class CompiledStatement
     {
         private static int _localCounter = 0;
-        public string LocalCounter
+        public static string NextUniqueID
         {
-            get {
-                _localCounter++;
-                return "$" + _localCounter; }
+            get
+            {
+                return "$" + _localCounter++;
+            }
         }
 
         private ActionNodeLinkedList _nodes;
@@ -27,13 +28,9 @@ namespace Compiler.compiler
             }
         }
 
-        public virtual void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
-        {
-            while (currentToken != null)
-            {
-                Factories.CompilerFactory.Create(currentToken.TokenType).compile(ref currentToken, endToken, nodes, before);
-            }
-        }
+        public abstract void compile(ref Token currentToken);
+
+        public abstract CompiledStatement Clone(ref Token currentToken);
 
         /*public ActionNode getLastToken()
         {
@@ -51,5 +48,7 @@ namespace Compiler.compiler
                 TokenType = tokenType;
             }
         }
+
+        public abstract bool IsMatch(Token currentToken);
     }
 }

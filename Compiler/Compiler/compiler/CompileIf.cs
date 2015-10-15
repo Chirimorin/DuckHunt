@@ -2,74 +2,44 @@
 using Compiler.exceptions;
 using Compiler.factories;
 using System.Collections.Generic;
+using System;
 
 namespace Compiler.compiler
 {
-    public class CompileIf : CompileIfGeneral
+    public class CompileIf : CompiledStatement
     {
-        private CompileCondition _condition;
-        public CompileCondition Condition
-        {
-            get { return _condition; }
-            private set { _condition = value; }
-        }
-
-        private DoNothing _firstDoNothing;
-        public DoNothing FirstDoNothing
-        {
-            get
-            {
-                if (_firstDoNothing == null)
-                {
-                    _firstDoNothing = new DoNothing();
-                }
-                return _firstDoNothing;
-            }
-        }
-
-        private ConditionalJump _conditionalJump;
-        public ConditionalJump ConditionalJump
-        {
-            get
-            {
-                if (_conditionalJump == null)
-                {
-                    _conditionalJump = new ConditionalJump();
-                }
-                return _conditionalJump;
-            }
-        }
-
-        private DoNothing _lastDoNothing;
-        public DoNothing LastDoNothing
-        {
-            get
-            {
-                if (_lastDoNothing == null)
-                {
-                    _lastDoNothing = new DoNothing();
-                }
-                return _lastDoNothing;
-            }
-        }
-
         public CompileIf()
         {
-            Nodes.insertLast(FirstDoNothing);
-            Nodes.insertLast(ConditionalJump);
-            Nodes.insertLast(new DoNothing());
-            Nodes.insertLast(LastDoNothing);
-
-            ConditionalJump.OnTrueJumpToNode = Nodes.get(3);
-            ConditionalJump.OnFalseJumpToNode = Nodes.get(5);
         }
 
-        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
+        public override CompiledStatement Clone(ref Token currentToken)
         {
+            CompiledStatement result = new CompileIf();
+            result.compile(ref currentToken);
+            return result;
+        }
+
+        public override void compile(ref Token currentToken)
+        {
+            // basis opzet if statement
+            DoNothing start = new DoNothing();
+            ConditionalJump conditionalJump = new ConditionalJump();
+            DoNothing statementStart = new DoNothing();
+            DoNothing end = new DoNothing();
+
+            Nodes.add(start);
+            Nodes.add(conditionalJump);
+            Nodes.add(statementStart);
+            Nodes.add(end);
+
+            conditionalJump.OnTrueJumpToNode = statementStart;
+            conditionalJump.OnFalseJumpToNode = end;
+
+            CompileCondition condition = null;
+            ActionNode insertPoint = statementStart;
+
             int ifLevel = currentToken.Level;
-
-            nodes.insertBefore(before, FirstDoNothing);
-
+            
             List<TokenExpectation> expected = new List<TokenExpectation>()
             {
                 new TokenExpectation(ifLevel, Tokens.If),
@@ -80,7 +50,7 @@ namespace Compiler.compiler
                 new TokenExpectation(ifLevel + 1, Tokens.ANY),
                 new TokenExpectation(ifLevel, Tokens.BracketsClose)
             };
-
+            
             foreach (TokenExpectation expectation in expected)
             {
                 if (expectation.Level == ifLevel)
@@ -96,21 +66,30 @@ namespace Compiler.compiler
                 }
                 else if (expectation.Level > ifLevel)
                 {
-                    if (Condition == null)
+                    if (condition == null)
                     {
-                        Condition = new CompileCondition();
-                        Condition.compile(ref currentToken, endToken, nodes, ConditionalJump);
+                        condition = new CompileCondition();
+                        condition.compile(ref currentToken);
+                        Nodes.insertAfter(condition.Nodes, start);
                     }
                     else
                     {
                         while (currentToken.Level > ifLevel)
                         {
-                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                            compiledBodyPart.compile(ref currentToken, endToken, nodes, LastDoNothing);
+                            CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
+                            ActionNode newInsertPoint = statement.Nodes.LastNode;
+                            Nodes.insertAfter(statement.Nodes, insertPoint);
+                            insertPoint = newInsertPoint;
                         };
                     }
                 }
             }
+        }
+
+        public override bool IsMatch(Token currentToken)
+        {
+            return currentToken.TokenType == Tokens.If &&
+                currentToken.Partner == null;
         }
     }
 }

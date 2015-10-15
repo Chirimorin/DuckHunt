@@ -17,12 +17,24 @@ namespace Compiler
             }
         }
 
-        public void insertFirst(ActionNode node)
+        public ActionNode LastNode
+        {
+            get
+            {
+                ActionNode node = StartNode;
+                while (node.Next != null)
+                {
+                    node = node.Next;
+                }
+                return node;
+            }
+        }
+
+        public void add(ActionNode node)
         {
             if (StartNode != null)
             {
-                node.Next = StartNode;
-                StartNode = node;
+                LastNode.Next = node;
             }
             else
             {
@@ -30,65 +42,27 @@ namespace Compiler
             }
         }
 
-        public void insertLast(ActionNode node)
+        public void add(ActionNodeLinkedList list)
         {
-            if (StartNode != null)
-            {
-                getLast().Next = node;
-            }
-            else
-            {
-                StartNode = node;
-            }
+            add(list.StartNode);
         }
 
-        public ActionNode getLast()
+        public void insertAfter(ActionNode newNode, ActionNode after)
         {
-            ActionNode node = StartNode;
-            while (node.Next != null)
-            {
-                node = node.Next;
-            }
-            return node;
+            if (after != null)
+                newNode.Next = after.Next;
+
+            after.Next = newNode;
         }
 
-        public void insertBefore(ActionNode keyNode, ActionNode node)
+        public void insertAfter(ActionNodeLinkedList newNodes, ActionNode after)
         {
-            if (keyNode == null)
-            {
-                this.insertLast(node);
-            }
-            else if (StartNode == keyNode)
-            {
-                this.insertFirst(node);
-            }
-            else
-            {
-                ActionNode previous = null;
-                ActionNode current = StartNode;
+            //if (after != null)
+                newNodes.LastNode.Next = after.Next;
 
-                while (current != null && !current.Equals(keyNode))
-                {
-                    previous = current;
-                    current = current.Next;
-                }
+            after.Next = newNodes.StartNode;
+        }
 
-                if (current != null)
-                {
-                    if (previous != null)
-                    {
-                        previous.Next = node;
-                    }
-
-                    while (node.Next != null)
-                    {
-                        node = node.Next;
-                    }
-                    node.Next = current;
-                }
-            }
-        }  
-        
         public ActionNode get(int index)
         {
             int count = 0;
@@ -99,7 +73,7 @@ namespace Compiler
                 count++;
             }
             return node;
-        }     
+        }
 
     }
 }

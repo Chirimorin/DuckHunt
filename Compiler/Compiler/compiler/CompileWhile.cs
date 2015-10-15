@@ -2,77 +2,41 @@
 using Compiler.exceptions;
 using Compiler.factories;
 using System.Collections.Generic;
+using System;
 
 namespace Compiler.compiler
 {
-    public class CompileWhile : BaseCompiler
+    public class CompileWhile : CompiledStatement
     {
-        private CompileCondition _condition;
-        public CompileCondition Condition
-        {
-            get  { return _condition; }
-            private set { _condition = value; }
-        }
-
-        private DoNothing _firstDoNothing;
-        public DoNothing FirstDoNothing
-        {
-            get
-            {
-                if (_firstDoNothing == null)
-                {
-                    _firstDoNothing = new DoNothing();
-                }
-                return _firstDoNothing;
-            }
-        }
-
-        private ConditionalJump _conditionalJump;
-        public ConditionalJump ConditionalJump
-        {
-            get
-            {
-                if (_conditionalJump == null)
-                {
-                    _conditionalJump = new ConditionalJump();
-                }
-                return _conditionalJump;
-            }
-        }
-
-        private Jump _jump;
-        public Jump Jump
-        {
-            get
-            {
-                if (_jump == null)
-                {
-                    _jump = new Jump();
-                }
-                return _jump;
-            }
-        }
-
         public CompileWhile()
         {
-            Nodes.insertLast(FirstDoNothing);
-            Nodes.insertLast(ConditionalJump);
-            Nodes.insertLast(new DoNothing());
-            Nodes.insertLast(Jump);
-            Nodes.insertLast(new DoNothing());
-
-            ConditionalJump.OnTrueJumpToNode = Nodes.get(2);
-            ConditionalJump.OnFalseJumpToNode = Nodes.get(4);
-
-            Jump.JumpToNode = Nodes.get(0);
         }
 
-        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
+        public override void compile(ref Token currentToken)
         {
+            // basis opzet while loop
+            DoNothing start = new DoNothing();
+            ConditionalJump conditionalJump = new ConditionalJump();
+            DoNothing statementStart = new DoNothing();
+            Jump statementEnd = new Jump();
+            DoNothing end = new DoNothing();
+
+            Nodes.add(start);
+            Nodes.add(conditionalJump);
+            Nodes.add(statementStart);
+            Nodes.add(statementEnd);
+            Nodes.add(end);
+
+            conditionalJump.OnTrueJumpToNode = statementStart;
+            conditionalJump.OnFalseJumpToNode = statementEnd;
+            statementEnd.JumpToNode = start;
+
+
+            CompileCondition condition = null;
+            ActionNode insertPoint = statementStart;
+
             int whileLevel = currentToken.Level;
-
-            nodes.insertBefore(before, FirstDoNothing);
-
+            
             List<TokenExpectation> expected = new List<TokenExpectation>()
             {
                 new TokenExpectation(whileLevel, Tokens.While),
@@ -83,7 +47,7 @@ namespace Compiler.compiler
                 new TokenExpectation(whileLevel + 1, Tokens.ANY),
                 new TokenExpectation(whileLevel, Tokens.BracketsClose)
             };
-
+            
             foreach (TokenExpectation expectation in expected)
             {
                 if (expectation.Level == whileLevel)
@@ -99,19 +63,36 @@ namespace Compiler.compiler
                 }
                 else if (expectation.Level > whileLevel)
                 {
-                    if (Condition == null)
+                    if (condition == null)
                     {
-                        Condition = new CompileCondition();
-                        Condition.compile(ref currentToken, endToken, nodes, ConditionalJump);
+                        condition = new CompileCondition();
+                        condition.compile(ref currentToken);
+                        Nodes.insertAfter(condition.Nodes, start);
                     }
                     else
                     {
-                        BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                        compiledBodyPart.compile(ref currentToken, endToken, nodes, Jump);
+                        while (currentToken.Level > whileLevel)
+                        {
+                            CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
+                            ActionNode newInsertPoint = statement.Nodes.LastNode;
+                            Nodes.insertAfter(statement.Nodes, insertPoint);
+                            insertPoint = newInsertPoint;
+                        }
                     }
                 }
             }
         }
 
+        public override bool IsMatch(Token currentToken)
+        {
+            return currentToken.TokenType == Tokens.While;
+        }
+
+        public override CompiledStatement Clone(ref Token currentToken)
+        {
+            CompiledStatement result = new CompileWhile();
+            result.compile(ref currentToken);
+            return result;
+        }
     }
 }

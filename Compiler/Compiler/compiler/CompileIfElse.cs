@@ -9,68 +9,46 @@ using System.Threading.Tasks;
 
 namespace Compiler.compiler
 {
-    /*public class CompileIfElse : CompileIfGeneral
+    public class CompileIfElse : CompiledStatement
     {
-        private LinkedList<ActionNode> _condition;
-        public LinkedList<ActionNode> Condition
-        {
-            get
-            {
-                if (_condition == null)
-                {
-                    _condition = new LinkedList<ActionNode>();
-                }
-                return _condition;
-            }
-        }
-
-        private LinkedList<ActionNode> _body;
-        public LinkedList<ActionNode> Body
-        {
-            get
-            {
-                if (_body == null)
-                {
-                    _body = new LinkedList<ActionNode>();
-                }
-                return _body;
-            }
-        }
-
-        private LinkedList<ActionNode> _bodyElse;
-        public LinkedList<ActionNode> BodyElse
-        {
-            get
-            {
-                if (_bodyElse == null)
-                {
-                    _bodyElse = new LinkedList<ActionNode>();
-                }
-                return _bodyElse;
-            }
-        }
-
         public CompileIfElse()
         {
-            ConditionalJump conditionalJump = new ConditionalJump();
-            Jump jump = new Jump();
-
-            Nodes.AddLast(new DoNothing());
-            Nodes.AddLast(conditionalJump);
-            Nodes.AddLast(new DoNothing());
-
-            Nodes.AddLast(jump);
-            Nodes.AddLast(new DoNothing());
-            Nodes.AddLast(new DoNothing());
-
-            conditionalJump.OnTrueJumpToNode = Nodes.ElementAt(3);
-            conditionalJump.OnFalseJumpToNode = Nodes.ElementAt(6);
-
-            jump.JumpToNode = Nodes.ElementAt(8);
         }
 
-        public override void compile(ref Token currentToken, Token endToken, ActionNodeLinkedList nodes, ActionNode before)
+        public override CompiledStatement Clone(ref Token currentToken)
         {
+            CompiledStatement result = new CompileIfElse();
+            result.compile(ref currentToken);
+            return result;
+        }
+
+        public override void compile(ref Token currentToken)
+        {
+            // basis opzet if statement
+            DoNothing start = new DoNothing();
+            ConditionalJump conditionalJump = new ConditionalJump();
+            DoNothing ifStart = new DoNothing();
+            Jump ifEnd = new Jump();
+            DoNothing elseStart = new DoNothing();
+            DoNothing elseEnd = new DoNothing();
+
+            Nodes.add(start);
+            Nodes.add(conditionalJump);
+            Nodes.add(ifStart);
+            Nodes.add(ifEnd);
+            Nodes.add(elseStart);
+            Nodes.add(elseEnd);
+
+            conditionalJump.OnTrueJumpToNode = ifStart;
+            conditionalJump.OnFalseJumpToNode = elseStart;
+            ifEnd.JumpToNode = elseEnd;
+
+            bool conditionCompiled = false;
+            bool ifCompiled = false;
+
+            ActionNode insertPointIf = ifStart;
+            ActionNode insertPointElse = elseStart;
+
             int ifLevel = currentToken.Level;
 
             List<TokenExpectation> expected = new List<TokenExpectation>()
@@ -88,7 +66,7 @@ namespace Compiler.compiler
                 new TokenExpectation(ifLevel, Tokens.BracketsClose)
             };
 
-            foreach (var expectation in expected)
+            foreach (TokenExpectation expectation in expected)
             {
                 if (expectation.Level == ifLevel)
                 {
@@ -101,34 +79,44 @@ namespace Compiler.compiler
                         currentToken = currentToken.Next;
                     }
                 }
-                else if (expectation.Level >= ifLevel)
+                else if (expectation.Level > ifLevel)
                 {
-                    if (Condition.Count <= 0)
+                    if (!conditionCompiled)
                     {
-                        CompileCondition compiledCondition = new CompileCondition();
-                        compiledCondition.compile(ref currentToken, endToken,nodes, before);
-                        //Condition.AddLast(compiledCondition.Compiled);
+                        CompileCondition condition = new CompileCondition();
+                        condition.compile(ref currentToken);
+                        Nodes.insertAfter(condition.Nodes, start);
+                        conditionCompiled = true;
                     }
-                    else if (Body.Count <= 0)
+                    else if (!ifCompiled)
                     {
                         while (currentToken.Level > ifLevel)
                         {
-                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                            compiledBodyPart.compile(ref currentToken, endToken, nodes, before);
-                            //Body.AddLast(compiledBodyPart.Compiled);
-                        };
+                            CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
+                            ActionNode newInsertPoint = statement.Nodes.LastNode;
+                            Nodes.insertAfter(statement.Nodes, insertPointIf);
+                            insertPointIf = newInsertPoint;
+                        }
+                        ifCompiled = true;
                     }
                     else
                     {
                         while (currentToken.Level > ifLevel)
                         {
-                            BaseCompiler compiledBodyPart = Factories.CompilerFactory.Create(currentToken.TokenType);
-                            compiledBodyPart.compile(ref currentToken, endToken, nodes, before);
-                            //BodyElse.AddLast(compiledBodyPart.Compiled);
-                        };
+                            CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
+                            ActionNode newInsertPoint = statement.Nodes.LastNode;
+                            Nodes.insertAfter(statement.Nodes, insertPointElse);
+                            insertPointElse = newInsertPoint;
+                        }
                     }
                 }
             }
         }
-    }*/
+
+        public override bool IsMatch(Token currentToken)
+        {
+            return currentToken.TokenType == Tokens.If &&
+                currentToken.Partner.TokenType == Tokens.Else;
+        }
+    }
 }
