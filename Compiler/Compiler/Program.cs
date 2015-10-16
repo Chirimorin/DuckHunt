@@ -4,6 +4,7 @@ using Compiler.exceptions;
 using Compiler.factories;
 using Compiler.virtual_machine;
 using System;
+using System.IO;
 
 namespace Compiler
 {
@@ -11,21 +12,28 @@ namespace Compiler
     {
         public static void Main(string[] args)
         {
+            Console.Write("Filename: ");
+            string file = Console.ReadLine();
+
             Console.WriteLine("-------- Tokenizer --------");
 
             Tokenizer tokenizer = new Tokenizer();
             try
             {
-                tokenizer.ReadFile("scripts/testScript.txt");
+                tokenizer.ReadFile("scripts/" + file);
             }
             catch (Exception ex) when
-                (ex is TokenNotFoundException ||
+                (ex is FileNotFoundException ||
+                 ex is TokenNotFoundException ||
                  ex is UnexpectedTokenException ||
                  ex is MissingPartnerTokenException ||
                  ex is BracketsNotMatchingException ||
                  ex is InvalidVariableNameException)
             {
                 Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+                return;
             }
 
             Token token = tokenizer.StartToken;
