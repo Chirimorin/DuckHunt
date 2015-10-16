@@ -1,10 +1,5 @@
-﻿using Compiler.action_nodes;
-using Compiler.factories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Compiler.factories;
+using Compiler.tokenizer;
 
 namespace Compiler.compiler
 {

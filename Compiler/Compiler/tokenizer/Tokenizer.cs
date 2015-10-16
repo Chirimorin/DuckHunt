@@ -1,9 +1,9 @@
-﻿using Compiler.exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Compiler.exceptions;
 
-namespace Compiler
+namespace Compiler.tokenizer
 {
     public class Tokenizer
     {
@@ -219,16 +219,16 @@ namespace Compiler
 
                     try
                     {
-                        currentToken.TokenType = getTokenType(tokens[i]);
+                        currentToken.TokenType = GetTokenType(tokens[i]);
                     }
                     catch (Exception)
                     {
                         throw new TokenNotFoundException(currentToken);
                     }
                     
-                    setPartner(currentToken);
+                    SetPartner(currentToken);
 
-                    checkCodeIsValid(currentToken);
+                    CheckCodeIsValid(currentToken);
 
                     // Haalt "if" van de stack af als er geen "else" is
                     if (TokenStack.Count != 0)
@@ -280,7 +280,7 @@ namespace Compiler
             }
         }
 
-        private Tokens getTokenType(string token)
+        private Tokens GetTokenType(string token)
         {
             int number = 0;
             Tokens result;
@@ -288,17 +288,17 @@ namespace Compiler
             if (token[0] == '¤') // Identifier
                 return Tokens.Identifier;
 
-            else if (int.TryParse(token, out number)) // Number
+            if (int.TryParse(token, out number)) // Number
                 return Tokens.Number;
 
-            else if (allTokens.TryGetValue(token, out result)) // Ander token
+            if (allTokens.TryGetValue(token, out result)) // Ander token
                 return result;
           
-            else // Token bestaat niet
-                throw new Exception("Invalid token");
+            // Token bestaat niet
+            throw new Exception("Invalid token");
         }
 
-        private void setPartner(Token token)
+        private void SetPartner(Token token)
         {
             Tokens partner;
             if (partners.TryGetValue(token.TokenType, out partner) &&
@@ -310,7 +310,7 @@ namespace Compiler
             }
         }
 
-        private void checkCodeIsValid(Token token)
+        private void CheckCodeIsValid(Token token)
         {
             Tokens[] result;
             if (possiblePreviousTokens.TryGetValue(token.TokenType, out result))
