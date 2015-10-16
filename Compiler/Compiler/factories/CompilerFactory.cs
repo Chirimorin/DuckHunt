@@ -38,8 +38,16 @@ namespace Compiler.factories
         {
             foreach (CompiledStatement compiler in _compilers)
             {
-                if (compiler.IsMatch(currentToken))
-                    return compiler.Clone(ref currentToken);
+                try
+                {
+                    if (compiler.IsMatch(currentToken))
+                        return compiler.Clone(ref currentToken);
+                }
+                catch (NullReferenceException)
+                {
+                    // Do nothing
+                }
+                
             }
 
             throw new Exception();

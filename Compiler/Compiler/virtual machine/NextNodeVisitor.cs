@@ -9,20 +9,17 @@ namespace Compiler.virtual_machine
 {
     public class NextNodeVisitor : INodeVisitor
     {
-        private VirtualMachine VM { get; set; }
+        private VirtualMachine Vm { get; }
         public ActionNode NextNode { get; private set; }
 
         public NextNodeVisitor(VirtualMachine vm)
         {
-            VM = vm;
+            Vm = vm;
         }
 
         public void Visit(ConditionalJump visited)
         {
-            if (VM.ReturnValue == "true")
-                NextNode = visited.OnTrueJumpToNode;
-            else
-                NextNode = visited.OnFalseJumpToNode;
+            NextNode = Vm.ReturnValue == "True" ? visited.OnTrueJumpToNode : visited.OnFalseJumpToNode;
         }
 
         public void Visit(DirectFunctionCall visited)

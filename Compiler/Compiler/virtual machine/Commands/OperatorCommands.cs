@@ -24,8 +24,8 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            int value1 = int.Parse(arguments[0]),
-                value2 = int.Parse(arguments[1]);
+            int value1 = int.Parse(vm.Variables[arguments[0]]),
+                value2 = int.Parse(vm.Variables[arguments[1]]);
 
             vm.ReturnValue = (value1 + value2).ToString();
         }
@@ -37,8 +37,8 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            int value1 = int.Parse(arguments[0]),
-                value2 = int.Parse(arguments[1]);
+            int value1 = int.Parse(vm.Variables[arguments[0]]),
+                value2 = int.Parse(vm.Variables[arguments[1]]);
 
             vm.ReturnValue = (value1 - value2).ToString();
         }

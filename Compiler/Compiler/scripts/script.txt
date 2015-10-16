@@ -15,5 +15,5 @@ else ¡ ¤i = ¤n !
 
     ¤i - ¤i == 1 ~
 
-    if ¤result ~
+    if ¡ ¤result ! ~
 «

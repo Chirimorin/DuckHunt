@@ -23,8 +23,8 @@ namespace Compiler.virtual_machine.Commands
         public override void Execute(string[] arguments, VirtualMachine vm)
         {
             base.Execute(arguments, vm);
-
-            vm.ReturnValue = (arguments[0] == arguments[1]).ToString();
+            
+            vm.ReturnValue = (vm.Variables[arguments[0]] == vm.Variables[arguments[1]]).ToString();
         }
     }
 
@@ -34,7 +34,7 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            vm.ReturnValue = (arguments[0] != arguments[1]).ToString();
+            vm.ReturnValue = (vm.Variables[arguments[0]] != vm.Variables[arguments[1]]).ToString();
         }
     }
 
@@ -44,9 +44,9 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            int value1 = int.Parse(arguments[0]), 
-                value2 = int.Parse(arguments[1]);
-            
+            int value1 = int.Parse(vm.Variables[arguments[0]]),
+                value2 = int.Parse(vm.Variables[arguments[1]]);
+
             vm.ReturnValue = (value1 >= value2).ToString();
         }
     }
@@ -57,8 +57,8 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            int value1 = int.Parse(arguments[0]),
-                value2 = int.Parse(arguments[1]);
+            int value1 = int.Parse(vm.Variables[arguments[0]]),
+                value2 = int.Parse(vm.Variables[arguments[1]]);
 
             vm.ReturnValue = (value1 > value2).ToString();
         }
@@ -70,8 +70,8 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            int value1 = int.Parse(arguments[0]),
-                value2 = int.Parse(arguments[1]);
+            int value1 = int.Parse(vm.Variables[arguments[0]]),
+                value2 = int.Parse(vm.Variables[arguments[1]]);
 
             vm.ReturnValue = (value1 <= value2).ToString();
         }
@@ -83,9 +83,9 @@ namespace Compiler.virtual_machine.Commands
         {
             base.Execute(arguments, vm);
 
-            int value1 = int.Parse(arguments[0]),
-                value2 = int.Parse(arguments[1]);
-
+            int value1 = int.Parse(vm.Variables[arguments[0]]),
+                value2 = int.Parse(vm.Variables[arguments[1]]);
+            
             vm.ReturnValue = (value1 < value2).ToString();
         }
     }

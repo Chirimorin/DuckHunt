@@ -19,7 +19,17 @@ namespace Compiler.virtual_machine
             Commands = new Dictionary<string, ICommand>()
             {
                 { "Plus", new PlusCommand() },
-                { "Minus", new MinusCommand() }
+                { "Minus", new MinusCommand() },
+                { "ConstantToReturn", new ConstantToReturnCommand() },
+                { "ReturnToVariable", new ReturnToVariableCommand() },
+                { "VariableToReturn", new VariableToReturnCommand() },
+                { "Print", new PrintCommand() },
+                { "Equals", new EqualsCommand() },
+                { "NotEquals", new NotEqualsCommand() },
+                { "GreaterEquals", new GreaterEqualsCommand() },
+                { "SmallerEquals", new SmallerEqualsCommand() },
+                { "GreaterThan", new GreaterThanCommand() },
+                { "SmallerThan", new SmallerThanCommand() },
             };
 
         }
@@ -37,7 +47,6 @@ namespace Compiler.virtual_machine
 
                 currentNode.Accept(nextNodeVisitor);
                 currentNode = nextNodeVisitor.NextNode;
-                Console.WriteLine("CurrentNode: " + currentNode);
             }
         }
 

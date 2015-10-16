@@ -52,7 +52,7 @@ namespace Compiler.compiler
                 }
             }
 
-            Nodes.add(new DirectFunctionCall("print", "ReturnValue"));
+            Nodes.add(new DirectFunctionCall("Print", "ReturnValue"));
 
             if (currentToken.TokenType != Tokens.Semicolon)
                 throw new Exception();
