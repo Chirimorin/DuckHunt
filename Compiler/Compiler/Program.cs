@@ -2,6 +2,7 @@
 using Compiler.compiler;
 using Compiler.exceptions;
 using Compiler.factories;
+using Compiler.virtual_machine;
 using System;
 
 namespace Compiler
@@ -53,17 +54,24 @@ namespace Compiler
             {
                 if (node is DirectFunctionCall)
                 {
-                    Console.WriteLine("DirectFunctionCall: " + ((DirectFunctionCall)node).getParameter(0));
+                    Console.WriteLine("DirectFunctionCall: " + ((DirectFunctionCall)node).ActionName);
                 }
                 else if (node is FunctionCall)
                 {
-                    Console.WriteLine("FunctionCall: " + ((FunctionCall)node).getParameter(0));
+                    Console.WriteLine("FunctionCall: " + ((FunctionCall)node).ActionName);
                 }
                 else
                     Console.WriteLine(node);
                 node = node.Next;
             }
 
+            Console.WriteLine();
+            Console.WriteLine("-------- Virtual Machine --------");
+
+            VirtualMachine vm = new VirtualMachine();
+            vm.Run(nodes);
+
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
     }

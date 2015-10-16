@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compiler.virtual_machine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Compiler.action_nodes
 {
     public class DoNothing: ActionNode
     {
-        public override void Accept(NodeVisitor visitor)
+        public override void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);
         }

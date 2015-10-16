@@ -16,19 +16,17 @@ namespace Compiler.compiler
         {
             // basis opzet while loop
             DoNothing start = new DoNothing();
-            ConditionalJump conditionalJump = new ConditionalJump();
             DoNothing statementStart = new DoNothing();
             Jump statementEnd = new Jump();
             DoNothing end = new DoNothing();
+            ConditionalJump conditionalJump = new ConditionalJump(statementStart, end);
 
             Nodes.add(start);
             Nodes.add(conditionalJump);
             Nodes.add(statementStart);
             Nodes.add(statementEnd);
             Nodes.add(end);
-
-            conditionalJump.OnTrueJumpToNode = statementStart;
-            conditionalJump.OnFalseJumpToNode = statementEnd;
+            
             statementEnd.JumpToNode = start;
 
 

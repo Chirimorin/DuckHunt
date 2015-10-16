@@ -5,16 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Compiler
+namespace Compiler.virtual_machine
 {
-    public interface NodeVisitor
+    public interface INodeVisitor
     {
-        void Visit(ActionNode visited);
-        void Visit(DoNothing visited);
-        void Visit(Jump visited);
         void Visit(ConditionalJump visited);
-        void Visit(AbstractFunctionCall visited);
         void Visit(DirectFunctionCall visited);
+        void Visit(DoNothing visited);
         void Visit(FunctionCall visited);
+        void Visit(Jump visited);
     }
 }

@@ -26,11 +26,11 @@ namespace Compiler.compiler
         {
             // basis opzet if statement
             DoNothing start = new DoNothing();
-            ConditionalJump conditionalJump = new ConditionalJump();
             DoNothing ifStart = new DoNothing();
             Jump ifEnd = new Jump();
             DoNothing elseStart = new DoNothing();
             DoNothing elseEnd = new DoNothing();
+            ConditionalJump conditionalJump = new ConditionalJump(ifStart, elseStart);
 
             Nodes.add(start);
             Nodes.add(conditionalJump);
@@ -38,9 +38,7 @@ namespace Compiler.compiler
             Nodes.add(ifEnd);
             Nodes.add(elseStart);
             Nodes.add(elseEnd);
-
-            conditionalJump.OnTrueJumpToNode = ifStart;
-            conditionalJump.OnFalseJumpToNode = elseStart;
+            
             ifEnd.JumpToNode = elseEnd;
 
             bool conditionCompiled = false;

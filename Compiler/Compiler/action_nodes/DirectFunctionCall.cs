@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compiler.virtual_machine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,8 @@ namespace Compiler.action_nodes
     {
         public DirectFunctionCall(string action, string parameter)
         {
-            setSize(2);
-            addParameter(0, action);
-            addParameter(1, parameter);
+            ActionName = action;
+            Parameters = new string[] { parameter };
         }
 
         public void action(VirtualMachine virtualMachine)
@@ -20,7 +20,7 @@ namespace Compiler.action_nodes
 
         }
 
-        public override void Accept(NodeVisitor visitor)
+        public override void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);
         }

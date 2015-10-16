@@ -23,17 +23,15 @@ namespace Compiler.compiler
         {
             // basis opzet if statement
             DoNothing start = new DoNothing();
-            ConditionalJump conditionalJump = new ConditionalJump();
             DoNothing statementStart = new DoNothing();
             DoNothing end = new DoNothing();
+            ConditionalJump conditionalJump = new ConditionalJump(statementStart, end);
 
             Nodes.add(start);
             Nodes.add(conditionalJump);
             Nodes.add(statementStart);
             Nodes.add(end);
-
-            conditionalJump.OnTrueJumpToNode = statementStart;
-            conditionalJump.OnFalseJumpToNode = end;
+            
 
             CompileCondition condition = null;
             ActionNode insertPoint = statementStart;

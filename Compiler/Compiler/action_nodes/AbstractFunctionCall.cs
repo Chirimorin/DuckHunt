@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compiler.virtual_machine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,33 +9,12 @@ namespace Compiler.action_nodes
 {
     public abstract class AbstractFunctionCall : ActionNode
     {
-        private string[] parameters;
-        
-        public void setSize(int size)
-        {
-            if (size > 0)
-            {
-                parameters = new string[size];
-            }
-            else
-            {
-                parameters = null;
-            }
-        }
+        public string ActionName { get; protected set; }
+        public string[] Parameters { get; protected set; }
 
-        public void addParameter(int index, string parameter)
+        public override void Execute(VirtualMachine vm)
         {
-            parameters[index] = parameter;
-        }
-
-        public string getParameter(int index)
-        {
-            return parameters[index];
-        }
-
-        public override void Accept(NodeVisitor visitor)
-        {
-            visitor.Visit(this);
+            vm.GetCommand(ActionName).Execute(Parameters, vm);
         }
     }
 }
