@@ -56,14 +56,11 @@
     <Compile Include="factories\CompilerFactory.cs" />
     <Compile Include="compiler\CompileAssignment .cs" />
     <Compile Include="compiler\CompileCondition.cs" />
-    <Compile Include="compiler\CompileFunction.cs" />
     <Compile Include="compiler\CompileIf.cs" />
     <Compile Include="compiler\CompileIfElse.cs" />
-    <Compile Include="compiler\CompileIfGeneral.cs" />
     <Compile Include="compiler\CompileOperator.cs" />
     <Compile Include="compiler\CompiledStatement.cs" />
     <Compile Include="compiler\CompilePrint.cs" />
-    <Compile Include="compiler\CompileSingleStatement.cs" />
     <Compile Include="compiler\CompileValue.cs" />
     <Compile Include="compiler\CompileWhile.cs" />
     <Compile Include="exceptions\InvalidVariableNameException.cs" />

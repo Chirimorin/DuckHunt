@@ -10,20 +10,10 @@ namespace Compiler.action_nodes
             OnFalseJumpToNode = onFalseJumpNode;
         }
 
-        private ActionNode _onTrueJumpToNode;
-        public ActionNode OnTrueJumpToNode
-        {
-            get { return _onTrueJumpToNode; }
-            private set { _onTrueJumpToNode = value; }
-        }
+        public ActionNode OnTrueJumpToNode { get; private set; }
 
-        private ActionNode _onFalseJumpToNode;
-        public ActionNode OnFalseJumpToNode
-        {
-            get { return _onFalseJumpToNode; }
-            private set { _onFalseJumpToNode = value; }
-        }
-        
+        public ActionNode OnFalseJumpToNode { get; private set; }
+
         public override void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);

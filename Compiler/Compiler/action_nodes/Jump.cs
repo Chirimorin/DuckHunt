@@ -4,12 +4,7 @@ namespace Compiler.action_nodes
 {
     public class Jump : ActionNode
     {
-        private ActionNode _jumpToNode;
-        public ActionNode JumpToNode
-        {
-            get { return _jumpToNode; }
-            set { _jumpToNode = value; }
-        }
+        public ActionNode JumpToNode { get; set; }
 
         public override void Accept(INodeVisitor visitor)
         {

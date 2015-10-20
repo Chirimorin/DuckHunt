@@ -5,10 +5,6 @@ namespace Compiler.compiler
 {
     public class CompileOperator : CompiledStatement
     {
-        public CompileOperator()
-        {
-        }
-
         public override bool IsMatch(Token currentToken)
         {
             return (currentToken.TokenType == Tokens.Number ||
@@ -21,7 +17,7 @@ namespace Compiler.compiler
                     currentToken.Next.Next.TokenType == Tokens.Identifier);
         }
 
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             Token leftToken = currentToken;
             string leftName = leftToken.Value;
@@ -34,21 +30,21 @@ namespace Compiler.compiler
 
             if (leftToken.TokenType != Tokens.Identifier)
             {
-                leftName = NextUniqueID;
-                Nodes.add(new DirectFunctionCall("ConstantToReturn", leftToken.Value));
-                Nodes.add(new DirectFunctionCall("ReturnToVariable", leftName));
+                leftName = NextUniqueId;
+                Nodes.Add(new DirectFunctionCall("ConstantToReturn", leftToken.Value));
+                Nodes.Add(new DirectFunctionCall("ReturnToVariable", leftName));
             }
             if (rightToken.TokenType != Tokens.Identifier)
             {
-                rightName = NextUniqueID;
-                Nodes.add(new DirectFunctionCall("ConstantToReturn", rightToken.Value));
-                Nodes.add(new DirectFunctionCall("ReturnToVariable", rightName));
+                rightName = NextUniqueId;
+                Nodes.Add(new DirectFunctionCall("ConstantToReturn", rightToken.Value));
+                Nodes.Add(new DirectFunctionCall("ReturnToVariable", rightName));
             }
 
             switch (operatorToken.TokenType)
             {
-                case Tokens.Minus: Nodes.add(new FunctionCall("Minus", leftName, rightName)); break;
-                case Tokens.Plus: Nodes.add(new FunctionCall("Plus", leftName, rightName)); break;
+                case Tokens.Minus: Nodes.Add(new FunctionCall("Minus", leftName, rightName)); break;
+                case Tokens.Plus: Nodes.Add(new FunctionCall("Plus", leftName, rightName)); break;
                 default: break;
             }
         }
@@ -56,7 +52,7 @@ namespace Compiler.compiler
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompileOperator();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
     }

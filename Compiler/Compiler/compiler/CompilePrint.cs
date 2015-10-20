@@ -7,30 +7,28 @@ using Compiler.tokenizer;
 
 namespace Compiler.compiler
 {
-    public class CompilePrint : CompileFunction
+    public class CompilePrint : CompiledStatement
     {
-        public CompilePrint(): base() { }
-
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompilePrint();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
 
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             int printLevel = currentToken.Level;
 
-            List<TokenExpectation> expected = new List<TokenExpectation>()
+            List<CompiledStatement.TokenExpectation> expected = new List<CompiledStatement.TokenExpectation>()
             {
-                new TokenExpectation(printLevel, Tokens.Print),
-                new TokenExpectation(printLevel, Tokens.EllipsisOpen),
-                new TokenExpectation(printLevel + 1, Tokens.ANY),
-                new TokenExpectation(printLevel, Tokens.EllipsisClose)
+                new CompiledStatement.TokenExpectation(printLevel, Tokens.Print),
+                new CompiledStatement.TokenExpectation(printLevel, Tokens.EllipsisOpen),
+                new CompiledStatement.TokenExpectation(printLevel + 1, Tokens.Any),
+                new CompiledStatement.TokenExpectation(printLevel, Tokens.EllipsisClose)
             };
 
-            foreach (TokenExpectation expectation in expected)
+            foreach (CompiledStatement.TokenExpectation expectation in expected)
             {
                 if (expectation.Level == printLevel)
                 {
@@ -46,11 +44,11 @@ namespace Compiler.compiler
                 else if (expectation.Level > printLevel)
                 {
                     var compiledBodyPart = CompilerFactory.Instance.CompileStatement(ref currentToken);
-                    Nodes.add(compiledBodyPart.Nodes);
+                    Nodes.Add(compiledBodyPart.Nodes);
                 }
             }
 
-            Nodes.add(new DirectFunctionCall("Print", "ReturnValue"));
+            Nodes.Add(new DirectFunctionCall("Print", "ReturnValue"));
 
             if (currentToken.TokenType != Tokens.Semicolon)
                 throw new Exception();

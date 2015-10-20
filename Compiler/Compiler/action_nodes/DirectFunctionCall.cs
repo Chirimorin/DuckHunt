@@ -10,11 +10,6 @@ namespace Compiler.action_nodes
             Parameters = new string[] { parameter };
         }
 
-        public void action(VirtualMachine virtualMachine)
-        {
-
-        }
-
         public override void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);

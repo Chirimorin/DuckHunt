@@ -8,16 +8,16 @@ namespace Compiler.compiler
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompileValue();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
 
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             if (currentToken.TokenType == Tokens.Number)
-                Nodes.add(new DirectFunctionCall("ConstantToReturn", currentToken.Value));
+                Nodes.Add(new DirectFunctionCall("ConstantToReturn", currentToken.Value));
             else
-                Nodes.add(new DirectFunctionCall("VariableToReturn", currentToken.Value));
+                Nodes.Add(new DirectFunctionCall("VariableToReturn", currentToken.Value));
             currentToken = currentToken.Next;
         }
 

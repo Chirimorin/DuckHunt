@@ -8,18 +8,14 @@ namespace Compiler.compiler
 {
     public class CompileIfElse : CompiledStatement
     {
-        public CompileIfElse()
-        {
-        }
-
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompileIfElse();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
 
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             // basis opzet if statement
             DoNothing start = new DoNothing();
@@ -29,12 +25,12 @@ namespace Compiler.compiler
             DoNothing elseEnd = new DoNothing();
             ConditionalJump conditionalJump = new ConditionalJump(ifStart, elseStart);
 
-            Nodes.add(start);
-            Nodes.add(conditionalJump);
-            Nodes.add(ifStart);
-            Nodes.add(ifEnd);
-            Nodes.add(elseStart);
-            Nodes.add(elseEnd);
+            Nodes.Add(start);
+            Nodes.Add(conditionalJump);
+            Nodes.Add(ifStart);
+            Nodes.Add(ifEnd);
+            Nodes.Add(elseStart);
+            Nodes.Add(elseEnd);
             
             ifEnd.JumpToNode = elseEnd;
 
@@ -50,14 +46,14 @@ namespace Compiler.compiler
             {
                 new TokenExpectation(ifLevel, Tokens.If),
                 new TokenExpectation(ifLevel, Tokens.EllipsisOpen),
-                new TokenExpectation(ifLevel + 1, Tokens.ANY),
+                new TokenExpectation(ifLevel + 1, Tokens.Any),
                 new TokenExpectation(ifLevel, Tokens.EllipsisClose),
                 new TokenExpectation(ifLevel, Tokens.BracketsOpen),
-                new TokenExpectation(ifLevel + 1, Tokens.ANY),
+                new TokenExpectation(ifLevel + 1, Tokens.Any),
                 new TokenExpectation(ifLevel, Tokens.BracketsClose),
                 new TokenExpectation(ifLevel, Tokens.Else),
                 new TokenExpectation(ifLevel, Tokens.BracketsOpen),
-                new TokenExpectation(ifLevel + 1, Tokens.ANY),
+                new TokenExpectation(ifLevel + 1, Tokens.Any),
                 new TokenExpectation(ifLevel, Tokens.BracketsClose)
             };
 
@@ -79,8 +75,8 @@ namespace Compiler.compiler
                     if (!conditionCompiled)
                     {
                         CompileCondition condition = new CompileCondition();
-                        condition.compile(ref currentToken);
-                        Nodes.insertAfter(condition.Nodes, start);
+                        condition.Compile(ref currentToken);
+                        Nodes.InsertAfter(condition.Nodes, start);
                         conditionCompiled = true;
                     }
                     else if (!ifCompiled)
@@ -89,7 +85,7 @@ namespace Compiler.compiler
                         {
                             CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
                             ActionNode newInsertPoint = statement.Nodes.LastNode;
-                            Nodes.insertAfter(statement.Nodes, insertPointIf);
+                            Nodes.InsertAfter(statement.Nodes, insertPointIf);
                             insertPointIf = newInsertPoint;
                         }
                         ifCompiled = true;
@@ -100,7 +96,7 @@ namespace Compiler.compiler
                         {
                             CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
                             ActionNode newInsertPoint = statement.Nodes.LastNode;
-                            Nodes.insertAfter(statement.Nodes, insertPointElse);
+                            Nodes.InsertAfter(statement.Nodes, insertPointElse);
                             insertPointElse = newInsertPoint;
                         }
                     }

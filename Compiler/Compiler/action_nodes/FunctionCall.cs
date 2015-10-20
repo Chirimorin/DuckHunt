@@ -9,12 +9,7 @@ namespace Compiler.action_nodes
             ActionName = action;
             Parameters = parameters;
         }
-
-        public void action(VirtualMachine virtualMachine)
-        {
-
-        }
-
+        
         public override void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);

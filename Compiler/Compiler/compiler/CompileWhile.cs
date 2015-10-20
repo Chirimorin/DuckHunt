@@ -8,11 +8,7 @@ namespace Compiler.compiler
 {
     public class CompileWhile : CompiledStatement
     {
-        public CompileWhile()
-        {
-        }
-
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             // basis opzet while loop
             DoNothing start = new DoNothing();
@@ -21,11 +17,11 @@ namespace Compiler.compiler
             DoNothing end = new DoNothing();
             ConditionalJump conditionalJump = new ConditionalJump(statementStart, end);
 
-            Nodes.add(start);
-            Nodes.add(conditionalJump);
-            Nodes.add(statementStart);
-            Nodes.add(statementEnd);
-            Nodes.add(end);
+            Nodes.Add(start);
+            Nodes.Add(conditionalJump);
+            Nodes.Add(statementStart);
+            Nodes.Add(statementEnd);
+            Nodes.Add(end);
             
             statementEnd.JumpToNode = start;
 
@@ -39,10 +35,10 @@ namespace Compiler.compiler
             {
                 new TokenExpectation(whileLevel, Tokens.While),
                 new TokenExpectation(whileLevel, Tokens.EllipsisOpen),
-                new TokenExpectation(whileLevel + 1, Tokens.ANY),
+                new TokenExpectation(whileLevel + 1, Tokens.Any),
                 new TokenExpectation(whileLevel, Tokens.EllipsisClose),
                 new TokenExpectation(whileLevel, Tokens.BracketsOpen), 
-                new TokenExpectation(whileLevel + 1, Tokens.ANY),
+                new TokenExpectation(whileLevel + 1, Tokens.Any),
                 new TokenExpectation(whileLevel, Tokens.BracketsClose)
             };
             
@@ -64,8 +60,8 @@ namespace Compiler.compiler
                     if (condition == null)
                     {
                         condition = new CompileCondition();
-                        condition.compile(ref currentToken);
-                        Nodes.insertAfter(condition.Nodes, start);
+                        condition.Compile(ref currentToken);
+                        Nodes.InsertAfter(condition.Nodes, start);
                     }
                     else
                     {
@@ -73,7 +69,7 @@ namespace Compiler.compiler
                         {
                             CompiledStatement statement = CompilerFactory.Instance.CompileStatement(ref currentToken);
                             ActionNode newInsertPoint = statement.Nodes.LastNode;
-                            Nodes.insertAfter(statement.Nodes, insertPoint);
+                            Nodes.InsertAfter(statement.Nodes, insertPoint);
                             insertPoint = newInsertPoint;
                         }
                     }
@@ -89,7 +85,7 @@ namespace Compiler.compiler
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompileWhile();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
     }

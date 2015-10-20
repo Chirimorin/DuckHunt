@@ -10,18 +10,18 @@ namespace Compiler.compiler
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompileAssignment();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
 
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             string variableName = currentToken.Value;
             currentToken = currentToken.Next.Next;
 
             CompiledStatement rightCompiled = CompilerFactory.Instance.CompileStatement(ref currentToken);
-            Nodes.add(rightCompiled.Nodes);
-            Nodes.add(new DirectFunctionCall("ReturnToVariable", variableName));
+            Nodes.Add(rightCompiled.Nodes);
+            Nodes.Add(new DirectFunctionCall("ReturnToVariable", variableName));
 
             if (currentToken.TokenType != Tokens.Semicolon)
                 throw new Exception();

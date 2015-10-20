@@ -5,7 +5,7 @@ namespace Compiler.compiler
 {
     public class TokenCompiler
     {
-        private ActionNodeLinkedList _compiledNodes;
+        private readonly ActionNodeLinkedList _compiledNodes;
 
         public TokenCompiler()
         {
@@ -16,7 +16,7 @@ namespace Compiler.compiler
         {
             while (currentToken != null)
             {
-                _compiledNodes.add(CompilerFactory.Instance.CompileStatement(ref currentToken).Nodes);
+                _compiledNodes.Add(CompilerFactory.Instance.CompileStatement(ref currentToken).Nodes);
             }
 
             return _compiledNodes;

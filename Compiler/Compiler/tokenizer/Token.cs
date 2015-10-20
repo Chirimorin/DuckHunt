@@ -37,6 +37,6 @@
         Semicolon, 
         Becomes, 
         Print,
-        ANY
+        Any
     }
 }

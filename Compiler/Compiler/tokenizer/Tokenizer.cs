@@ -10,12 +10,12 @@ namespace Compiler.tokenizer
         public Token StartToken { get; set; }
         private Token PreviousToken { get; set; }
 
-        private Stack<Token> TokenStack { get; set; }
+        private Stack<Token> TokenStack { get; }
 
         private int Level { get; set; }
 
         #region all tokens
-        private Dictionary<string, Tokens> allTokens = new Dictionary<string, Tokens>()
+        private readonly Dictionary<string, Tokens> _allTokens = new Dictionary<string, Tokens>
         {
             {"while", Tokens.If},
             {"print", Tokens.Else},
@@ -39,7 +39,8 @@ namespace Compiler.tokenizer
         #endregion
 
         #region push to stack tokens
-        Tokens[] pushToStackTokens = new Tokens[]
+
+        readonly Tokens[] _pushToStackTokens = 
         {
             Tokens.If,
             Tokens.EllipsisOpen,
@@ -48,7 +49,7 @@ namespace Compiler.tokenizer
         #endregion
 
         #region partners
-        private Dictionary<Tokens, Tokens> partners = new Dictionary<Tokens, Tokens>()
+        private readonly Dictionary<Tokens, Tokens> _partners = new Dictionary<Tokens, Tokens>
         {
             {Tokens.Else, Tokens.If },
             {Tokens.EllipsisClose, Tokens.EllipsisOpen },
@@ -57,7 +58,7 @@ namespace Compiler.tokenizer
         #endregion
 
         #region ignore tokens
-        Tokens[] ignoreTokens = new Tokens[]
+        private readonly Tokens[] _ignoreTokens = 
         {
             Tokens.Else,
             Tokens.BracketsClose,
@@ -68,13 +69,13 @@ namespace Compiler.tokenizer
         #endregion
 
         #region increase/decrease tokens
-        Tokens[] increaseTokens = new Tokens[]
+        private readonly Tokens[] _increaseTokens = 
         {
             Tokens.EllipsisOpen,
             Tokens.BracketsOpen
         };
 
-        Tokens[] decreaseTokens = new Tokens[]
+        private readonly Tokens[] _decreaseTokens = 
         {
             Tokens.EllipsisClose,
             Tokens.BracketsClose
@@ -82,7 +83,8 @@ namespace Compiler.tokenizer
         #endregion
 
         #region possible start tokens
-        Tokens[] possibleStartTokens = new Tokens[]
+
+        private readonly Tokens[] _possibleStartTokens = 
         {
             Tokens.Identifier,
             Tokens.If,
@@ -92,7 +94,7 @@ namespace Compiler.tokenizer
         #endregion
 
         #region possible previous tokens
-        private Dictionary<Tokens, Tokens[]> possiblePreviousTokens = new Dictionary<Tokens, Tokens[]>()
+        private readonly Dictionary<Tokens, Tokens[]> _possiblePreviousTokens = new Dictionary<Tokens, Tokens[]>
         {
             {Tokens.If, new Tokens[] {
                 Tokens.BracketsOpen,
@@ -198,15 +200,17 @@ namespace Compiler.tokenizer
             int character = 1;
 
             string[] tokens = line.Split(' ');
-            for (int i = 0; i < tokens.Length; i++)
+            foreach (string token in tokens)
             {
-                if (tokens[i].Length != 0)
+                if (token.Length != 0)
                 {
-                    Token currentToken = new Token();
-                    currentToken.Value = tokens[i];
-                    currentToken.Line = lineNumber;
-                    currentToken.Character = character;
-                    currentToken.Level = Level;
+                    Token currentToken = new Token
+                    {
+                        Value = token,
+                        Line = lineNumber,
+                        Character = character,
+                        Level = Level
+                    };
 
                     if (StartToken == null)
                         StartToken = currentToken;
@@ -219,7 +223,7 @@ namespace Compiler.tokenizer
 
                     try
                     {
-                        currentToken.TokenType = GetTokenType(tokens[i]);
+                        currentToken.TokenType = GetTokenType(token);
                     }
                     catch (Exception)
                     {
@@ -237,43 +241,34 @@ namespace Compiler.tokenizer
 
                         if (topToken.TokenType == Tokens.If &&
                             currentToken.Level <= topToken.Level &&
-                            !ignoreTokens.Contains(currentToken.TokenType))
+                            !_ignoreTokens.Contains(currentToken.TokenType))
                         {
                             TokenStack.Pop();
                         }
                     }
 
-                    //if ((currentToken.TokenType == Tokens.Identifier ||
-                    //     currentToken.TokenType == Tokens.If ||
-                    //     currentToken.TokenType == Tokens.While ||
-                    //     currentToken.TokenType == Tokens.Print) &&
-                    //     TokenStack.Count > 0 && TokenStack.Peek().TokenType == Tokens.If)
-                    //{
-                    //    TokenStack.Pop();
-                    //}
-
                     // Pusht token naar de stack of haalt partner token eraf als dat nodig is
                     Tokens partner;
-                    if (pushToStackTokens.Contains(currentToken.TokenType))
+                    if (_pushToStackTokens.Contains(currentToken.TokenType))
                     {
                         TokenStack.Push(currentToken);
                     }
                     else if (TokenStack.Count != 0 &&
-                            partners.TryGetValue(currentToken.TokenType, out partner) &&
-                            TokenStack.Peek().TokenType == partner)
+                             _partners.TryGetValue(currentToken.TokenType, out partner) &&
+                             TokenStack.Peek().TokenType == partner)
                     {
                         TokenStack.Pop();
                     }
 
-                    if (increaseTokens.Contains(currentToken.TokenType))
+                    if (_increaseTokens.Contains(currentToken.TokenType))
                         Level++;
-                    else if (decreaseTokens.Contains(currentToken.TokenType))
+                    else if (_decreaseTokens.Contains(currentToken.TokenType))
                     {
                         Level--;
                         currentToken.Level--;
                     }
 
-                    character += tokens[i].Length;
+                    character += token.Length;
                     PreviousToken = currentToken;
                 }
                 character++;
@@ -291,7 +286,7 @@ namespace Compiler.tokenizer
             if (int.TryParse(token, out number)) // Number
                 return Tokens.Number;
 
-            if (allTokens.TryGetValue(token, out result)) // Ander token
+            if (_allTokens.TryGetValue(token, out result)) // Ander token
                 return result;
           
             // Token bestaat niet
@@ -301,21 +296,18 @@ namespace Compiler.tokenizer
         private void SetPartner(Token token)
         {
             Tokens partner;
-            if (partners.TryGetValue(token.TokenType, out partner) &&
-                TokenStack.Count != 0 &&
-                TokenStack.Peek().TokenType == partner)
-            {
-                token.Partner = TokenStack.Peek();
-                token.Partner.Partner = token;
-            }
+            if (!_partners.TryGetValue(token.TokenType, out partner) || TokenStack.Count == 0 ||
+                TokenStack.Peek().TokenType != partner) return;
+            token.Partner = TokenStack.Peek();
+            token.Partner.Partner = token;
         }
 
         private void CheckCodeIsValid(Token token)
         {
             Tokens[] result;
-            if (possiblePreviousTokens.TryGetValue(token.TokenType, out result))
+            if (_possiblePreviousTokens.TryGetValue(token.TokenType, out result))
             {
-                if ((token == StartToken && !possibleStartTokens.Contains(token.TokenType)) ||
+                if ((token == StartToken && !_possibleStartTokens.Contains(token.TokenType)) ||
                     (token.Previous != null && !result.Contains(token.Previous.TokenType)))
                 {
                     throw new UnexpectedTokenException(token); // Exception: Teken staat op een rare plaats
@@ -323,7 +315,7 @@ namespace Compiler.tokenizer
             }
 
             Tokens partner;
-            if (partners.TryGetValue(token.TokenType, out partner))
+            if (_partners.TryGetValue(token.TokenType, out partner))
             {
                 if (TokenStack.Count == 0 || TokenStack.Peek().TokenType != partner)
                 {

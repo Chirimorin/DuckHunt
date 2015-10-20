@@ -4,18 +4,7 @@ namespace Compiler
 {
     public class ActionNodeLinkedList
     {
-        private ActionNode _startNode;
-        public ActionNode StartNode
-        {
-            get
-            {
-                return _startNode;
-            }
-            private set
-            {
-                _startNode = value;
-            }
-        }
+        public ActionNode StartNode { get; private set; }
 
         public ActionNode LastNode
         {
@@ -30,7 +19,7 @@ namespace Compiler
             }
         }
 
-        public void add(ActionNode node)
+        public void Add(ActionNode node)
         {
             if (StartNode != null)
             {
@@ -42,12 +31,12 @@ namespace Compiler
             }
         }
 
-        public void add(ActionNodeLinkedList list)
+        public void Add(ActionNodeLinkedList list)
         {
-            add(list.StartNode);
+            Add(list.StartNode);
         }
 
-        public void insertAfter(ActionNode newNode, ActionNode after)
+        public void InsertAfter(ActionNode newNode, ActionNode after)
         {
             if (after != null)
                 newNode.Next = after.Next;
@@ -55,7 +44,7 @@ namespace Compiler
             after.Next = newNode;
         }
 
-        public void insertAfter(ActionNodeLinkedList newNodes, ActionNode after)
+        public void InsertAfter(ActionNodeLinkedList newNodes, ActionNode after)
         {
             //if (after != null)
                 newNodes.LastNode.Next = after.Next;
@@ -63,7 +52,7 @@ namespace Compiler
             after.Next = newNodes.StartNode;
         }
 
-        public ActionNode get(int index)
+        public ActionNode Get(int index)
         {
             int count = 0;
             ActionNode node = StartNode;

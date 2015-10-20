@@ -8,29 +8,26 @@ namespace Compiler.factories
     public class CompilerFactory
     {
         #region Singleton
-        private static CompilerFactory _instance = new CompilerFactory();
 
         private CompilerFactory()
         {
-            _compilers = new List<CompiledStatement>();
-            _compilers.Add(new CompileWhile());
-            _compilers.Add(new CompileIf());
-            _compilers.Add(new CompileIfElse());
-            _compilers.Add(new CompileAssignment());
-            _compilers.Add(new CompileOperator());
-            _compilers.Add(new CompilePrint());
-
-            // Onderaan laten staan!
-            _compilers.Add(new CompileValue());
+            _compilers = new List<CompiledStatement>
+            {
+                new CompileWhile(),
+                new CompileIf(),
+                new CompileIfElse(),
+                new CompileAssignment(),
+                new CompileOperator(),
+                new CompilePrint(),
+                new CompileValue()
+            };
         }
 
-        public static CompilerFactory Instance
-        {
-            get { return _instance; }
-        }
+        public static CompilerFactory Instance { get; } = new CompilerFactory();
+
         #endregion
 
-        private List<CompiledStatement> _compilers;
+        private readonly List<CompiledStatement> _compilers;
 
         public CompiledStatement CompileStatement(ref Token currentToken)
         {

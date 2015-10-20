@@ -8,11 +8,11 @@ namespace Compiler.compiler
         public override CompiledStatement Clone(ref Token currentToken)
         {
             CompiledStatement result = new CompileCondition();
-            result.compile(ref currentToken);
+            result.Compile(ref currentToken);
             return result;
         }
 
-        public override void compile(ref Token currentToken)
+        public override void Compile(ref Token currentToken)
         {
             Token leftToken = currentToken;
             string leftName = leftToken.Value;
@@ -25,25 +25,25 @@ namespace Compiler.compiler
 
             if (leftToken.TokenType != Tokens.Identifier)
             {
-                leftName = NextUniqueID;
-                Nodes.add(new DirectFunctionCall("ConstantToReturn", leftToken.Value));
-                Nodes.add(new DirectFunctionCall("ReturnToVariable", leftName));
+                leftName = NextUniqueId;
+                Nodes.Add(new DirectFunctionCall("ConstantToReturn", leftToken.Value));
+                Nodes.Add(new DirectFunctionCall("ReturnToVariable", leftName));
             }
             if (rightToken.TokenType != Tokens.Identifier)
             {
-                rightName = NextUniqueID;
-                Nodes.add(new DirectFunctionCall("ConstantToReturn", rightToken.Value));
-                Nodes.add(new DirectFunctionCall("ReturnToVariable", rightName));
+                rightName = NextUniqueId;
+                Nodes.Add(new DirectFunctionCall("ConstantToReturn", rightToken.Value));
+                Nodes.Add(new DirectFunctionCall("ReturnToVariable", rightName));
             }
 
             switch(operatorToken.TokenType)
             {
-                case Tokens.Equals: Nodes.add(new FunctionCall("Equals", leftName, rightName)); break;
-                case Tokens.GreaterEquals: Nodes.add(new FunctionCall("GreaterEquals", leftName, rightName)); break;
-                case Tokens.GreaterThan: Nodes.add(new FunctionCall("GreaterThan", leftName, rightName)); break;
-                case Tokens.NotEquals: Nodes.add(new FunctionCall("NotEquals", leftName, rightName)); break;
-                case Tokens.SmallerEquals: Nodes.add(new FunctionCall("SmallerEquals", leftName, rightName)); break;
-                case Tokens.SmallerThan: Nodes.add(new FunctionCall("SmallerThan", leftName, rightName)); break;
+                case Tokens.Equals: Nodes.Add(new FunctionCall("Equals", leftName, rightName)); break;
+                case Tokens.GreaterEquals: Nodes.Add(new FunctionCall("GreaterEquals", leftName, rightName)); break;
+                case Tokens.GreaterThan: Nodes.Add(new FunctionCall("GreaterThan", leftName, rightName)); break;
+                case Tokens.NotEquals: Nodes.Add(new FunctionCall("NotEquals", leftName, rightName)); break;
+                case Tokens.SmallerEquals: Nodes.Add(new FunctionCall("SmallerEquals", leftName, rightName)); break;
+                case Tokens.SmallerThan: Nodes.Add(new FunctionCall("SmallerThan", leftName, rightName)); break;
                 default: break;
             }
         }
