@@ -12,6 +12,8 @@ identifiers			begin met ¤
 =					-
 +					==
 -					<
+*					&
+/					#
 
 print				if
 

@@ -11,7 +11,7 @@ namespace Compiler.virtual_machine.Commands
                 throw new RuntimeException("Incorrect arguments for ReturnToVariableCommand");
             }
 
-            vm.Variables[arguments[0]] = vm.ReturnValue;
+            vm.Variables[arguments[0]] = int.Parse(vm.ReturnValue);
             vm.ReturnValue = "";
         }
     }

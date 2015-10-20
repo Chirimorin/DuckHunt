@@ -6,7 +6,7 @@ else ¡ ¤i = ¤n !
 »
     while ¡ ¤i > 5 !
     »
-        ¤result - ¤result < ¤i ~
+        ¤result - ¤result # ¤i ~
     «
     print
     »

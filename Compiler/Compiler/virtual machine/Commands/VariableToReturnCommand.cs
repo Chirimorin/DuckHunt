@@ -11,10 +11,10 @@ namespace Compiler.virtual_machine.Commands
                 throw new RuntimeException("Incorrect arguments for VariableToReturnCommand");
             }
 
-            string result;
+            int result;
             if (vm.Variables.TryGetValue(arguments[0], out result))
             {
-                vm.ReturnValue = result;
+                vm.ReturnValue = result.ToString();
             }
             else
                 throw new RuntimeException("Variable " + arguments[0] + " does not exist");

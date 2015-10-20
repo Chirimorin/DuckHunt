@@ -29,6 +29,8 @@ namespace Compiler.tokenizer
             {"-", Tokens.Becomes},
             {"==", Tokens.Plus},
             {"<", Tokens.Minus},
+            {"&", Tokens.Multiply},
+            {"#", Tokens.Divide },
             {"if", Tokens.Print},
             {"¡", Tokens.EllipsisOpen},
             {"!", Tokens.EllipsisClose},
@@ -137,6 +139,14 @@ namespace Compiler.tokenizer
                 Tokens.Number,
                 Tokens.EllipsisClose } },
             {Tokens.Minus, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.Multiply, new Tokens[] {
+                Tokens.Identifier,
+                Tokens.Number,
+                Tokens.EllipsisClose } },
+            {Tokens.Divide, new Tokens[] {
                 Tokens.Identifier,
                 Tokens.Number,
                 Tokens.EllipsisClose } },

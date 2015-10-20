@@ -11,10 +11,7 @@ namespace Compiler.virtual_machine.Commands
                 throw new RuntimeException("Incorrect arguments for Condition");
             }
 
-            int value1 = int.Parse(vm.Variables[arguments[0]]),
-                value2 = int.Parse(vm.Variables[arguments[1]]);
-
-            vm.ReturnValue = Calculate(value1, value2).ToString();
+            vm.ReturnValue = Calculate(vm.Variables[arguments[0]], vm.Variables[arguments[1]]).ToString();
         }
 
         protected abstract bool Calculate(int left, int right);

@@ -8,7 +8,7 @@ namespace Compiler.virtual_machine
     public class VirtualMachine
     {
         public string ReturnValue { get; set; }
-        public Dictionary<string, string> Variables { get; set; }
+        public Dictionary<string, int> Variables { get; set; }
         private Dictionary<string, ICommand> Commands { get; set; }
 
         public VirtualMachine()
@@ -17,6 +17,8 @@ namespace Compiler.virtual_machine
             {
                 { "Plus", new PlusCommand() },
                 { "Minus", new MinusCommand() },
+                { "Multiply", new MultiplyCommand() },
+                { "Divide", new DivideCommand() },
                 { "ConstantToReturn", new ConstantToReturnCommand() },
                 { "ReturnToVariable", new ReturnToVariableCommand() },
                 { "VariableToReturn", new VariableToReturnCommand() },
@@ -35,7 +37,7 @@ namespace Compiler.virtual_machine
         {
             ActionNode currentNode = list.StartNode;
             NextNodeVisitor nextNodeVisitor = new NextNodeVisitor(this);
-            Variables = new Dictionary<string, string>();
+            Variables = new Dictionary<string, int>();
 
             while (currentNode != null)
             {

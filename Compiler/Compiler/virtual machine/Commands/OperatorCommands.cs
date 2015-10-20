@@ -11,10 +11,7 @@ namespace Compiler.virtual_machine.Commands
                 throw new RuntimeException("Incorrect amount of arguments for OperatorCommand");
             }
 
-            int value1 = int.Parse(vm.Variables[arguments[0]]),
-                value2 = int.Parse(vm.Variables[arguments[1]]);
-
-            vm.ReturnValue = Calculate(value1, value2).ToString();
+            vm.ReturnValue = Calculate(vm.Variables[arguments[0]], vm.Variables[arguments[1]]).ToString();
         }
 
         protected abstract int Calculate(int left, int right);
@@ -33,6 +30,22 @@ namespace Compiler.virtual_machine.Commands
         protected override int Calculate(int left, int right)
         {
             return left - right;
+        }
+    }
+
+    public class MultiplyCommand : OperatorCommand
+    {
+        protected override int Calculate(int left, int right)
+        {
+            return left*right;
+        }
+    }
+
+    public class DivideCommand : OperatorCommand
+    {
+        protected override int Calculate(int left, int right)
+        {
+            return left/right;
         }
     }
 }

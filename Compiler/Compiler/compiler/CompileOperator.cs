@@ -11,7 +11,9 @@ namespace Compiler.compiler
                     currentToken.TokenType == Tokens.Identifier) &&
 
                    (currentToken.Next.TokenType == Tokens.Minus ||
-                    currentToken.Next.TokenType == Tokens.Plus) &&
+                    currentToken.Next.TokenType == Tokens.Plus ||
+                    currentToken.Next.TokenType == Tokens.Multiply ||
+                    currentToken.Next.TokenType == Tokens.Divide) &&
 
                    (currentToken.Next.Next.TokenType == Tokens.Number ||
                     currentToken.Next.Next.TokenType == Tokens.Identifier);
@@ -45,6 +47,8 @@ namespace Compiler.compiler
             {
                 case Tokens.Minus: Nodes.Add(new FunctionCall("Minus", leftName, rightName)); break;
                 case Tokens.Plus: Nodes.Add(new FunctionCall("Plus", leftName, rightName)); break;
+                case Tokens.Multiply: Nodes.Add(new FunctionCall("Multiply", leftName, rightName)); break;
+                case Tokens.Divide: Nodes.Add(new FunctionCall("Divide", leftName, rightName)); break;
                 default: break;
             }
         }

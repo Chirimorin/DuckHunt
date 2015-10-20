@@ -30,6 +30,8 @@
         While, 
         Plus, 
         Minus,
+        Multiply,
+        Divide,
         EllipsisOpen, 
         EllipsisClose,
         BracketsOpen,
